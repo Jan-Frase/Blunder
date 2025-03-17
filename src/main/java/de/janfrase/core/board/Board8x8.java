@@ -2,6 +2,7 @@ package de.janfrase.core.board;
 
 import de.janfrase.utility.Constants.Color;
 import de.janfrase.utility.Constants.Piece;
+import org.javatuples.Pair;
 
 /**
  * Represents an 8x8 chessboard containing tiles with pieces and their corresponding colors.
@@ -23,7 +24,7 @@ public class Board8x8 {
      * @param y The row index (0-based) of the board.
      * @return The piece located at the specified position, represented by the {@link Piece} enum.
      */
-    public Piece getTile(int x, int y) {
+    public Piece getPiece(int x, int y) {
         return pieces[convertIndices(x, y)];
     }
 
@@ -46,7 +47,7 @@ public class Board8x8 {
      * @param piece The piece to be placed at the specified position, represented
      *              by the {@link Piece} enum.
      */
-    public void setTile(int x, int y, Piece piece) {
+    public void setPiece(int x, int y, Piece piece) {
         pieces[convertIndices(x, y)] = piece;
     }
 
@@ -84,6 +85,20 @@ public class Board8x8 {
     public void addTile(int x, int y, Piece piece, Color color) {
         pieces[convertIndices(x, y)] = piece;
         colors[convertIndices(x, y)] = color;
+    }
+
+    /**
+     * Retrieves the piece and color of the tile at the specified position on the board.
+     *
+     * @param x The column index (0-based) of the board.
+     * @param y The row index (0-based) of the board.
+     * @return A Pair containing the {@link Piece} located at the specified position and
+     * the {@link Color} of the tile.
+     */
+    public Pair<Piece, Color> getTile(int x, int y) {
+        Piece piece = getPiece(x, y);
+        Color color = getColor(x, y);
+        return new Pair<>(piece, color);
     }
 
     /**
