@@ -3,7 +3,7 @@ package de.janfrase.ui.board;
 import javax.swing.*;
 import java.awt.*;
 
-public class Tile {
+class Tile {
     private static final Color DARK_COLOR = Color.DARK_GRAY;
     private static final Color LIGHT_COLOR = Color.GRAY;
 
