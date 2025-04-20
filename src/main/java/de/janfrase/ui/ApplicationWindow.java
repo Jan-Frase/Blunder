@@ -38,6 +38,8 @@ public class ApplicationWindow {
         frame.setUndecorated(false);
         frame.setSize(400, 400);
 
+        // TODO: Eventually allow for resizing.
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
 
