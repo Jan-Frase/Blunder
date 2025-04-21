@@ -9,7 +9,7 @@ public class Constants {
         KING, QUEEN, ROOK, BISHOP, KNIGHT, PAWN, EMPTY
     }
 
-    public enum Color {
+    public enum Colors {
         WHITE, BLACK, EMPTY
     }
 

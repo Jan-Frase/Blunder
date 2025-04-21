@@ -1,6 +1,6 @@
 package de.janfrase.core.board;
 
-import de.janfrase.utility.Constants.Color;
+import de.janfrase.utility.Constants.Colors;
 import de.janfrase.utility.Constants.Piece;
 import org.javatuples.Pair;
 
@@ -11,7 +11,7 @@ import org.javatuples.Pair;
  */
 public class Board8x8 {
     private Piece[] pieces;
-    private Color[] colors;
+    private Colors[] colors;
 
     public Board8x8() {
         initPieces();
@@ -33,9 +33,9 @@ public class Board8x8 {
      *
      * @param x The column index (0-based) of the board.
      * @param y The row index (0-based) of the board.
-     * @return The color of the specified tile, represented by the {@link Color} enum.
+     * @return The color of the specified tile, represented by the {@link Colors} enum.
      */
-    public Color getColor(int x, int y) {
+    public Colors getColor(int x, int y) {
         return colors[convertIndices(x, y)];
     }
 
@@ -56,10 +56,10 @@ public class Board8x8 {
      *
      * @param x     The column index (0-based) of the board.
      * @param y     The row index (0-based) of the board.
-     * @param color The color to be set at the specified position, represented by the {@link Color} enum.
+     * @param colors The color to be set at the specified position, represented by the {@link Colors} enum.
      */
-    public void setColor(int x, int y, Color color) {
-        colors[convertIndices(x, y)] = color;
+    public void setColor(int x, int y, Colors colors) {
+        this.colors[convertIndices(x, y)] = colors;
     }
 
     /**
@@ -71,7 +71,7 @@ public class Board8x8 {
      */
     public void removeTile(int x, int y) {
         pieces[convertIndices(x, y)] = Piece.EMPTY;
-        colors[convertIndices(x, y)] = Color.EMPTY;
+        colors[convertIndices(x, y)] = Colors.EMPTY;
     }
 
     /**
@@ -80,11 +80,11 @@ public class Board8x8 {
      * @param x     The column index (0-based) of the board.
      * @param y     The row index (0-based) of the board.
      * @param piece The piece to be added at the specified position, represented by the {@link Piece} enum.
-     * @param color The color associated with the piece to be placed, represented by the {@link Color} enum.
+     * @param colors The color associated with the piece to be placed, represented by the {@link Colors} enum.
      */
-    public void addTile(int x, int y, Piece piece, Color color) {
+    public void addTile(int x, int y, Piece piece, Colors colors) {
         pieces[convertIndices(x, y)] = piece;
-        colors[convertIndices(x, y)] = color;
+        this.colors[convertIndices(x, y)] = colors;
     }
 
     /**
@@ -93,12 +93,12 @@ public class Board8x8 {
      * @param x The column index (0-based) of the board.
      * @param y The row index (0-based) of the board.
      * @return A Pair containing the {@link Piece} located at the specified position and
-     * the {@link Color} of the tile.
+     * the {@link Colors} of the tile.
      */
-    public Pair<Piece, Color> getTile(int x, int y) {
+    public Pair<Piece, Colors> getTile(int x, int y) {
         Piece piece = getPiece(x, y);
-        Color color = getColor(x, y);
-        return new Pair<>(piece, color);
+        Colors colors = getColor(x, y);
+        return new Pair<>(piece, colors);
     }
 
     /**
@@ -132,15 +132,15 @@ public class Board8x8 {
                 Piece.ROOK, Piece.KNIGHT, Piece.BISHOP, Piece.QUEEN, Piece.KING, Piece.BISHOP, Piece.KNIGHT, Piece.ROOK
         };
 
-        colors = new Color[]{
-                Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
-                Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK,
-                Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY,
-                Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY,
-                Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY,
-                Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY, Color.EMPTY,
-                Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE,
-                Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE
+        colors = new Colors[]{
+                Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK,
+                Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK,
+                Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY,
+                Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY,
+                Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY,
+                Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY,
+                Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE,
+                Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE, Colors.WHITE
         };
     }
 }
