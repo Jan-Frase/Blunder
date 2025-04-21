@@ -20,6 +20,7 @@ class TileForegroundPainter {
 
     private static final EnumMap<Piece, String> pieceNameMap = new EnumMap<>(Piece.class);
     private static final EnumMap<Colors, String> colorNameMap = new EnumMap<>(Colors.class);
+    // TODO: Separate the loading into its own class?
     private static final EnumMap<Colors, EnumMap<Piece, BufferedImage>> pieceImageCache = new EnumMap<>(Colors.class);
 
     static {

@@ -13,12 +13,13 @@ public class TilePainter {
     private final TileForegroundPainter foregroundPainter;
 
     public TilePainter(boolean isWhite) {
+        this.panel.setLayout(new BorderLayout());
+
         this.backgroundPainter = new TileBackgroundPainter(isWhite);
         this.foregroundPainter = new TileForegroundPainter(Constants.Piece.BISHOP, Constants.Colors.BLACK);
 
-        this.panel.setLayout(new BorderLayout());
-
         JPanel bgPanel = backgroundPainter.getPanel();
+        // TODO: Is there any way to do this prettier?
         bgPanel.add(foregroundPainter.getPanel());
 
         this.panel.add(bgPanel, BorderLayout.CENTER);
