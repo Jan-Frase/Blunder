@@ -1,9 +1,11 @@
 package de.janfrase;
 
-import de.janfrase.ui.ApplicationWindow;
+import de.janfrase.core.board.BoardPrinter;
+import de.janfrase.core.board.BoardRepresentation;
 
 public class Main {
     public static void main(String[] args) {
-        ApplicationWindow applicationWindow = ApplicationWindow.getInstance();
+        BoardRepresentation boardRepresentation = new BoardRepresentation();
+        System.out.println(BoardPrinter.convertBoardToString(boardRepresentation));
     }
 }

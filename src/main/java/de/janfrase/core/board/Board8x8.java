@@ -24,7 +24,7 @@ public class Board8x8 {
      * @param y The row index (0-based) of the board.
      * @return The piece located at the specified position, represented by the {@link Piece} enum.
      */
-    public Piece getPiece(int x, int y) {
+    public Piece getPieceAtPosition(int x, int y) {
         return pieces[convertIndices(x, y)];
     }
 
@@ -35,56 +35,8 @@ public class Board8x8 {
      * @param y The row index (0-based) of the board.
      * @return The color of the specified tile, represented by the {@link Colors} enum.
      */
-    public Colors getColor(int x, int y) {
+    public Colors getColorAtPosition(int x, int y) {
         return colors[convertIndices(x, y)];
-    }
-
-    /**
-     * Sets a piece on the board at the specified position.
-     *
-     * @param x     The column index (0-based) of the board.
-     * @param y     The row index (0-based) of the board.
-     * @param piece The piece to be placed at the specified position, represented
-     *              by the {@link Piece} enum.
-     */
-    public void setPiece(int x, int y, Piece piece) {
-        pieces[convertIndices(x, y)] = piece;
-    }
-
-    /**
-     * Sets the color of a tile on the board at the specified position.
-     *
-     * @param x     The column index (0-based) of the board.
-     * @param y     The row index (0-based) of the board.
-     * @param colors The color to be set at the specified position, represented by the {@link Colors} enum.
-     */
-    public void setColor(int x, int y, Colors colors) {
-        this.colors[convertIndices(x, y)] = colors;
-    }
-
-    /**
-     * Removes a tile from the board at the specified position by setting its
-     * piece and color to empty.
-     *
-     * @param x The column index (0-based) of the board.
-     * @param y The row index (0-based) of the board.
-     */
-    public void removeTile(int x, int y) {
-        pieces[convertIndices(x, y)] = Piece.EMPTY;
-        colors[convertIndices(x, y)] = Colors.EMPTY;
-    }
-
-    /**
-     * Places a piece with a specific color at the given position on the board.
-     *
-     * @param x     The column index (0-based) of the board.
-     * @param y     The row index (0-based) of the board.
-     * @param piece The piece to be added at the specified position, represented by the {@link Piece} enum.
-     * @param colors The color associated with the piece to be placed, represented by the {@link Colors} enum.
-     */
-    public void addTile(int x, int y, Piece piece, Colors colors) {
-        pieces[convertIndices(x, y)] = piece;
-        this.colors[convertIndices(x, y)] = colors;
     }
 
     /**
@@ -96,10 +48,36 @@ public class Board8x8 {
      * the {@link Colors} of the tile.
      */
     public Pair<Piece, Colors> getTile(int x, int y) {
-        Piece piece = getPiece(x, y);
-        Colors colors = getColor(x, y);
+        Piece piece = getPieceAtPosition(x, y);
+        Colors colors = getColorAtPosition(x, y);
         return new Pair<>(piece, colors);
     }
+
+    /**
+     * Removes a tile from the board at the specified position by setting its
+     * piece and color to empty.
+     *
+     * @param x The column index (0-based) of the board.
+     * @param y The row index (0-based) of the board.
+     */
+    public void makeSquareEmpty(int x, int y) {
+        this.pieces[convertIndices(x, y)] = Piece.EMPTY;
+        this.colors[convertIndices(x, y)] = Colors.EMPTY;
+    }
+
+    /**
+     * Places a piece with a specific color at the given position on the board.
+     *
+     * @param x     The column index (0-based) of the board.
+     * @param y     The row index (0-based) of the board.
+     * @param piece The piece to be added at the specified position, represented by the {@link Piece} enum.
+     * @param color The color associated with the piece to be placed, represented by the {@link Colors} enum.
+     */
+    public void fillSquare(int x, int y, Piece piece, Colors color) {
+        this.pieces[convertIndices(x, y)] = piece;
+        this.colors[convertIndices(x, y)] = color;
+    }
+
 
     /**
      * Converts a two-dimensional board index (x, y) into a one-dimensional array index.
@@ -121,7 +99,8 @@ public class Board8x8 {
      * (BLACK, WHITE, or EMPTY for unoccupied squares).
      */
     private void initPieces() {
-        pieces = new Piece[]{
+        // TODO: Remove this lol.
+        this.pieces = new Piece[]{
                 Piece.ROOK, Piece.KNIGHT, Piece.BISHOP, Piece.QUEEN, Piece.KING, Piece.BISHOP, Piece.KNIGHT, Piece.ROOK,
                 Piece.PAWN, Piece.PAWN, Piece.PAWN, Piece.PAWN, Piece.PAWN, Piece.PAWN, Piece.PAWN, Piece.PAWN,
                 Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY, Piece.EMPTY,
@@ -132,7 +111,7 @@ public class Board8x8 {
                 Piece.ROOK, Piece.KNIGHT, Piece.BISHOP, Piece.QUEEN, Piece.KING, Piece.BISHOP, Piece.KNIGHT, Piece.ROOK
         };
 
-        colors = new Colors[]{
+        this.colors = new Colors[]{
                 Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK,
                 Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK, Colors.BLACK,
                 Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY, Colors.EMPTY,

@@ -16,7 +16,7 @@ public class TilePainter {
         this.panel.setLayout(new BorderLayout());
 
         this.backgroundPainter = new TileBackgroundPainter(isWhite);
-        this.foregroundPainter = new TileForegroundPainter(Constants.Piece.BISHOP, Constants.Colors.BLACK);
+        this.foregroundPainter = new TileForegroundPainter(Constants.Piece.EMPTY, Constants.Colors.EMPTY);
 
         JPanel bgPanel = backgroundPainter.getPanel();
         // TODO: Is there any way to do this prettier?
@@ -27,6 +27,11 @@ public class TilePainter {
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    public void setPiece(Constants.Piece piece, Constants.Colors colors) {
+        this.foregroundPainter.setPiece(piece, colors);
+        this.panel.repaint();
     }
 
 }
