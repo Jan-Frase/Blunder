@@ -1,6 +1,8 @@
 package de.janfrase.core.board;
 
 import de.janfrase.utility.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.javatuples.Pair;
 
 /**
@@ -8,10 +10,12 @@ import org.javatuples.Pair;
  * By doing this I can combine the advantages of both.
  */
 public class BoardRepresentation {
+    private static final Logger logger = LogManager.getLogger();
 
-    Board8x8 squareBoard;
+    private final Board8x8 squareBoard;
 
     public BoardRepresentation() {
+        logger.debug("Creating new BoardRepresentation.");
         this.squareBoard = new Board8x8();
     }
 

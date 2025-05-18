@@ -1,5 +1,7 @@
 # Next steps
-- Finish the connection between Board Representation and GUI
+- Logging
+- Linting
+- Unit Tests
 
 # Goals and Ideas
 - Modularize everything

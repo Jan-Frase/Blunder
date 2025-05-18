@@ -2,6 +2,8 @@ package de.janfrase.core.board;
 
 import de.janfrase.utility.Constants.Colors;
 import de.janfrase.utility.Constants.Piece;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.javatuples.Pair;
 
 /**
@@ -10,6 +12,7 @@ import org.javatuples.Pair;
  * including their pieces and colors. The board is initialized according to the standard chess rules.
  */
 public class Board8x8 {
+    private static final Logger logger = LogManager.getLogger();
     private Piece[] pieces;
     private Colors[] colors;
 

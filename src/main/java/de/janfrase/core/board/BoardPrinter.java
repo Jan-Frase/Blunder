@@ -5,9 +5,14 @@ import org.javatuples.Pair;
 
 import java.util.EnumMap;
 
+/**
+ * The BoardPrinter class provides utilities for converting a chess board representation
+ * into a human-readable string format. It supports rendering the board using either
+ * Unicode or ASCII characters for the chess pieces.
+ */
 public class BoardPrinter {
 
-    private static final boolean USE_ASCII = true;
+    private static final boolean USE_ASCII = false;
 
     private static final String EMPTY = " ";
 
@@ -99,6 +104,7 @@ public class BoardPrinter {
     public static String convertBoardToString(BoardRepresentation boardRepresentation) {
         StringBuilder sb = new StringBuilder();
 
+        sb.append("\n");
         for (int y = 0; y < Constants.BOARD_WIDTH; y++) {
             for (int x = 0; x < Constants.BOARD_WIDTH; x++) {
                 Pair<Constants.Piece, Constants.Colors> tile = boardRepresentation.getTile(x, y);
