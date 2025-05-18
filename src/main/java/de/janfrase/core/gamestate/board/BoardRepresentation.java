@@ -24,9 +24,9 @@ public class BoardRepresentation {
      *
      * @param x The column index (0-based) of the board.
      * @param y The row index (0-based) of the board.
-     * @return The piece located at the specified position, represented by the {@link Constants.Piece} enum.
+     * @return The piece located at the specified position, represented by the {@link Constants.PieceType} enum.
      */
-    public Constants.Piece getPieceAtPosition(int x, int y) {
+    public Constants.PieceType getPieceAtPosition(int x, int y) {
         return this.squareBoard.getPieceAtPosition(x, y);
     }
 
@@ -35,9 +35,9 @@ public class BoardRepresentation {
      *
      * @param x The column index (0-based) of the board.
      * @param y The row index (0-based) of the board.
-     * @return The color of the specified tile, represented by the {@link Constants.Colors} enum.
+     * @return The color of the specified tile, represented by the {@link Constants.Side} enum.
      */
-    public Constants.Colors getColorAtPosition(int x, int y) {
+    public Constants.Side getColorAtPosition(int x, int y) {
         return this.squareBoard.getColorAtPosition(x, y);
     }
 
@@ -46,10 +46,10 @@ public class BoardRepresentation {
      *
      * @param x The column index (0-based) of the board.
      * @param y The row index (0-based) of the board.
-     * @return A Pair containing the {@link Constants.Piece} located at the specified position and
-     * the {@link Constants.Colors} of the tile.
+     * @return A Pair containing the {@link Constants.PieceType} located at the specified position and
+     * the {@link Constants.Side} of the tile.
      */
-    public Pair<Constants.Piece, Constants.Colors> getTile(int x, int y) {
+    public Pair<Constants.PieceType, Constants.Side> getSquare(int x, int y) {
         return this.squareBoard.getTile(x, y);
     }
 
@@ -69,10 +69,10 @@ public class BoardRepresentation {
      *
      * @param x     The column index (0-based) of the board.
      * @param y     The row index (0-based) of the board.
-     * @param piece The piece to be added at the specified position, represented by the {@link Constants.Piece} enum.
-     * @param color The color associated with the piece to be placed, represented by the {@link Constants.Colors} enum.
+     * @param pieceType The piece to be added at the specified position, represented by the {@link Constants.PieceType} enum.
+     * @param color The color associated with the piece to be placed, represented by the {@link Constants.Side} enum.
      */
-    public void fillSquare(int x, int y, Constants.Piece piece, Constants.Colors color) {
-        this.squareBoard.fillSquare(x, y, piece, color);
+    public void fillSquare(int x, int y, Constants.PieceType pieceType, Constants.Side color) {
+        this.squareBoard.fillSquare(x, y, pieceType, color);
     }
 }
