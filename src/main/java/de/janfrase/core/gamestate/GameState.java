@@ -7,4 +7,7 @@ public class GameState {
     BoardRepresentation boardRepresentation;
     // TODO: Add stack with irreversible state information - castling rights, half move clock and more.
 
+    public BoardRepresentation getBoardRepresentation() {
+        return boardRepresentation;
+    }
 }
