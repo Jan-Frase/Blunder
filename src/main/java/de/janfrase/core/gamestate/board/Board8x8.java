@@ -1,5 +1,6 @@
-package de.janfrase.core.board;
+package de.janfrase.core.gamestate.board;
 
+import de.janfrase.utility.Constants;
 import de.janfrase.utility.Constants.Colors;
 import de.janfrase.utility.Constants.Piece;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +18,10 @@ public class Board8x8 {
     private Colors[] colors;
 
     public Board8x8() {
+
+        this.pieces = new Piece[Constants.BOARD_TOTAL_SIZE];
+        this.colors = new Colors[Constants.BOARD_TOTAL_SIZE];
+
         initPieces();
     }
 

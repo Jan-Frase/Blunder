@@ -1,4 +1,4 @@
-package de.janfrase.core.board;
+package de.janfrase.core.gamestate.board;
 
 import de.janfrase.utility.Constants;
 import org.apache.logging.log4j.LogManager;

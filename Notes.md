@@ -1,7 +1,11 @@
 # Next steps
-- Logging
 - Linting
 - Unit Tests
+
+
+# Done
+- Add basic Logging
+
 
 # Goals and Ideas
 - Modularize everything

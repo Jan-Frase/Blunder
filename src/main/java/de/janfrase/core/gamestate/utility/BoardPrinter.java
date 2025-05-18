@@ -1,5 +1,6 @@
-package de.janfrase.core.board;
+package de.janfrase.core.gamestate.utility;
 
+import de.janfrase.core.gamestate.board.BoardRepresentation;
 import de.janfrase.utility.Constants;
 import org.javatuples.Pair;
 
