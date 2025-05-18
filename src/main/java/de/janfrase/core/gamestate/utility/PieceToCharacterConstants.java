@@ -5,13 +5,28 @@ import org.javatuples.Pair;
 
 import java.util.EnumMap;
 
+
 public class PieceToCharacterConstants {
+
+
+    // A map from Ascii Char -> (Color, Piece) :)
+    // A bit ugly but also a bit funny - imma leave it in.
     static final EnumMap<AsciiCharacter, Pair<Constants.Colors, Constants.Piece>> mapFromAscii = new EnumMap<>(AsciiCharacter.class) {{
         put(AsciiCharacter.EMPTY, new Pair<>(Constants.Colors.EMPTY, Constants.Piece.EMPTY));
         put(AsciiCharacter.WHITE_KING, new Pair<>(Constants.Colors.WHITE, Constants.Piece.KING));
-
-
+        put(AsciiCharacter.WHITE_QUEEN, new Pair<>(Constants.Colors.WHITE, Constants.Piece.QUEEN));
+        put(AsciiCharacter.WHITE_ROOK, new Pair<>(Constants.Colors.WHITE, Constants.Piece.ROOK));
+        put(AsciiCharacter.WHITE_BISHOP, new Pair<>(Constants.Colors.WHITE, Constants.Piece.BISHOP));
+        put(AsciiCharacter.WHITE_KNIGHT, new Pair<>(Constants.Colors.WHITE, Constants.Piece.KNIGHT));
+        put(AsciiCharacter.WHITE_PAWN, new Pair<>(Constants.Colors.WHITE, Constants.Piece.PAWN));
+        put(AsciiCharacter.BLACK_KING, new Pair<>(Constants.Colors.BLACK, Constants.Piece.KING));
+        put(AsciiCharacter.BLACK_QUEEN, new Pair<>(Constants.Colors.BLACK, Constants.Piece.QUEEN));
+        put(AsciiCharacter.BLACK_ROOK, new Pair<>(Constants.Colors.BLACK, Constants.Piece.ROOK));
+        put(AsciiCharacter.BLACK_BISHOP, new Pair<>(Constants.Colors.BLACK, Constants.Piece.BISHOP));
+        put(AsciiCharacter.BLACK_KNIGHT, new Pair<>(Constants.Colors.BLACK, Constants.Piece.KNIGHT));
+        put(AsciiCharacter.BLACK_PAWN, new Pair<>(Constants.Colors.BLACK, Constants.Piece.PAWN));
     }};
+
     // A map from (Color, Piece) -> Ascii Char :)
     // A bit ugly but also a bit funny - imma leave it in.
     static final EnumMap<Constants.Colors, EnumMap<Constants.Piece, AsciiCharacter>> mapToAscii = new EnumMap<>(Constants.Colors.class) {{

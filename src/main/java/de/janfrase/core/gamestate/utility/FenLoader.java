@@ -8,20 +8,49 @@ import de.janfrase.core.gamestate.board.BoardRepresentation;
  * Default String is rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
  */
 public class FenLoader {
-    private static final int PIECE_PLACEMENT = 0;
-    private static final int SIDE_TO_MOVE = 1;
-    private static final int CASTLING_ABILITY = 2;
-    private static final int EN_PASSANT_TARGET_SQUARE = 3;
-    private static final int HALF_MOVE_CLOCK = 4;
-    private static final int FULL_MOVE_COUNTER = 5;
+    private static final String RANK_SEPERATOR = "/";
+    private static final String SEGMENT_SEPERATOR = " ";
 
     public static void loadFenString(String fenString, GameState gameState) {
-        String[] fenStringParts = fenString.split(" ");
+        String[] fenSegments = fenString.split(SEGMENT_SEPERATOR);
 
-        parsePiecePlacement(fenStringParts[PIECE_PLACEMENT], gameState.getBoardRepresentation());
+        parsePiecePlacement(fenSegments[FenSegments.PIECE_PLACEMENT.getIndex()], gameState.getBoardRepresentation());
     }
 
     private static void parsePiecePlacement(String piecePlacement, BoardRepresentation boardRepresentation) {
+        int yPos = 0;
+        for (String rank : piecePlacement.split(RANK_SEPERATOR)) {
+            int xPos = 0;
 
+            for (char c : rank.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    xPos += Integer.parseInt(String.valueOf(c));
+                } else {
+                    mapFromAscii
+
+                }
+            }
+
+            yPos++;
+        }
+    }
+
+    private enum FenSegments {
+        PIECE_PLACEMENT(0),
+        SIDE_TO_MOVE(1),
+        CASTLING_ABILITY(2),
+        EN_PASSANT_TARGET_SQUARE(3),
+        HALF_MOVE_CLOCK(4),
+        FULL_MOVE_COUNTER(5);
+
+        private final int index;
+
+        FenSegments(int index) {
+            this.index = index;
+        }
+
+        public int getIndex() {
+            return index;
+        }
     }
 }
