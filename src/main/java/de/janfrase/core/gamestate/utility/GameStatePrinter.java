@@ -15,13 +15,17 @@ import static de.janfrase.core.gamestate.utility.PieceToCharacterConstants.mapTo
 public class GameStatePrinter {
 
     private static final boolean USE_ASCII = false;
+    private static final String LIGHT_SQUARE = "◻";
+    private static final String DARK_SQUARE = "◼";
 
 
-    private static String getStringRepresentation(Constants.PieceType pieceType, Constants.Side color) {
-        if( USE_ASCII )
-            return mapToAscii.get(color).get(pieceType).getCharacter();
+    private static String getStringRepresentation(Constants.PieceType pieceType, Constants.Side color, int x, int y) {
+        String piece = USE_ASCII ? mapToAscii.get(color).get(pieceType).getCharacter() : mapToUnicode.get(color).get(pieceType);
+        if(pieceType != Constants.PieceType.EMPTY) {
+            return piece;
+        }
 
-        return mapToUnicode.get(color).get(pieceType);
+        return ((x + y) % 2 == 0) ? LIGHT_SQUARE : DARK_SQUARE;
     }
 
     public static String print(GameState gameState) {
@@ -32,7 +36,7 @@ public class GameStatePrinter {
             for (int x = 0; x < Constants.BOARD_WIDTH; x++) {
                 Pair<Constants.PieceType, Constants.Side> tile = gameState.getBoardRepresentation().getSquare(x, y);
 
-                sb.append(getStringRepresentation(tile.getValue0(), tile.getValue1()));
+                sb.append(getStringRepresentation(tile.getValue0(), tile.getValue1(), x, y));
 
             }
             sb.append("\n");

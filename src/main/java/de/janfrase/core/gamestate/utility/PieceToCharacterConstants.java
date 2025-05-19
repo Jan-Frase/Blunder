@@ -81,7 +81,6 @@ public class PieceToCharacterConstants {
 
         public static AsciiCharacter getCharacter(String character) {
             return switch (character) {
-                case " " -> EMPTY;
                 case "K" -> WHITE_KING;
                 case "Q" -> WHITE_QUEEN;
                 case "R" -> WHITE_ROOK;
@@ -94,7 +93,7 @@ public class PieceToCharacterConstants {
                 case "b" -> BLACK_BISHOP;
                 case "n" -> BLACK_KNIGHT;
                 case "p" -> BLACK_PAWN;
-                default -> null;
+                default -> EMPTY;
             };
         }
     }

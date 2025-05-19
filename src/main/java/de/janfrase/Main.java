@@ -18,7 +18,10 @@ public class Main {
         FenLoader.loadStartingPosition(gameState);
         logger.trace(GameStatePrinter.print(gameState));
 
-        logger.trace(gameState.getBoardRepresentation().getSquare(0,0));
+
+        gameState = new GameState();
+        FenLoader.loadFenString("N4k2/8/2p5/8/5q2/4Q3/1K6/8 w - - 0 1", gameState);
+        logger.trace(GameStatePrinter.print(gameState));
 
         logger.info("Chess engine finished.");
     }
