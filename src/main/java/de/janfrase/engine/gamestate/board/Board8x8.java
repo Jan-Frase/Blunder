@@ -3,9 +3,6 @@ package de.janfrase.engine.gamestate.board;
 import de.janfrase.utility.Constants;
 import de.janfrase.utility.Constants.Side;
 import de.janfrase.utility.Constants.PieceType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.javatuples.Pair;
 
 /**
  * Represents an 8x8 chessboard containing tiles with pieces and their corresponding colors.
@@ -46,20 +43,6 @@ public class Board8x8 {
      */
     public Side getColorAtPosition(int x, int y) {
         return side[convertIndices(x, y)];
-    }
-
-    /**
-     * Retrieves the piece and color of the tile at the specified position on the board.
-     *
-     * @param x The column index (0-based) of the board.
-     * @param y The row index (0-based) of the board.
-     * @return A Pair containing the {@link PieceType} located at the specified position and
-     * the {@link Side} of the tile.
-     */
-    public Pair<PieceType, Side> getTile(int x, int y) {
-        PieceType pieceType = getPieceAtPosition(x, y);
-        Side side = getColorAtPosition(x, y);
-        return new Pair<>(pieceType, side);
     }
 
     /**
