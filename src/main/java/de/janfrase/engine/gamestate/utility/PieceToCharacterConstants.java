@@ -1,4 +1,4 @@
-package de.janfrase.core.gamestate.utility;
+package de.janfrase.engine.gamestate.utility;
 
 import de.janfrase.utility.Constants;
 import org.javatuples.Pair;

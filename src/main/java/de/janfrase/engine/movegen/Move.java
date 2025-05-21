@@ -1,4 +1,4 @@
-package de.janfrase.core.gamestate.move;
+package de.janfrase.engine.movegen;
 
 /**
  * Represents a move in a chess game. A move consists of a starting position

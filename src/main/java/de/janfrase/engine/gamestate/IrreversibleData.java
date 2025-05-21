@@ -1,4 +1,4 @@
-package de.janfrase.core.gamestate;
+package de.janfrase.engine.gamestate;
 
 import java.util.OptionalInt;
 

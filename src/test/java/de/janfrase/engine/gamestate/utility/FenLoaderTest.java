@@ -1,7 +1,7 @@
-package de.janfrase.core.gamestate.utility;
+package de.janfrase.engine.gamestate.utility;
 
-import de.janfrase.core.gamestate.GameState;
-import de.janfrase.core.gamestate.board.BoardRepresentation;
+import de.janfrase.engine.gamestate.GameState;
+import de.janfrase.engine.gamestate.board.BoardRepresentation;
 import de.janfrase.utility.Constants;
 import org.junit.jupiter.api.Test;
 

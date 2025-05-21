@@ -1,30 +1,35 @@
-package de.janfrase.core.gamestate.utility;
+package de.janfrase.engine.gamestate.utility;
 
-import de.janfrase.core.gamestate.CastlingRights;
-import de.janfrase.core.gamestate.GameState;
-import de.janfrase.core.gamestate.IrreversibleData;
-import de.janfrase.core.gamestate.board.BoardRepresentation;
+import de.janfrase.engine.gamestate.CastlingRights;
+import de.janfrase.engine.gamestate.GameState;
+import de.janfrase.engine.gamestate.IrreversibleData;
+import de.janfrase.engine.gamestate.board.BoardRepresentation;
 import de.janfrase.utility.Constants;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.javatuples.Pair;
 
 import java.util.OptionalInt;
 
-import static de.janfrase.core.gamestate.utility.PieceToCharacterConstants.AsciiCharacter;
+import static de.janfrase.engine.gamestate.utility.PieceToCharacterConstants.AsciiCharacter;
 
 /**
  * See: <a href="https://www.chessprogramming.org/Forsyth-Edwards_Notation">Chess programming wiki.</a>
  */
 public class FenLoader {
 
+    private static final Logger logger = LogManager.getLogger();
     private static final String STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     private static final String RANK_SEPARATOR = "/";
     private static final String SEGMENT_SEPARATOR = " ";
+
 
     public static void loadStartingPosition(GameState gameState) {
         loadFenString(STARTING_FEN, gameState);
     }
 
     public static void loadFenString(String fenString, GameState gameState) {
+        logger.info("Starting fen parsing on : {}", fenString);
         String[] fenSegments = fenString.split(SEGMENT_SEPARATOR);
 
         parsePiecePlacement(fenSegments[FenSegments.PIECE_PLACEMENT.getIndex()], gameState.getBoardRepresentation());
@@ -33,6 +38,9 @@ public class FenLoader {
         parseIrreversibleData(fenSegments[FenSegments.CASTLING_ABILITY.getIndex()], fenSegments[FenSegments.EN_PASSANT_TARGET_SQUARE.getIndex()], fenSegments[FenSegments.HALF_MOVE_CLOCK.getIndex()], gameState);
 
         parseFullMoveCounter(fenSegments[FenSegments.FULL_MOVE_COUNTER.getIndex()], gameState);
+
+
+        logger.trace("Finished fen parsing : {}", GameStatePrinter.print(gameState));
     }
 
     private static void parsePiecePlacement(String piecePlacement, BoardRepresentation boardRepresentation) {

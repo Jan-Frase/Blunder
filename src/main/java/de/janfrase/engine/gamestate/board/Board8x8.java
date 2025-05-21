@@ -1,4 +1,4 @@
-package de.janfrase.core.gamestate.board;
+package de.janfrase.engine.gamestate.board;
 
 import de.janfrase.utility.Constants;
 import de.janfrase.utility.Constants.Side;
@@ -13,7 +13,6 @@ import org.javatuples.Pair;
  * including their pieces and colors. The board is initialized according to the standard chess rules.
  */
 public class Board8x8 {
-    private static final Logger logger = LogManager.getLogger();
     private final PieceType[] pieceTypes;
     private final Side[] side;
 
