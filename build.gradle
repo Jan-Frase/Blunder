@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation("com.diffplug.spotless:spotless-lib:7.0.3")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:7.0.3")
 
     implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
     implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
