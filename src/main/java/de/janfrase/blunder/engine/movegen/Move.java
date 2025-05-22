@@ -11,9 +11,9 @@ package de.janfrase.blunder.engine.movegen;
  * @param fromY           The starting y-coordinate of the move, specifying the row position (0-based).
  * @param toX             The ending x-coordinate of the move, specifying the column position (0-based).
  * @param toY             The ending y-coordinate of the move, specifying the row position (0-based).
- * @param specialMoveType The type of special move, represented by {@code SpecialMoveType}.
+ * @param moveType The type of special move, represented by {@code SpecialMoveType}.
  */
-public record Move(int fromX, int fromY, int toX, int toY, SpecialMoveType specialMoveType) {
+public record Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
 
 
     /**
@@ -26,14 +26,14 @@ public record Move(int fromX, int fromY, int toX, int toY, SpecialMoveType speci
      * @param toY   The ending y-coordinate of the move, specifying the row position (0-based).
      */
     public Move(int fromX, int fromY, int toX, int toY) {
-        this(fromX, fromY, toX, toY, SpecialMoveType.QUIET_MOVE);
+        this(fromX, fromY, toX, toY, MoveType.QUIET_MOVE);
     }
 
 
     /**
      * Based on this <a href="https://www.chessprogramming.org/Encoding_Moves#From-To_Based">chessprogramming</a> page.
      */
-    private enum SpecialMoveType {
+    public enum MoveType {
         QUIET_MOVE,
 
         CAPTURE, EP_CAPTURE,
