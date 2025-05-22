@@ -1,8 +1,8 @@
-package de.janfrase.engine.gamestate.utility;
+package de.janfrase.blunder.engine.gamestate.utility;
 
-import de.janfrase.engine.gamestate.GameState;
-import de.janfrase.engine.gamestate.board.BoardRepresentation;
-import de.janfrase.utility.Constants;
+import de.janfrase.blunder.engine.gamestate.GameState;
+import de.janfrase.blunder.engine.gamestate.board.BoardRepresentation;
+import de.janfrase.blunder.utility.Constants;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,14 +24,14 @@ public class FenLoaderTest {
 
         assertNotNull(board, "Board representation should not be null after loading FEN.");
 
-        assertEquals(Constants.PieceType.ROOK, board.getSquare(0, 0).getValue0(), "Expected a rook at position (0, 0).");
-        assertEquals(Constants.Side.BLACK, board.getSquare(0, 0).getValue1(), "Expected a white rook at position (0, 0).");
+        assertEquals(Constants.PieceType.ROOK, board.getPieceAtPosition(0, 0), "Expected a rook at position (0, 0).");
+        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(0, 0), "Expected a white rook at position (0, 0).");
 
-        assertEquals(Constants.PieceType.KING, board.getSquare(4, 0).getValue0(), "Expected a king at position (4, 0).");
-        assertEquals(Constants.Side.BLACK, board.getSquare(4, 0).getValue1(), "Expected a white king at position (4, 0).");
+        assertEquals(Constants.PieceType.KING, board.getPieceAtPosition(4, 0), "Expected a king at position (4, 0).");
+        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(4, 0), "Expected a white king at position (4, 0).");
 
-        assertEquals(Constants.PieceType.PAWN, board.getSquare(3, 1).getValue0(), "Expected a white pawn at position (4, 0).");
-        assertEquals(Constants.Side.BLACK, board.getSquare(3, 1).getValue1(), "Expected a white pawn at position (4, 0).");
+        assertEquals(Constants.PieceType.PAWN, board.getPieceAtPosition(3, 1), "Expected a white pawn at position (4, 0).");
+        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(3, 1), "Expected a white pawn at position (4, 0).");
 
         assertTrue(gameState.isWhitesTurn(), "White should move first in starting position");
         assertTrue(gameState.getIrreversibleDataStack().peek().castlingRights().whiteShortCastle(), "White should have kingside castling rights");
@@ -52,16 +52,16 @@ public class FenLoaderTest {
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         assertNotNull(board, "Board representation should not be null after loading FEN.");
-        assertEquals(Constants.Side.WHITE, board.getSquare(0, 0).getValue1(), "Expected a white knight at position (0, 0).");
-        assertEquals(Constants.PieceType.KNIGHT, board.getSquare(0, 0).getValue0(), "Expected a white knight at position (0, 0).");
+        assertEquals(Constants.PieceType.KNIGHT, board.getPieceAtPosition(0, 0), "Expected a white knight at position (0, 0).");
+        assertEquals(Constants.Side.WHITE, board.getSideAtPosition(0, 0), "Expected a white knight at position (0, 0).");
 
 
-        assertEquals(Constants.Side.BLACK, board.getSquare(5, 0).getValue1(), "Expected a black king at position (5, 0).");
-        assertEquals(Constants.PieceType.KING, board.getSquare(5, 0).getValue0(), "Expected a black king at position (5, 0).");
+        assertEquals(Constants.PieceType.KING, board.getPieceAtPosition(5, 0), "Expected a black king at position (5, 0).");
+        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(5, 0), "Expected a black king at position (5, 0).");
 
 
-        assertEquals(Constants.Side.BLACK, board.getSquare(2, 3).getValue1(), "Expected a black pawn at position (2, 3).");
-        assertEquals(Constants.PieceType.PAWN, board.getSquare(2, 3).getValue0(), "Expected a black pawn at position (2, 3).");
+        assertEquals(Constants.PieceType.PAWN, board.getPieceAtPosition(2, 3), "Expected a black pawn at position (2, 3).");
+        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(2, 3), "Expected a black pawn at position (2, 3).");
 
         assertFalse(gameState.isWhitesTurn(), "Black should be to move");
         assertTrue(gameState.getIrreversibleDataStack().peek().enPassantX().isPresent(), "En passant square should exist");
@@ -82,7 +82,7 @@ public class FenLoaderTest {
         assertNotNull(board, "Board representation should not be null after loading FEN.");
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
-                assertEquals(Constants.Side.EMPTY, board.getSquare(x, y).getValue1(), "Expected no piece at position (" + x + ", " + y + ").");
+                assertEquals(Constants.Side.EMPTY, board.getSideAtPosition(x, y), "Expected no piece at position (" + x + ", " + y + ").");
             }
         }
 

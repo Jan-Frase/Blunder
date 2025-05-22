@@ -1,6 +1,6 @@
-package de.janfrase.engine.gamestate;
+package de.janfrase.blunder.engine.gamestate;
 
-import de.janfrase.engine.gamestate.board.BoardRepresentation;
+import de.janfrase.blunder.engine.gamestate.board.BoardRepresentation;
 
 import java.util.Stack;
 

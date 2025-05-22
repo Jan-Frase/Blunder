@@ -1,8 +1,8 @@
-package de.janfrase.engine.gamestate.board;
+package de.janfrase.blunder.engine.gamestate.board;
 
-import de.janfrase.utility.Constants;
-import de.janfrase.utility.Constants.Side;
-import de.janfrase.utility.Constants.PieceType;
+import de.janfrase.blunder.utility.Constants;
+import de.janfrase.blunder.utility.Constants.Side;
+import de.janfrase.blunder.utility.Constants.PieceType;
 
 /**
  * Represents an 8x8 chessboard containing tiles with pieces and their corresponding colors.
@@ -41,7 +41,7 @@ public class Board8x8 {
      * @param y The row index (0-based) of the board.
      * @return The color of the specified tile, represented by the {@link Side} enum.
      */
-    public Side getColorAtPosition(int x, int y) {
+    public Side getSideAtPosition(int x, int y) {
         return side[convertIndices(x, y)];
     }
 

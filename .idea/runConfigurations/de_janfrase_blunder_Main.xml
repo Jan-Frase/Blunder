@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Main" type="Application" factoryName="Application" nameIsGenerated="true">
-    <option name="MAIN_CLASS_NAME" value="de.janfrase.Main" />
+  <configuration default="false" name="de.janfrase.blunder.Main" type="Application" factoryName="Application" nameIsGenerated="true">
+    <option name="MAIN_CLASS_NAME" value="de.janfrase.blunder.Main" />
     <module name="Blunder.main" />
     <extension name="coverage">
       <pattern>

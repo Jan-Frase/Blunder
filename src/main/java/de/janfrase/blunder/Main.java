@@ -1,8 +1,8 @@
-package de.janfrase;
+package de.janfrase.blunder;
 
-import de.janfrase.engine.gamestate.GameState;
-import de.janfrase.engine.gamestate.utility.FenLoader;
-import de.janfrase.engine.gamestate.utility.GameStatePrinter;
+import de.janfrase.blunder.engine.gamestate.GameState;
+import de.janfrase.blunder.engine.gamestate.utility.FenLoader;
+import de.janfrase.blunder.engine.gamestate.utility.GameStatePrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

@@ -1,9 +1,8 @@
-package de.janfrase.engine.gamestate.board;
+package de.janfrase.blunder.engine.gamestate.board;
 
-import de.janfrase.utility.Constants;
+import de.janfrase.blunder.utility.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.javatuples.Pair;
 
 /**
  * This class combines a square-centric representation and a piece-centric representation.
@@ -37,20 +36,8 @@ public class BoardRepresentation {
      * @param y The row index (0-based) of the board.
      * @return The color of the specified tile, represented by the {@link Constants.Side} enum.
      */
-    public Constants.Side getColorAtPosition(int x, int y) {
-        return this.squareBoard.getColorAtPosition(x, y);
-    }
-
-    /**
-     * Retrieves the piece and color of the tile at the specified position on the board.
-     *
-     * @param x The column index (0-based) of the board.
-     * @param y The row index (0-based) of the board.
-     * @return A Pair containing the {@link Constants.PieceType} located at the specified position and
-     * the {@link Constants.Side} of the tile.
-     */
-    public Pair<Constants.PieceType, Constants.Side> getSquare(int x, int y) {
-        return this.squareBoard.getTile(x, y);
+    public Constants.Side getSideAtPosition(int x, int y) {
+        return this.squareBoard.getSideAtPosition(x, y);
     }
 
     /**

@@ -1,4 +1,4 @@
-package de.janfrase.utility;
+package de.janfrase.blunder.utility;
 
 public class Constants {
     public static final int BOARD_WIDTH = 8;

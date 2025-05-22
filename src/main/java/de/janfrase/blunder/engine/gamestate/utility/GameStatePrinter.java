@@ -1,11 +1,10 @@
-package de.janfrase.engine.gamestate.utility;
+package de.janfrase.blunder.engine.gamestate.utility;
 
-import de.janfrase.engine.gamestate.GameState;
-import de.janfrase.utility.Constants;
-import org.javatuples.Pair;
+import de.janfrase.blunder.engine.gamestate.GameState;
+import de.janfrase.blunder.utility.Constants;
 
-import static de.janfrase.engine.gamestate.utility.PieceToCharacterConstants.mapToAscii;
-import static de.janfrase.engine.gamestate.utility.PieceToCharacterConstants.mapToUnicode;
+import static de.janfrase.blunder.engine.gamestate.utility.PieceToCharacterConstants.mapToAscii;
+import static de.janfrase.blunder.engine.gamestate.utility.PieceToCharacterConstants.mapToUnicode;
 
 /**
  * The BoardPrinter class provides utilities for converting a chess board representation
@@ -34,9 +33,9 @@ public class GameStatePrinter {
         sb.append("\n");
         for (int y = 0; y < Constants.BOARD_WIDTH; y++) {
             for (int x = 0; x < Constants.BOARD_WIDTH; x++) {
-                Pair<Constants.PieceType, Constants.Side> tile = gameState.getBoardRepresentation().getSquare(x, y);
-
-                sb.append(getStringRepresentation(tile.getValue0(), tile.getValue1(), x, y));
+                Constants.Side side = gameState.getBoardRepresentation().getSideAtPosition(x, y);
+                Constants.PieceType pieceType = gameState.getBoardRepresentation().getPieceAtPosition(x, y);
+                sb.append(getStringRepresentation(pieceType, side, x, y));
 
             }
             sb.append("\n");

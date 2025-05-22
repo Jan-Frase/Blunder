@@ -1,7 +1,6 @@
-package de.janfrase.engine.gamestate.utility;
+package de.janfrase.blunder.engine.gamestate.utility;
 
-import de.janfrase.utility.Constants;
-import org.javatuples.Pair;
+import de.janfrase.blunder.utility.Constants;
 
 import java.util.EnumMap;
 
@@ -11,20 +10,20 @@ public class PieceToCharacterConstants {
 
     // A map from Ascii Char -> (Color, Piece) :)
     // A bit ugly but also a bit funny - imma leave it in.
-    static final EnumMap<AsciiCharacter, Pair<Constants.Side, Constants.PieceType>> mapFromAscii = new EnumMap<>(AsciiCharacter.class) {{
-        put(AsciiCharacter.EMPTY, new Pair<>(Constants.Side.EMPTY, Constants.PieceType.EMPTY));
-        put(AsciiCharacter.WHITE_KING, new Pair<>(Constants.Side.WHITE, Constants.PieceType.KING));
-        put(AsciiCharacter.WHITE_QUEEN, new Pair<>(Constants.Side.WHITE, Constants.PieceType.QUEEN));
-        put(AsciiCharacter.WHITE_ROOK, new Pair<>(Constants.Side.WHITE, Constants.PieceType.ROOK));
-        put(AsciiCharacter.WHITE_BISHOP, new Pair<>(Constants.Side.WHITE, Constants.PieceType.BISHOP));
-        put(AsciiCharacter.WHITE_KNIGHT, new Pair<>(Constants.Side.WHITE, Constants.PieceType.KNIGHT));
-        put(AsciiCharacter.WHITE_PAWN, new Pair<>(Constants.Side.WHITE, Constants.PieceType.PAWN));
-        put(AsciiCharacter.BLACK_KING, new Pair<>(Constants.Side.BLACK, Constants.PieceType.KING));
-        put(AsciiCharacter.BLACK_QUEEN, new Pair<>(Constants.Side.BLACK, Constants.PieceType.QUEEN));
-        put(AsciiCharacter.BLACK_ROOK, new Pair<>(Constants.Side.BLACK, Constants.PieceType.ROOK));
-        put(AsciiCharacter.BLACK_BISHOP, new Pair<>(Constants.Side.BLACK, Constants.PieceType.BISHOP));
-        put(AsciiCharacter.BLACK_KNIGHT, new Pair<>(Constants.Side.BLACK, Constants.PieceType.KNIGHT));
-        put(AsciiCharacter.BLACK_PAWN, new Pair<>(Constants.Side.BLACK, Constants.PieceType.PAWN));
+    static final EnumMap<AsciiCharacter, Constants.PieceType> mapFromAscii = new EnumMap<>(AsciiCharacter.class) {{
+        put(AsciiCharacter.EMPTY, Constants.PieceType.EMPTY);
+        put(AsciiCharacter.WHITE_KING, Constants.PieceType.KING);
+        put(AsciiCharacter.WHITE_QUEEN, Constants.PieceType.QUEEN);
+        put(AsciiCharacter.WHITE_ROOK, Constants.PieceType.ROOK);
+        put(AsciiCharacter.WHITE_BISHOP, Constants.PieceType.BISHOP);
+        put(AsciiCharacter.WHITE_KNIGHT, Constants.PieceType.KNIGHT);
+        put(AsciiCharacter.WHITE_PAWN, Constants.PieceType.PAWN);
+        put(AsciiCharacter.BLACK_KING, Constants.PieceType.KING);
+        put(AsciiCharacter.BLACK_QUEEN, Constants.PieceType.QUEEN);
+        put(AsciiCharacter.BLACK_ROOK, Constants.PieceType.ROOK);
+        put(AsciiCharacter.BLACK_BISHOP, Constants.PieceType.BISHOP);
+        put(AsciiCharacter.BLACK_KNIGHT, Constants.PieceType.KNIGHT);
+        put(AsciiCharacter.BLACK_PAWN, Constants.PieceType.PAWN);
     }};
 
     // A map from (Color, Piece) -> Ascii Char :)

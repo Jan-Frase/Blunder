@@ -1,17 +1,16 @@
-package de.janfrase.engine.gamestate.utility;
+package de.janfrase.blunder.engine.gamestate.utility;
 
-import de.janfrase.engine.gamestate.CastlingRights;
-import de.janfrase.engine.gamestate.GameState;
-import de.janfrase.engine.gamestate.IrreversibleData;
-import de.janfrase.engine.gamestate.board.BoardRepresentation;
-import de.janfrase.utility.Constants;
+import de.janfrase.blunder.engine.gamestate.CastlingRights;
+import de.janfrase.blunder.engine.gamestate.GameState;
+import de.janfrase.blunder.engine.gamestate.IrreversibleData;
+import de.janfrase.blunder.engine.gamestate.board.BoardRepresentation;
+import de.janfrase.blunder.utility.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.javatuples.Pair;
 
 import java.util.OptionalInt;
 
-import static de.janfrase.engine.gamestate.utility.PieceToCharacterConstants.AsciiCharacter;
+import static de.janfrase.blunder.engine.gamestate.utility.PieceToCharacterConstants.AsciiCharacter;
 
 /**
  * See: <a href="https://www.chessprogramming.org/Forsyth-Edwards_Notation">Chess programming wiki.</a>
@@ -54,11 +53,10 @@ public class FenLoader {
                 } else {
                     // Get the fitting character enum for the char. This is a bit convoluted.
                     AsciiCharacter character = PieceToCharacterConstants.AsciiCharacter.getCharacter(String.valueOf(c));
-                    // Get the Pair of Black/White and Piece enum.
-                    Pair<Constants.Side, Constants.PieceType> piecePair = PieceToCharacterConstants.mapFromAscii.get(character);
 
-                    Constants.Side pieceSide = piecePair.getValue0();
-                    Constants.PieceType pieceType = piecePair.getValue1();
+                    // Get the Pair of Black/White and Piece enum.
+                    Constants.PieceType pieceType = PieceToCharacterConstants.mapFromAscii.get(character);
+                    Constants.Side pieceSide = Character.isUpperCase(c) ? Constants.Side.WHITE : Constants.Side.BLACK;
 
                     boardRepresentation.fillSquare(xPos, yPos, pieceType, pieceSide);
 
