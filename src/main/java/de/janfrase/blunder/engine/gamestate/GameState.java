@@ -52,6 +52,7 @@ public class GameState {
 
         if (move.moveType().equals(Move.MoveType.EP_CAPTURE)) {
             // remove the captured pawn from the board
+            // TODO: correct y axis value
             this.boardRepresentation.fillSquare(move.toX(), move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
         }
 
