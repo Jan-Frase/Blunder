@@ -40,6 +40,10 @@ public record IrreversibleData(CastlingRights castlingRights, OptionalInt enPass
         public IrreversibleData build() {
             return new IrreversibleData(castlingRights, enPassantX, halfMoveClock);
         }
+
+        public IrreversibleData buildDefault() {
+            return new IrreversibleData(new CastlingRights(true, true, true, true), OptionalInt.empty(), 0);
+        }
     }
 
 }
