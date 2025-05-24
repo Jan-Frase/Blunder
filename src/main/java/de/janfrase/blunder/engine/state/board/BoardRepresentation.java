@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 /**
  * This class combines a square-centric representation and a piece-centric representation.
- * By doing this I can combine the advantages of both.
+ * By doing this, I can combine the advantages of both.
  */
 public class BoardRepresentation {
     private static final Logger logger = LogManager.getLogger();

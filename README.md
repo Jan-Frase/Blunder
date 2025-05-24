@@ -2,5 +2,5 @@
 🚧 **Under Construction**
 
 ## 📜 Overview  
-An attempt to build a chess engine from scratch. 
-🔨 Built with: Java
+An attempt to build a chess engine from scratch.
+🔨 Built with Java

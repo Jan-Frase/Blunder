@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameStateFenParserTest {
 
-    GameState gameState = GameState.getInstance();
+    final GameState gameState = GameState.getInstance();
 
     @AfterEach
     void beforeEach() {

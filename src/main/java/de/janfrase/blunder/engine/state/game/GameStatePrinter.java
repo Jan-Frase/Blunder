@@ -135,24 +135,6 @@ public class GameStatePrinter {
             this.character = character;
         }
 
-        public static AsciiCharacter getCharacter(String character) {
-            return switch (character) {
-                case "K" -> WHITE_KING;
-                case "Q" -> WHITE_QUEEN;
-                case "R" -> WHITE_ROOK;
-                case "B" -> WHITE_BISHOP;
-                case "N" -> WHITE_KNIGHT;
-                case "P" -> WHITE_PAWN;
-                case "k" -> BLACK_KING;
-                case "q" -> BLACK_QUEEN;
-                case "r" -> BLACK_ROOK;
-                case "b" -> BLACK_BISHOP;
-                case "n" -> BLACK_KNIGHT;
-                case "p" -> BLACK_PAWN;
-                default -> EMPTY;
-            };
-        }
-
         public String getCharacter() {
             return this.character;
         }
