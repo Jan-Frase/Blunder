@@ -1,48 +1,59 @@
-package de.janfrase.blunder.engine.gamestate.utility;
+package de.janfrase.blunder.engine.state.game;
 
-import de.janfrase.blunder.engine.gamestate.CastlingRights;
-import de.janfrase.blunder.engine.gamestate.GameState;
-import de.janfrase.blunder.engine.gamestate.IrreversibleData;
-import de.janfrase.blunder.engine.gamestate.board.BoardRepresentation;
+import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
+import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.OptionalInt;
-
-import static de.janfrase.blunder.engine.gamestate.utility.PieceToCharacterConstants.AsciiCharacter;
 
 /**
  * See: <a href="https://www.chessprogramming.org/Forsyth-Edwards_Notation">Chess programming wiki.</a>
  */
-public class FenLoader {
-
+public class GameStateFenParser {
     private static final Logger logger = LogManager.getLogger();
     private static final String STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     private static final String RANK_SEPARATOR = "/";
     private static final String SEGMENT_SEPARATOR = " ";
+    private static final Map<String, Constants.PieceType> charToPieceMap = new HashMap<>() {{
+        put("K", Constants.PieceType.KING);
+        put("Q", Constants.PieceType.QUEEN);
+        put("R", Constants.PieceType.ROOK);
+        put("B", Constants.PieceType.BISHOP);
+        put("N", Constants.PieceType.KNIGHT);
+        put("P", Constants.PieceType.PAWN);
+        put("k", Constants.PieceType.KING);
+        put("q", Constants.PieceType.QUEEN);
+        put("r", Constants.PieceType.ROOK);
+        put("b", Constants.PieceType.BISHOP);
+        put("n", Constants.PieceType.KNIGHT);
+        put("p", Constants.PieceType.PAWN);
+    }};
 
 
-    public static void loadStartingPosition(GameState gameState) {
-        loadFenString(STARTING_FEN, gameState);
+    public static void loadStartingPosition() {
+        loadFenString(STARTING_FEN);
     }
 
-    public static void loadFenString(String fenString, GameState gameState) {
+    public static void loadFenString(String fenString) {
         logger.info("Starting fen parsing on : {}", fenString);
         String[] fenSegments = fenString.split(SEGMENT_SEPARATOR);
 
-        parsePiecePlacement(fenSegments[FenSegments.PIECE_PLACEMENT.getIndex()], gameState.getBoardRepresentation());
-        parseSideToMove(fenSegments[FenSegments.SIDE_TO_MOVE.getIndex()], gameState);
+        parsePiecePlacement(fenSegments[FenSegments.PIECE_PLACEMENT.getIndex()]);
+        parseSideToMove(fenSegments[FenSegments.SIDE_TO_MOVE.getIndex()]);
 
-        parseIrreversibleData(fenSegments[FenSegments.CASTLING_ABILITY.getIndex()], fenSegments[FenSegments.EN_PASSANT_TARGET_SQUARE.getIndex()], fenSegments[FenSegments.HALF_MOVE_CLOCK.getIndex()], gameState);
+        parseIrreversibleData(fenSegments[FenSegments.CASTLING_ABILITY.getIndex()], fenSegments[FenSegments.EN_PASSANT_TARGET_SQUARE.getIndex()], fenSegments[FenSegments.HALF_MOVE_CLOCK.getIndex()]);
 
-        parseFullMoveCounter(fenSegments[FenSegments.FULL_MOVE_COUNTER.getIndex()], gameState);
+        parseFullMoveCounter(fenSegments[FenSegments.FULL_MOVE_COUNTER.getIndex()]);
 
 
-        logger.trace("Finished fen parsing : {}", GameStatePrinter.print(gameState));
+        logger.trace("Finished fen parsing : {}", GameStatePrinter.print());
     }
 
-    private static void parsePiecePlacement(String piecePlacement, BoardRepresentation boardRepresentation) {
+    private static void parsePiecePlacement(String piecePlacement) {
         int yPos = 0;
         for (String rank : piecePlacement.split(RANK_SEPARATOR)) {
             int xPos = 0;
@@ -51,14 +62,11 @@ public class FenLoader {
                 if (Character.isDigit(c)) {
                     xPos += Integer.parseInt(String.valueOf(c));
                 } else {
-                    // Get the fitting character enum for the char. This is a bit convoluted.
-                    AsciiCharacter character = PieceToCharacterConstants.AsciiCharacter.getCharacter(String.valueOf(c));
-
-                    // Get the Pair of Black/White and Piece enum.
-                    Constants.PieceType pieceType = PieceToCharacterConstants.mapFromAscii.get(character);
+                    // Get the piece type and color.
+                    Constants.PieceType pieceType = charToPieceMap.get(String.valueOf(c));
                     Constants.Side pieceSide = Character.isUpperCase(c) ? Constants.Side.WHITE : Constants.Side.BLACK;
 
-                    boardRepresentation.fillSquare(xPos, yPos, pieceType, pieceSide);
+                    GameState.getInstance().boardRepresentation.fillSquare(xPos, yPos, pieceType, pieceSide);
 
                     xPos++;
                 }
@@ -67,16 +75,16 @@ public class FenLoader {
         }
     }
 
-    private static void parseSideToMove(String sideToMove, GameState gameState) {
-        gameState.setIsWhitesTurn("w".equals(sideToMove));
+    private static void parseSideToMove(String sideToMove) {
+        GameState.getInstance().isWhitesTurn = "w".equals(sideToMove);
     }
 
-    private static void parseIrreversibleData(String castlingAbility, String enPassantSquare, String halfMoveClock, GameState gameState) {
+    private static void parseIrreversibleData(String castlingAbility, String enPassantSquare, String halfMoveClock) {
         CastlingRights castlingRights = parseCastlingAbility(castlingAbility);
         OptionalInt enPassantTargetSquare = parseEnPassantSquare(enPassantSquare);
         int halfMoveCount = Integer.parseInt(halfMoveClock);
 
-        gameState.getIrreversibleDataStack().push(new IrreversibleData(castlingRights, enPassantTargetSquare, halfMoveCount));
+        GameState.getInstance().irreversibleDataStack.push(new IrreversibleData(castlingRights, enPassantTargetSquare, halfMoveCount));
     }
 
     private static CastlingRights parseCastlingAbility(String castlingAbility) {
@@ -96,8 +104,8 @@ public class FenLoader {
         return OptionalInt.of(xPos);
     }
 
-    private static void parseFullMoveCounter(String fullMoveCounter, GameState gameState) {
-        gameState.setFullMoveCounter(Integer.parseInt(fullMoveCounter));
+    private static void parseFullMoveCounter(String fullMoveCounter) {
+        GameState.getInstance().fullMoveCounter = Integer.parseInt(fullMoveCounter);
     }
 
     private enum FenSegments {

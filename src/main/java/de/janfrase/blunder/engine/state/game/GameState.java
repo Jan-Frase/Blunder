@@ -1,24 +1,58 @@
-package de.janfrase.blunder.engine.gamestate;
+package de.janfrase.blunder.engine.state.game;
 
-import de.janfrase.blunder.engine.gamestate.board.BoardRepresentation;
 import de.janfrase.blunder.engine.movegen.Move;
+import de.janfrase.blunder.engine.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
 
 import java.util.OptionalInt;
 import java.util.Stack;
 
+/**
+ * The {@code GameState} class represents the current state of the chess game,
+ * including the board, active player, move count, and irreversible data.
+ * <p>
+ * It uses a singleton pattern to ensure there's only one instance of the game state.
+ */
 public class GameState {
 
-    private final BoardRepresentation boardRepresentation;
-    private final Stack<IrreversibleData> irreversibleData;
-    private boolean isWhitesTurn;
-    private int fullMoveCounter;
+    private static GameState instance = new GameState();
 
-    public GameState() {
+    final BoardRepresentation boardRepresentation;
+    final Stack<IrreversibleData> irreversibleDataStack;
+    boolean isWhitesTurn;
+    int fullMoveCounter;
+
+    private GameState() {
         this.boardRepresentation = new BoardRepresentation();
-        this.irreversibleData = new Stack<>();
+        this.irreversibleDataStack = new Stack<>();
         this.isWhitesTurn = true;
         this.fullMoveCounter = 1;
+    }
+
+
+    /**
+     * Returns the singleton instance of the {@code GameState} class.
+     * The {@code GameState} class represents the current state of a chess game
+     * and ensures that only one instance of this class exists at any given time.
+     *
+     * @return the singleton instance of {@code GameState}
+     */
+    public static GameState getInstance() {
+        return instance;
+    }
+
+    /**
+     * Resets the game state to its initial condition by reinitializing
+     * the {@code GameState} singleton instance.
+     * <p>
+     * This method ensures the game state is reset to a newly instantiated default configuration, clearing any prior
+     * game progress or data.
+     * <p>
+     * This is mostly here to easily implement unit tests.
+     */
+    public static void resetGameState() {
+        instance = new GameState();
     }
 
     // ------------------------------
@@ -42,7 +76,7 @@ public class GameState {
         this.isWhitesTurn = !this.isWhitesTurn;
 
         // copy the old irreversibleData
-        IrreversibleData.Builder irreversibleDataBuilder = new IrreversibleData.Builder().transferFromOldState(irreversibleData.peek());
+        IrreversibleData.Builder irreversibleDataBuilder = new IrreversibleData.Builder().transferFromOldState(irreversibleDataStack.peek());
 
         // now we can get to the edge cases :)
         if (move.moveType().equals(Move.MoveType.CAPTURE) || fromPieceType.equals(Constants.PieceType.PAWN)) {
@@ -65,33 +99,4 @@ public class GameState {
     public void unmakeMove(Move move) {
 
     }
-
-    // ------------------------------
-    // GETTERS AND SETTERS
-    // ------------------------------
-
-    public BoardRepresentation getBoardRepresentation() {
-        return boardRepresentation;
-    }
-
-    public Stack<IrreversibleData> getIrreversibleDataStack() {
-        return irreversibleData;
-    }
-
-    public boolean isWhitesTurn() {
-        return isWhitesTurn;
-    }
-
-    public int getFullMoveCounter() {
-        return fullMoveCounter;
-    }
-
-    public void setFullMoveCounter(int fullMoveCounter) {
-        this.fullMoveCounter = fullMoveCounter;
-    }
-
-    public void setIsWhitesTurn(boolean isWhitesTurn) {
-        this.isWhitesTurn = isWhitesTurn;
-    }
-
 }

@@ -1,4 +1,4 @@
-package de.janfrase.blunder.engine.gamestate.board;
+package de.janfrase.blunder.engine.state.board;
 
 import de.janfrase.blunder.utility.Constants;
 import org.apache.logging.log4j.LogManager;

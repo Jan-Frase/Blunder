@@ -1,31 +1,15 @@
-package de.janfrase.blunder.engine.gamestate.utility;
+package de.janfrase.blunder.engine.state.game;
 
 import de.janfrase.blunder.utility.Constants;
 
 import java.util.EnumMap;
 
-
-public class PieceToCharacterConstants {
-
-
-    // A map from Ascii Char -> (Color, Piece) :)
-    // A bit ugly but also a bit funny - imma leave it in.
-    static final EnumMap<AsciiCharacter, Constants.PieceType> mapFromAscii = new EnumMap<>(AsciiCharacter.class) {{
-        put(AsciiCharacter.EMPTY, Constants.PieceType.EMPTY);
-        put(AsciiCharacter.WHITE_KING, Constants.PieceType.KING);
-        put(AsciiCharacter.WHITE_QUEEN, Constants.PieceType.QUEEN);
-        put(AsciiCharacter.WHITE_ROOK, Constants.PieceType.ROOK);
-        put(AsciiCharacter.WHITE_BISHOP, Constants.PieceType.BISHOP);
-        put(AsciiCharacter.WHITE_KNIGHT, Constants.PieceType.KNIGHT);
-        put(AsciiCharacter.WHITE_PAWN, Constants.PieceType.PAWN);
-        put(AsciiCharacter.BLACK_KING, Constants.PieceType.KING);
-        put(AsciiCharacter.BLACK_QUEEN, Constants.PieceType.QUEEN);
-        put(AsciiCharacter.BLACK_ROOK, Constants.PieceType.ROOK);
-        put(AsciiCharacter.BLACK_BISHOP, Constants.PieceType.BISHOP);
-        put(AsciiCharacter.BLACK_KNIGHT, Constants.PieceType.KNIGHT);
-        put(AsciiCharacter.BLACK_PAWN, Constants.PieceType.PAWN);
-    }};
-
+/**
+ * The BoardPrinter class provides utilities for converting a chess board representation
+ * into a human-readable string format. It supports rendering the board using either
+ * Unicode or ASCII characters for the chess pieces.
+ */
+public class GameStatePrinter {
     // A map from (Color, Piece) -> Ascii Char :)
     // A bit ugly but also a bit funny - imma leave it in.
     static final EnumMap<Constants.Side, EnumMap<Constants.PieceType, AsciiCharacter>> mapToAscii = new EnumMap<>(Constants.Side.class) {{
@@ -51,53 +35,6 @@ public class PieceToCharacterConstants {
             put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY);
         }});
     }};
-
-
-    enum AsciiCharacter {
-        EMPTY(" "),
-        WHITE_KING("K"),
-        WHITE_QUEEN("Q"),
-        WHITE_ROOK("R"),
-        WHITE_BISHOP("B"),
-        WHITE_KNIGHT("N"),
-        WHITE_PAWN("P"),
-        BLACK_KING("k"),
-        BLACK_QUEEN("q"),
-        BLACK_ROOK("r"),
-        BLACK_BISHOP("b"),
-        BLACK_KNIGHT("n"),
-        BLACK_PAWN("p");
-
-        private final String character;
-
-        AsciiCharacter(String character) {
-            this.character = character;
-        }
-
-        public String getCharacter() {
-            return this.character;
-        }
-
-        public static AsciiCharacter getCharacter(String character) {
-            return switch (character) {
-                case "K" -> WHITE_KING;
-                case "Q" -> WHITE_QUEEN;
-                case "R" -> WHITE_ROOK;
-                case "B" -> WHITE_BISHOP;
-                case "N" -> WHITE_KNIGHT;
-                case "P" -> WHITE_PAWN;
-                case "k" -> BLACK_KING;
-                case "q" -> BLACK_QUEEN;
-                case "r" -> BLACK_ROOK;
-                case "b" -> BLACK_BISHOP;
-                case "n" -> BLACK_KNIGHT;
-                case "p" -> BLACK_PAWN;
-                default -> EMPTY;
-            };
-        }
-    }
-
-
     /*
      * ---------------
      * Unicode section
@@ -117,7 +54,6 @@ public class PieceToCharacterConstants {
     private static final String UNICODE_BLACK_BISHOP = "♝";
     private static final String UNICODE_BLACK_KNIGHT = "♞";
     private static final String UNICODE_BLACK_PAWN = "♟";
-
     // A map from (Color, Piece) -> Unicode Char :)
     // A bit ugly but also a bit funny - imma leave it in.
     static final EnumMap<Constants.Side, EnumMap<Constants.PieceType, String>> mapToUnicode = new EnumMap<>(Constants.Side.class) {{
@@ -143,4 +79,82 @@ public class PieceToCharacterConstants {
             put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY.getCharacter());
         }});
     }};
+
+    public static String print() {
+        GameState gameState = GameState.getInstance();
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("\n");
+        for (int y = 0; y < Constants.BOARD_WIDTH; y++) {
+            for (int x = 0; x < Constants.BOARD_WIDTH; x++) {
+                Constants.Side side = gameState.boardRepresentation.getSideAtPosition(x, y);
+                Constants.PieceType pieceType = gameState.boardRepresentation.getPieceAtPosition(x, y);
+                sb.append(getStringRepresentation(pieceType, side, x, y));
+
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
+    }
+
+
+    private static final boolean USE_ASCII = false;
+    private static final String LIGHT_SQUARE = "◻";
+    private static final String DARK_SQUARE = "◼";
+
+
+    private static String getStringRepresentation(Constants.PieceType pieceType, Constants.Side color, int x, int y) {
+        String piece = USE_ASCII ? mapToAscii.get(color).get(pieceType).getCharacter() : mapToUnicode.get(color).get(pieceType);
+        if(pieceType != Constants.PieceType.EMPTY) {
+            return piece;
+        }
+
+        return ((x + y) % 2 == 0) ? LIGHT_SQUARE : DARK_SQUARE;
+    }
+
+    enum AsciiCharacter {
+        EMPTY(" "),
+        WHITE_KING("K"),
+        WHITE_QUEEN("Q"),
+        WHITE_ROOK("R"),
+        WHITE_BISHOP("B"),
+        WHITE_KNIGHT("N"),
+        WHITE_PAWN("P"),
+        BLACK_KING("k"),
+        BLACK_QUEEN("q"),
+        BLACK_ROOK("r"),
+        BLACK_BISHOP("b"),
+        BLACK_KNIGHT("n"),
+        BLACK_PAWN("p");
+
+        private final String character;
+
+        AsciiCharacter(String character) {
+            this.character = character;
+        }
+
+        public static AsciiCharacter getCharacter(String character) {
+            return switch (character) {
+                case "K" -> WHITE_KING;
+                case "Q" -> WHITE_QUEEN;
+                case "R" -> WHITE_ROOK;
+                case "B" -> WHITE_BISHOP;
+                case "N" -> WHITE_KNIGHT;
+                case "P" -> WHITE_PAWN;
+                case "k" -> BLACK_KING;
+                case "q" -> BLACK_QUEEN;
+                case "r" -> BLACK_ROOK;
+                case "b" -> BLACK_BISHOP;
+                case "n" -> BLACK_KNIGHT;
+                case "p" -> BLACK_PAWN;
+                default -> EMPTY;
+            };
+        }
+
+        public String getCharacter() {
+            return this.character;
+        }
+    }
 }

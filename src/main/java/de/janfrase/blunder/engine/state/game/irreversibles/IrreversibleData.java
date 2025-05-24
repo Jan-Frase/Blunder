@@ -1,4 +1,4 @@
-package de.janfrase.blunder.engine.gamestate;
+package de.janfrase.blunder.engine.state.game.irreversibles;
 
 import java.util.OptionalInt;
 

@@ -1,8 +1,8 @@
-package de.janfrase.blunder.engine.gamestate.board;
+package de.janfrase.blunder.engine.state.board;
 
 import de.janfrase.blunder.utility.Constants;
-import de.janfrase.blunder.utility.Constants.Side;
 import de.janfrase.blunder.utility.Constants.PieceType;
+import de.janfrase.blunder.utility.Constants.Side;
 
 /**
  * Represents an 8x8 chessboard containing tiles with pieces and their corresponding colors.

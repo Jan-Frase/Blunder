@@ -1,8 +1,8 @@
 package de.janfrase.blunder;
 
-import de.janfrase.blunder.engine.gamestate.GameState;
-import de.janfrase.blunder.engine.gamestate.utility.FenLoader;
-import de.janfrase.blunder.engine.gamestate.utility.GameStatePrinter;
+import de.janfrase.blunder.engine.state.game.GameState;
+import de.janfrase.blunder.engine.state.game.GameStateFenParser;
+import de.janfrase.blunder.engine.state.game.GameStatePrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,14 +12,13 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Chess engine started.");
 
-        GameState gameState = new GameState();
-        logger.trace(GameStatePrinter.print(gameState));
+        logger.trace(GameStatePrinter.print());
 
-        FenLoader.loadStartingPosition(gameState);
+        GameStateFenParser.loadStartingPosition();
 
+        GameState.resetGameState();
 
-        gameState = new GameState();
-        FenLoader.loadFenString("N4k2/8/2p5/8/5q2/4Q3/1K6/8 w - - 0 1", gameState);
+        GameStateFenParser.loadFenString("N4k2/8/2p5/8/5q2/4Q3/1K6/8 w - - 0 1");
 
         logger.info("Chess engine finished.");
     }
