@@ -1,9 +1,10 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.game.irreversibles;
 
 import java.util.OptionalInt;
 
-
-public record IrreversibleData(CastlingRights castlingRights, OptionalInt enPassantX, int halfMoveClock) {
+public record IrreversibleData(
+        CastlingRights castlingRights, OptionalInt enPassantX, int halfMoveClock) {
 
     /**
      * A builder class for constructing instances of {@code IrreversibleData}.
@@ -15,7 +16,7 @@ public record IrreversibleData(CastlingRights castlingRights, OptionalInt enPass
         private OptionalInt enPassantX;
         private int halfMoveClock;
 
-        public Builder transferFromOldState(IrreversibleData irreversibleData){
+        public Builder transferFromOldState(IrreversibleData irreversibleData) {
             this.castlingRights = irreversibleData.castlingRights();
             this.enPassantX = OptionalInt.empty();
             this.halfMoveClock = irreversibleData.halfMoveClock() + 1;
@@ -42,8 +43,8 @@ public record IrreversibleData(CastlingRights castlingRights, OptionalInt enPass
         }
 
         public IrreversibleData buildDefault() {
-            return new IrreversibleData(new CastlingRights(true, true, true, true), OptionalInt.empty(), 0);
+            return new IrreversibleData(
+                    new CastlingRights(true, true, true, true), OptionalInt.empty(), 0);
         }
     }
-
 }

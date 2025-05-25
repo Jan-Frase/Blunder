@@ -1,3 +1,4 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.board;
 
 import de.janfrase.blunder.utility.Constants;

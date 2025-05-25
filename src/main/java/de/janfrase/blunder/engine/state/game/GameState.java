@@ -1,3 +1,4 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.game;
 
 import de.janfrase.blunder.engine.movegen.Move;
@@ -5,7 +6,6 @@ import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
-
 import java.util.OptionalInt;
 import java.util.Stack;
 
@@ -23,6 +23,7 @@ public class GameState {
     public static final int RIGHT_X_ROOK_START = 7;
     public static final int LEFT_X_ROOK_START = 0;
     public static final int KING_STARTING_X = 4;
+
     /**
      * The singleton instance of the {@code GameState} class.
      * This ensures that only one instance of the {@code GameState} class exists at any time,
@@ -46,7 +47,6 @@ public class GameState {
         this.isWhitesTurn = true;
         this.fullMoveCounter = 1;
     }
-
 
     /**
      * Returns the singleton instance of the {@code GameState} class.
@@ -76,14 +76,18 @@ public class GameState {
     // Make Section
     // ------------------------------
 
-    private static void halfMoveRelatedMakeMove(Move move, Constants.PieceType fromPieceType, IrreversibleData.Builder irreversibleDataBuilder) {
+    private static void halfMoveRelatedMakeMove(
+            Move move,
+            Constants.PieceType fromPieceType,
+            IrreversibleData.Builder irreversibleDataBuilder) {
         // now we can get to the edge cases :)
-        boolean wasSomethingCaptured = move.moveType().equals(Move.MoveType.CAPTURE)
-                || move.moveType().equals(Move.MoveType.EP_CAPTURE)
-                || move.moveType().equals(Move.MoveType.ROOK_PROMOTION_CAPTURE)
-                || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION_CAPTURE)
-                || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION_CAPTURE)
-                || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION_CAPTURE);
+        boolean wasSomethingCaptured =
+                move.moveType().equals(Move.MoveType.CAPTURE)
+                        || move.moveType().equals(Move.MoveType.EP_CAPTURE)
+                        || move.moveType().equals(Move.MoveType.ROOK_PROMOTION_CAPTURE)
+                        || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION_CAPTURE)
+                        || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION_CAPTURE)
+                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION_CAPTURE);
 
         // half-move clock handling
         if (wasSomethingCaptured || fromPieceType.equals(Constants.PieceType.PAWN)) {
@@ -107,16 +111,22 @@ public class GameState {
      */
     public void makeMove(Move move) {
         // set the square we are moving to, to have the piece we moved
-        Constants.Side fromSide = this.boardRepresentation.getSideAtPosition(move.fromX(), move.fromY());
-        Constants.PieceType fromPieceType = this.boardRepresentation.getPieceAtPosition(move.fromX(), move.fromY());
+        Constants.Side fromSide =
+                this.boardRepresentation.getSideAtPosition(move.fromX(), move.fromY());
+        Constants.PieceType fromPieceType =
+                this.boardRepresentation.getPieceAtPosition(move.fromX(), move.fromY());
         this.boardRepresentation.fillSquare(move.toX(), move.toY(), fromPieceType, fromSide);
 
         // set the square we are moving away from, to empty
-        this.boardRepresentation.fillSquare(move.fromX(), move.fromY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+        this.boardRepresentation.fillSquare(
+                move.fromX(), move.fromY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
 
         // copy the old irreversibleData
-        IrreversibleData.Builder irreversibleDataBuilder = new IrreversibleData.Builder().transferFromOldState(irreversibleDataStack.peek());
-        CastlingRights.Builder castlingRightsBuilder = new CastlingRights.Builder().transferFromOldState(irreversibleDataStack.peek().castlingRights());
+        IrreversibleData.Builder irreversibleDataBuilder =
+                new IrreversibleData.Builder().transferFromOldState(irreversibleDataStack.peek());
+        CastlingRights.Builder castlingRightsBuilder =
+                new CastlingRights.Builder()
+                        .transferFromOldState(irreversibleDataStack.peek().castlingRights());
 
         halfMoveRelatedMakeMove(move, fromPieceType, irreversibleDataBuilder);
 
@@ -136,7 +146,8 @@ public class GameState {
         this.irreversibleDataStack.push(irreversibleDataBuilder.build());
     }
 
-    private void enPassantRelatedMakeMove(Move move, Constants.Side fromSide, IrreversibleData.Builder irreversibleDataBuilder) {
+    private void enPassantRelatedMakeMove(
+            Move move, Constants.Side fromSide, IrreversibleData.Builder irreversibleDataBuilder) {
         // en passant capture handling
         if (move.moveType().equals(Move.MoveType.EP_CAPTURE)) {
             // off set the move.toY value depending on who took the piece
@@ -144,7 +155,11 @@ public class GameState {
             int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
 
             // remove the captured pawn from the board
-            this.boardRepresentation.fillSquare(move.toX(), move.toY() + yOffset, Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+            this.boardRepresentation.fillSquare(
+                    move.toX(),
+                    move.toY() + yOffset,
+                    Constants.PieceType.EMPTY,
+                    Constants.Side.EMPTY);
         }
 
         // en passant move handling
@@ -154,16 +169,26 @@ public class GameState {
         }
     }
 
-    private void castlingRelatedMakeMove(Move move, Constants.Side fromSide, CastlingRights.Builder castlingRightsBuilder, Constants.PieceType fromPieceType) {
+    private void castlingRelatedMakeMove(
+            Move move,
+            Constants.Side fromSide,
+            CastlingRights.Builder castlingRightsBuilder,
+            Constants.PieceType fromPieceType) {
         // castle move handling
-        if (move.moveType().equals(Move.MoveType.SHORT_CASTLE) || move.moveType().equals(Move.MoveType.LONG_CASTLE)) {
+        if (move.moveType().equals(Move.MoveType.SHORT_CASTLE)
+                || move.moveType().equals(Move.MoveType.LONG_CASTLE)) {
             // the rook goes to the left of the king on a king side castle and vice versa
             int rookXOffset = (move.moveType().equals(Move.MoveType.SHORT_CASTLE)) ? LEFT : RIGHT;
-            this.boardRepresentation.fillSquare(move.toX() + rookXOffset, move.toY(), Constants.PieceType.ROOK, fromSide);
+            this.boardRepresentation.fillSquare(
+                    move.toX() + rookXOffset, move.toY(), Constants.PieceType.ROOK, fromSide);
 
             // clear the rooks starting square
-            int rookXStart = (move.moveType().equals(Move.MoveType.SHORT_CASTLE)) ? RIGHT_X_ROOK_START : LEFT_X_ROOK_START;
-            this.boardRepresentation.fillSquare(rookXStart, move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+            int rookXStart =
+                    (move.moveType().equals(Move.MoveType.SHORT_CASTLE))
+                            ? RIGHT_X_ROOK_START
+                            : LEFT_X_ROOK_START;
+            this.boardRepresentation.fillSquare(
+                    rookXStart, move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
 
             // disable the castling rights
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, true);
@@ -173,46 +198,58 @@ public class GameState {
         int startingY = isWhitesTurn ? 0 : 7;
 
         // castle right loss on king move
-        if (fromPieceType.equals(Constants.PieceType.KING) && move.fromX() == KING_STARTING_X && move.fromY() == startingY) {
+        if (fromPieceType.equals(Constants.PieceType.KING)
+                && move.fromX() == KING_STARTING_X
+                && move.fromY() == startingY) {
             // disable all castling rights if the king was moved
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, true);
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, false);
         }
 
         // castle right loss on rook move
-        if (fromPieceType.equals(Constants.PieceType.ROOK) && move.fromX() == RIGHT_X_ROOK_START && move.fromY() == startingY) {
-            // disable the short castling rights if the right rook was moved from its starting square
+        if (fromPieceType.equals(Constants.PieceType.ROOK)
+                && move.fromX() == RIGHT_X_ROOK_START
+                && move.fromY() == startingY) {
+            // disable the short castling rights if the right rook was moved from its starting
+            // square
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, true);
         }
 
         // castle right loss on rook move
-        if (fromPieceType.equals(Constants.PieceType.ROOK) && move.fromX() == LEFT_X_ROOK_START && move.fromY() == startingY) {
+        if (fromPieceType.equals(Constants.PieceType.ROOK)
+                && move.fromX() == LEFT_X_ROOK_START
+                && move.fromY() == startingY) {
             // disable the long castling rights if the left rook was moved from its starting square
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, false);
         }
     }
 
-
     private void promotionRelatedMakeMove(Move move, Constants.Side fromSide) {
-        boolean wasSomethingPromoted = move.moveType().equals(Move.MoveType.ROOK_PROMOTION)
-                || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION)
-                || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION)
-                || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION)
-                || move.moveType().equals(Move.MoveType.ROOK_PROMOTION_CAPTURE)
-                || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION_CAPTURE)
-                || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION_CAPTURE)
-                || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION_CAPTURE);
+        boolean wasSomethingPromoted =
+                move.moveType().equals(Move.MoveType.ROOK_PROMOTION)
+                        || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION)
+                        || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION)
+                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION)
+                        || move.moveType().equals(Move.MoveType.ROOK_PROMOTION_CAPTURE)
+                        || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION_CAPTURE)
+                        || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION_CAPTURE)
+                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION_CAPTURE);
 
         if (wasSomethingPromoted) {
-            Constants.PieceType promotedPieceType = switch (move.moveType()) {
-                case ROOK_PROMOTION, ROOK_PROMOTION_CAPTURE -> Constants.PieceType.ROOK;
-                case KNIGHT_PROMOTION, KNIGHT_PROMOTION_CAPTURE -> Constants.PieceType.KNIGHT;
-                case BISHOP_PROMOTION, BISHOP_PROMOTION_CAPTURE -> Constants.PieceType.BISHOP;
-                case QUEEN_PROMOTION, QUEEN_PROMOTION_CAPTURE -> Constants.PieceType.QUEEN;
-                default -> throw new IllegalStateException("Unexpected value: " + move.moveType());
-            };
+            Constants.PieceType promotedPieceType =
+                    switch (move.moveType()) {
+                        case ROOK_PROMOTION, ROOK_PROMOTION_CAPTURE -> Constants.PieceType.ROOK;
+                        case KNIGHT_PROMOTION, KNIGHT_PROMOTION_CAPTURE -> Constants.PieceType
+                                .KNIGHT;
+                        case BISHOP_PROMOTION, BISHOP_PROMOTION_CAPTURE -> Constants.PieceType
+                                .BISHOP;
+                        case QUEEN_PROMOTION, QUEEN_PROMOTION_CAPTURE -> Constants.PieceType.QUEEN;
+                        default -> throw new IllegalStateException(
+                                "Unexpected value: " + move.moveType());
+                    };
 
-            this.boardRepresentation.fillSquare(move.toX(), move.toY(), promotedPieceType, fromSide);
+            this.boardRepresentation.fillSquare(
+                    move.toX(), move.toY(), promotedPieceType, fromSide);
         }
     }
 
@@ -220,7 +257,5 @@ public class GameState {
     // Unmake Section
     // ------------------------------
 
-    public void unmakeMove(Move move) {
-
-    }
+    public void unmakeMove(Move move) {}
 }

@@ -1,3 +1,4 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.movegen;
 
 /**
@@ -15,7 +16,6 @@ package de.janfrase.blunder.engine.movegen;
  */
 public record Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
 
-
     /**
      * Initializes a new move with the specified starting and ending positions, defaulting
      * to a {@code SpecialMoveType.QUIET_MOVE}.
@@ -29,19 +29,27 @@ public record Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
         this(fromX, fromY, toX, toY, MoveType.QUIET_MOVE);
     }
 
-
     /**
      * Based on this <a href="https://www.chessprogramming.org/Encoding_Moves#From-To_Based">chessprogramming</a> page.
      */
     public enum MoveType {
         QUIET_MOVE,
 
-        CAPTURE, EP_CAPTURE,
+        CAPTURE,
+        EP_CAPTURE,
 
         DOUBLE_PAWN_PUSH,
 
-        SHORT_CASTLE, LONG_CASTLE,
+        SHORT_CASTLE,
+        LONG_CASTLE,
 
-        ROOK_PROMOTION, ROOK_PROMOTION_CAPTURE, BISHOP_PROMOTION, BISHOP_PROMOTION_CAPTURE, KNIGHT_PROMOTION, KNIGHT_PROMOTION_CAPTURE, QUEEN_PROMOTION, QUEEN_PROMOTION_CAPTURE,
+        ROOK_PROMOTION,
+        ROOK_PROMOTION_CAPTURE,
+        BISHOP_PROMOTION,
+        BISHOP_PROMOTION_CAPTURE,
+        KNIGHT_PROMOTION,
+        KNIGHT_PROMOTION_CAPTURE,
+        QUEEN_PROMOTION,
+        QUEEN_PROMOTION_CAPTURE,
     }
 }

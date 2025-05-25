@@ -1,11 +1,12 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.game;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.utility.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class GameStateFenParserTest {
 
@@ -15,7 +16,7 @@ public class GameStateFenParserTest {
     void beforeEach() {
         GameState.resetGameState();
     }
-    
+
     /**
      * Tests for the loadFenString method in the FenLoader class.
      * The loadFenString method parses a FEN string representing a chessboard state
@@ -29,21 +30,50 @@ public class GameStateFenParserTest {
 
         assertNotNull(board, "Board representation should not be null after loading FEN.");
 
-        assertEquals(Constants.PieceType.ROOK, board.getPieceAtPosition(0, 0), "Expected a rook at position (0, 0).");
-        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(0, 0), "Expected a white rook at position (0, 0).");
+        assertEquals(
+                Constants.PieceType.ROOK,
+                board.getPieceAtPosition(0, 0),
+                "Expected a rook at position (0, 0).");
+        assertEquals(
+                Constants.Side.BLACK,
+                board.getSideAtPosition(0, 0),
+                "Expected a white rook at position (0, 0).");
 
-        assertEquals(Constants.PieceType.KING, board.getPieceAtPosition(4, 0), "Expected a king at position (4, 0).");
-        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(4, 0), "Expected a white king at position (4, 0).");
+        assertEquals(
+                Constants.PieceType.KING,
+                board.getPieceAtPosition(4, 0),
+                "Expected a king at position (4, 0).");
+        assertEquals(
+                Constants.Side.BLACK,
+                board.getSideAtPosition(4, 0),
+                "Expected a white king at position (4, 0).");
 
-        assertEquals(Constants.PieceType.PAWN, board.getPieceAtPosition(3, 1), "Expected a white pawn at position (4, 0).");
-        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(3, 1), "Expected a white pawn at position (4, 0).");
+        assertEquals(
+                Constants.PieceType.PAWN,
+                board.getPieceAtPosition(3, 1),
+                "Expected a white pawn at position (4, 0).");
+        assertEquals(
+                Constants.Side.BLACK,
+                board.getSideAtPosition(3, 1),
+                "Expected a white pawn at position (4, 0).");
 
         assertTrue(this.gameState.isWhitesTurn, "White should move first in starting position");
-        assertTrue(gameState.irreversibleDataStack.peek().castlingRights().whiteShortCastle(), "White should have kingside castling rights");
-        assertTrue(gameState.irreversibleDataStack.peek().castlingRights().whiteLongCastle(), "White should have queenside castling rights");
-        assertTrue(gameState.irreversibleDataStack.peek().castlingRights().blackShortCastle(), "Black should have kingside castling rights");
-        assertTrue(gameState.irreversibleDataStack.peek().castlingRights().blackLongCastle(), "Black should have queenside castling rights");
-        assertEquals(0, gameState.irreversibleDataStack.peek().halfMoveClock(), "Half move clock should be 0");
+        assertTrue(
+                gameState.irreversibleDataStack.peek().castlingRights().whiteShortCastle(),
+                "White should have kingside castling rights");
+        assertTrue(
+                gameState.irreversibleDataStack.peek().castlingRights().whiteLongCastle(),
+                "White should have queenside castling rights");
+        assertTrue(
+                gameState.irreversibleDataStack.peek().castlingRights().blackShortCastle(),
+                "Black should have kingside castling rights");
+        assertTrue(
+                gameState.irreversibleDataStack.peek().castlingRights().blackLongCastle(),
+                "Black should have queenside castling rights");
+        assertEquals(
+                0,
+                gameState.irreversibleDataStack.peek().halfMoveClock(),
+                "Half move clock should be 0");
         assertEquals(1, gameState.fullMoveCounter, "Full move counter should be 1");
     }
 
@@ -56,21 +86,45 @@ public class GameStateFenParserTest {
         BoardRepresentation board = gameState.boardRepresentation;
 
         assertNotNull(board, "Board representation should not be null after loading FEN.");
-        assertEquals(Constants.PieceType.KNIGHT, board.getPieceAtPosition(0, 0), "Expected a white knight at position (0, 0).");
-        assertEquals(Constants.Side.WHITE, board.getSideAtPosition(0, 0), "Expected a white knight at position (0, 0).");
+        assertEquals(
+                Constants.PieceType.KNIGHT,
+                board.getPieceAtPosition(0, 0),
+                "Expected a white knight at position (0, 0).");
+        assertEquals(
+                Constants.Side.WHITE,
+                board.getSideAtPosition(0, 0),
+                "Expected a white knight at position (0, 0).");
 
+        assertEquals(
+                Constants.PieceType.KING,
+                board.getPieceAtPosition(5, 0),
+                "Expected a black king at position (5, 0).");
+        assertEquals(
+                Constants.Side.BLACK,
+                board.getSideAtPosition(5, 0),
+                "Expected a black king at position (5, 0).");
 
-        assertEquals(Constants.PieceType.KING, board.getPieceAtPosition(5, 0), "Expected a black king at position (5, 0).");
-        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(5, 0), "Expected a black king at position (5, 0).");
-
-
-        assertEquals(Constants.PieceType.PAWN, board.getPieceAtPosition(2, 3), "Expected a black pawn at position (2, 3).");
-        assertEquals(Constants.Side.BLACK, board.getSideAtPosition(2, 3), "Expected a black pawn at position (2, 3).");
+        assertEquals(
+                Constants.PieceType.PAWN,
+                board.getPieceAtPosition(2, 3),
+                "Expected a black pawn at position (2, 3).");
+        assertEquals(
+                Constants.Side.BLACK,
+                board.getSideAtPosition(2, 3),
+                "Expected a black pawn at position (2, 3).");
 
         assertFalse(gameState.isWhitesTurn, "Black should be to move");
-        assertTrue(gameState.irreversibleDataStack.peek().enPassantX().isPresent(), "En passant square should exist");
-        assertEquals(2, gameState.irreversibleDataStack.peek().enPassantX().getAsInt(), "En passant square should be on c-file");
-        assertEquals(36, gameState.irreversibleDataStack.peek().halfMoveClock(), "Half move clock should be 36");
+        assertTrue(
+                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
+                "En passant square should exist");
+        assertEquals(
+                2,
+                gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
+                "En passant square should be on c-file");
+        assertEquals(
+                36,
+                gameState.irreversibleDataStack.peek().halfMoveClock(),
+                "Half move clock should be 36");
         assertEquals(45, gameState.fullMoveCounter, "Full move counter should be 45");
     }
 
@@ -85,16 +139,30 @@ public class GameStateFenParserTest {
         assertNotNull(board, "Board representation should not be null after loading FEN.");
         for (int y = 0; y < 8; y++) {
             for (int x = 0; x < 8; x++) {
-                assertEquals(Constants.Side.EMPTY, board.getSideAtPosition(x, y), "Expected no piece at position (" + x + ", " + y + ").");
+                assertEquals(
+                        Constants.Side.EMPTY,
+                        board.getSideAtPosition(x, y),
+                        "Expected no piece at position (" + x + ", " + y + ").");
             }
         }
 
         assertTrue(gameState.isWhitesTurn, "White should be to move");
-        assertFalse(gameState.irreversibleDataStack.peek().castlingRights().whiteShortCastle(), "No castling rights should be available");
-        assertFalse(gameState.irreversibleDataStack.peek().castlingRights().whiteLongCastle(), "No castling rights should be available");
-        assertFalse(gameState.irreversibleDataStack.peek().castlingRights().blackShortCastle(), "No castling rights should be available");
-        assertFalse(gameState.irreversibleDataStack.peek().castlingRights().blackLongCastle(), "No castling rights should be available");
-        assertEquals(0, gameState.irreversibleDataStack.peek().halfMoveClock(), "Half move clock should be 0");
+        assertFalse(
+                gameState.irreversibleDataStack.peek().castlingRights().whiteShortCastle(),
+                "No castling rights should be available");
+        assertFalse(
+                gameState.irreversibleDataStack.peek().castlingRights().whiteLongCastle(),
+                "No castling rights should be available");
+        assertFalse(
+                gameState.irreversibleDataStack.peek().castlingRights().blackShortCastle(),
+                "No castling rights should be available");
+        assertFalse(
+                gameState.irreversibleDataStack.peek().castlingRights().blackLongCastle(),
+                "No castling rights should be available");
+        assertEquals(
+                0,
+                gameState.irreversibleDataStack.peek().halfMoveClock(),
+                "Half move clock should be 0");
         assertEquals(1, gameState.fullMoveCounter, "Full move counter should be 1");
     }
 }

@@ -1,3 +1,4 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.board;
 
 import de.janfrase.blunder.utility.Constants;
@@ -69,7 +70,6 @@ public class Board8x8 {
         this.pieceTypes[convertIndices(x, y)] = pieceType;
         this.side[convertIndices(x, y)] = color;
     }
-
 
     /**
      * Converts a two-dimensional board index (x, y) into a one-dimensional array index.

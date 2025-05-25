@@ -1,38 +1,41 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.game;
 
 import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.OptionalInt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * See: <a href="https://www.chessprogramming.org/Forsyth-Edwards_Notation">Chess programming wiki.</a>
  */
 public class GameStateFenParser {
     private static final Logger logger = LogManager.getLogger();
-    private static final String STARTING_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+    private static final String STARTING_FEN =
+            "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     private static final String RANK_SEPARATOR = "/";
     private static final String SEGMENT_SEPARATOR = " ";
-    private static final Map<String, Constants.PieceType> charToPieceMap = new HashMap<>() {{
-        put("K", Constants.PieceType.KING);
-        put("Q", Constants.PieceType.QUEEN);
-        put("R", Constants.PieceType.ROOK);
-        put("B", Constants.PieceType.BISHOP);
-        put("N", Constants.PieceType.KNIGHT);
-        put("P", Constants.PieceType.PAWN);
-        put("k", Constants.PieceType.KING);
-        put("q", Constants.PieceType.QUEEN);
-        put("r", Constants.PieceType.ROOK);
-        put("b", Constants.PieceType.BISHOP);
-        put("n", Constants.PieceType.KNIGHT);
-        put("p", Constants.PieceType.PAWN);
-    }};
-
+    private static final Map<String, Constants.PieceType> charToPieceMap =
+            new HashMap<>() {
+                {
+                    put("K", Constants.PieceType.KING);
+                    put("Q", Constants.PieceType.QUEEN);
+                    put("R", Constants.PieceType.ROOK);
+                    put("B", Constants.PieceType.BISHOP);
+                    put("N", Constants.PieceType.KNIGHT);
+                    put("P", Constants.PieceType.PAWN);
+                    put("k", Constants.PieceType.KING);
+                    put("q", Constants.PieceType.QUEEN);
+                    put("r", Constants.PieceType.ROOK);
+                    put("b", Constants.PieceType.BISHOP);
+                    put("n", Constants.PieceType.KNIGHT);
+                    put("p", Constants.PieceType.PAWN);
+                }
+            };
 
     public static void loadStartingPosition() {
         loadFenString(STARTING_FEN);
@@ -45,10 +48,12 @@ public class GameStateFenParser {
         parsePiecePlacement(fenSegments[FenSegments.PIECE_PLACEMENT.getIndex()]);
         parseSideToMove(fenSegments[FenSegments.SIDE_TO_MOVE.getIndex()]);
 
-        parseIrreversibleData(fenSegments[FenSegments.CASTLING_ABILITY.getIndex()], fenSegments[FenSegments.EN_PASSANT_TARGET_SQUARE.getIndex()], fenSegments[FenSegments.HALF_MOVE_CLOCK.getIndex()]);
+        parseIrreversibleData(
+                fenSegments[FenSegments.CASTLING_ABILITY.getIndex()],
+                fenSegments[FenSegments.EN_PASSANT_TARGET_SQUARE.getIndex()],
+                fenSegments[FenSegments.HALF_MOVE_CLOCK.getIndex()]);
 
         parseFullMoveCounter(fenSegments[FenSegments.FULL_MOVE_COUNTER.getIndex()]);
-
 
         logger.trace("Finished fen parsing : {}", GameStatePrinter.print());
     }
@@ -64,9 +69,12 @@ public class GameStateFenParser {
                 } else {
                     // Get the piece type and color.
                     Constants.PieceType pieceType = charToPieceMap.get(String.valueOf(c));
-                    Constants.Side pieceSide = Character.isUpperCase(c) ? Constants.Side.WHITE : Constants.Side.BLACK;
+                    Constants.Side pieceSide =
+                            Character.isUpperCase(c) ? Constants.Side.WHITE : Constants.Side.BLACK;
 
-                    GameState.getInstance().boardRepresentation.fillSquare(xPos, yPos, pieceType, pieceSide);
+                    GameState.getInstance()
+                            .boardRepresentation
+                            .fillSquare(xPos, yPos, pieceType, pieceSide);
 
                     xPos++;
                 }
@@ -79,12 +87,15 @@ public class GameStateFenParser {
         GameState.getInstance().isWhitesTurn = "w".equals(sideToMove);
     }
 
-    private static void parseIrreversibleData(String castlingAbility, String enPassantSquare, String halfMoveClock) {
+    private static void parseIrreversibleData(
+            String castlingAbility, String enPassantSquare, String halfMoveClock) {
         CastlingRights castlingRights = parseCastlingAbility(castlingAbility);
         OptionalInt enPassantTargetSquare = parseEnPassantSquare(enPassantSquare);
         int halfMoveCount = Integer.parseInt(halfMoveClock);
 
-        GameState.getInstance().irreversibleDataStack.push(new IrreversibleData(castlingRights, enPassantTargetSquare, halfMoveCount));
+        GameState.getInstance()
+                .irreversibleDataStack
+                .push(new IrreversibleData(castlingRights, enPassantTargetSquare, halfMoveCount));
     }
 
     private static CastlingRights parseCastlingAbility(String castlingAbility) {
@@ -93,7 +104,8 @@ public class GameStateFenParser {
         boolean blackShortCastle = castlingAbility.indexOf('k') != -1;
         boolean blackLongCastle = castlingAbility.indexOf('q') != -1;
 
-        return new CastlingRights(whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
+        return new CastlingRights(
+                whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle);
     }
 
     private static OptionalInt parseEnPassantSquare(String enPassantSquare) {
@@ -109,7 +121,12 @@ public class GameStateFenParser {
     }
 
     private enum FenSegments {
-        PIECE_PLACEMENT(0), SIDE_TO_MOVE(1), CASTLING_ABILITY(2), EN_PASSANT_TARGET_SQUARE(3), HALF_MOVE_CLOCK(4), FULL_MOVE_COUNTER(5);
+        PIECE_PLACEMENT(0),
+        SIDE_TO_MOVE(1),
+        CASTLING_ABILITY(2),
+        EN_PASSANT_TARGET_SQUARE(3),
+        HALF_MOVE_CLOCK(4),
+        FULL_MOVE_COUNTER(5);
 
         private final int index;
 

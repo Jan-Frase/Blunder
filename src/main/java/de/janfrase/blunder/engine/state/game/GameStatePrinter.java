@@ -1,7 +1,7 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.game;
 
 import de.janfrase.blunder.utility.Constants;
-
 import java.util.EnumMap;
 
 /**
@@ -12,29 +12,44 @@ import java.util.EnumMap;
 public class GameStatePrinter {
     // A map from (Color, Piece) -> Ascii Char :)
     // A bit ugly but also a bit funny - imma leave it in.
-    static final EnumMap<Constants.Side, EnumMap<Constants.PieceType, AsciiCharacter>> mapToAscii = new EnumMap<>(Constants.Side.class) {{
-        put(Constants.Side.WHITE, new EnumMap<>(Constants.PieceType.class) {{
-            put(Constants.PieceType.KING, AsciiCharacter.WHITE_KING);
-            put(Constants.PieceType.QUEEN, AsciiCharacter.WHITE_QUEEN);
-            put(Constants.PieceType.ROOK, AsciiCharacter.WHITE_ROOK);
-            put(Constants.PieceType.BISHOP, AsciiCharacter.WHITE_BISHOP);
-            put(Constants.PieceType.KNIGHT, AsciiCharacter.WHITE_KNIGHT);
-            put(Constants.PieceType.PAWN, AsciiCharacter.WHITE_PAWN);
-            put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY);
-        }});
-        put(Constants.Side.BLACK, new EnumMap<>(Constants.PieceType.class) {{
-            put(Constants.PieceType.KING, AsciiCharacter.BLACK_KING);
-            put(Constants.PieceType.QUEEN, AsciiCharacter.BLACK_QUEEN);
-            put(Constants.PieceType.ROOK, AsciiCharacter.BLACK_ROOK);
-            put(Constants.PieceType.BISHOP, AsciiCharacter.BLACK_BISHOP);
-            put(Constants.PieceType.KNIGHT, AsciiCharacter.BLACK_KNIGHT);
-            put(Constants.PieceType.PAWN, AsciiCharacter.BLACK_PAWN);
-            put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY);
-        }});
-        put(Constants.Side.EMPTY, new EnumMap<>(Constants.PieceType.class) {{
-            put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY);
-        }});
-    }};
+    static final EnumMap<Constants.Side, EnumMap<Constants.PieceType, AsciiCharacter>> mapToAscii =
+            new EnumMap<>(Constants.Side.class) {
+                {
+                    put(
+                            Constants.Side.WHITE,
+                            new EnumMap<>(Constants.PieceType.class) {
+                                {
+                                    put(Constants.PieceType.KING, AsciiCharacter.WHITE_KING);
+                                    put(Constants.PieceType.QUEEN, AsciiCharacter.WHITE_QUEEN);
+                                    put(Constants.PieceType.ROOK, AsciiCharacter.WHITE_ROOK);
+                                    put(Constants.PieceType.BISHOP, AsciiCharacter.WHITE_BISHOP);
+                                    put(Constants.PieceType.KNIGHT, AsciiCharacter.WHITE_KNIGHT);
+                                    put(Constants.PieceType.PAWN, AsciiCharacter.WHITE_PAWN);
+                                    put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY);
+                                }
+                            });
+                    put(
+                            Constants.Side.BLACK,
+                            new EnumMap<>(Constants.PieceType.class) {
+                                {
+                                    put(Constants.PieceType.KING, AsciiCharacter.BLACK_KING);
+                                    put(Constants.PieceType.QUEEN, AsciiCharacter.BLACK_QUEEN);
+                                    put(Constants.PieceType.ROOK, AsciiCharacter.BLACK_ROOK);
+                                    put(Constants.PieceType.BISHOP, AsciiCharacter.BLACK_BISHOP);
+                                    put(Constants.PieceType.KNIGHT, AsciiCharacter.BLACK_KNIGHT);
+                                    put(Constants.PieceType.PAWN, AsciiCharacter.BLACK_PAWN);
+                                    put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY);
+                                }
+                            });
+                    put(
+                            Constants.Side.EMPTY,
+                            new EnumMap<>(Constants.PieceType.class) {
+                                {
+                                    put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY);
+                                }
+                            });
+                }
+            };
     /*
      * ---------------
      * Unicode section
@@ -56,29 +71,50 @@ public class GameStatePrinter {
     private static final String UNICODE_BLACK_PAWN = "♟";
     // A map from (Color, Piece) -> Unicode Char :)
     // A bit ugly but also a bit funny - imma leave it in.
-    static final EnumMap<Constants.Side, EnumMap<Constants.PieceType, String>> mapToUnicode = new EnumMap<>(Constants.Side.class) {{
-        put(Constants.Side.WHITE, new EnumMap<>(Constants.PieceType.class) {{
-            put(Constants.PieceType.KING, UNICODE_WHITE_KING);
-            put(Constants.PieceType.QUEEN, UNICODE_WHITE_QUEEN);
-            put(Constants.PieceType.ROOK, UNICODE_WHITE_ROOK);
-            put(Constants.PieceType.BISHOP, UNICODE_WHITE_BISHOP);
-            put(Constants.PieceType.KNIGHT, UNICODE_WHITE_KNIGHT);
-            put(Constants.PieceType.PAWN, UNICODE_WHITE_PAWN);
-            put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY.getCharacter());
-        }});
-        put(Constants.Side.BLACK, new EnumMap<>(Constants.PieceType.class) {{
-            put(Constants.PieceType.KING, UNICODE_BLACK_KING);
-            put(Constants.PieceType.QUEEN, UNICODE_BLACK_QUEEN);
-            put(Constants.PieceType.ROOK, UNICODE_BLACK_ROOK);
-            put(Constants.PieceType.BISHOP, UNICODE_BLACK_BISHOP);
-            put(Constants.PieceType.KNIGHT, UNICODE_BLACK_KNIGHT);
-            put(Constants.PieceType.PAWN, UNICODE_BLACK_PAWN);
-            put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY.getCharacter());
-        }});
-        put(Constants.Side.EMPTY, new EnumMap<>(Constants.PieceType.class) {{
-            put(Constants.PieceType.EMPTY, AsciiCharacter.EMPTY.getCharacter());
-        }});
-    }};
+    static final EnumMap<Constants.Side, EnumMap<Constants.PieceType, String>> mapToUnicode =
+            new EnumMap<>(Constants.Side.class) {
+                {
+                    put(
+                            Constants.Side.WHITE,
+                            new EnumMap<>(Constants.PieceType.class) {
+                                {
+                                    put(Constants.PieceType.KING, UNICODE_WHITE_KING);
+                                    put(Constants.PieceType.QUEEN, UNICODE_WHITE_QUEEN);
+                                    put(Constants.PieceType.ROOK, UNICODE_WHITE_ROOK);
+                                    put(Constants.PieceType.BISHOP, UNICODE_WHITE_BISHOP);
+                                    put(Constants.PieceType.KNIGHT, UNICODE_WHITE_KNIGHT);
+                                    put(Constants.PieceType.PAWN, UNICODE_WHITE_PAWN);
+                                    put(
+                                            Constants.PieceType.EMPTY,
+                                            AsciiCharacter.EMPTY.getCharacter());
+                                }
+                            });
+                    put(
+                            Constants.Side.BLACK,
+                            new EnumMap<>(Constants.PieceType.class) {
+                                {
+                                    put(Constants.PieceType.KING, UNICODE_BLACK_KING);
+                                    put(Constants.PieceType.QUEEN, UNICODE_BLACK_QUEEN);
+                                    put(Constants.PieceType.ROOK, UNICODE_BLACK_ROOK);
+                                    put(Constants.PieceType.BISHOP, UNICODE_BLACK_BISHOP);
+                                    put(Constants.PieceType.KNIGHT, UNICODE_BLACK_KNIGHT);
+                                    put(Constants.PieceType.PAWN, UNICODE_BLACK_PAWN);
+                                    put(
+                                            Constants.PieceType.EMPTY,
+                                            AsciiCharacter.EMPTY.getCharacter());
+                                }
+                            });
+                    put(
+                            Constants.Side.EMPTY,
+                            new EnumMap<>(Constants.PieceType.class) {
+                                {
+                                    put(
+                                            Constants.PieceType.EMPTY,
+                                            AsciiCharacter.EMPTY.getCharacter());
+                                }
+                            });
+                }
+            };
 
     public static String print() {
         GameState gameState = GameState.getInstance();
@@ -89,9 +125,9 @@ public class GameStatePrinter {
         for (int y = 0; y < Constants.BOARD_WIDTH; y++) {
             for (int x = 0; x < Constants.BOARD_WIDTH; x++) {
                 Constants.Side side = gameState.boardRepresentation.getSideAtPosition(x, y);
-                Constants.PieceType pieceType = gameState.boardRepresentation.getPieceAtPosition(x, y);
+                Constants.PieceType pieceType =
+                        gameState.boardRepresentation.getPieceAtPosition(x, y);
                 sb.append(getStringRepresentation(pieceType, side, x, y));
-
             }
             sb.append("\n");
         }
@@ -99,15 +135,17 @@ public class GameStatePrinter {
         return sb.toString();
     }
 
-
     private static final boolean USE_ASCII = false;
     private static final String LIGHT_SQUARE = "◻";
     private static final String DARK_SQUARE = "◼";
 
-
-    private static String getStringRepresentation(Constants.PieceType pieceType, Constants.Side color, int x, int y) {
-        String piece = USE_ASCII ? mapToAscii.get(color).get(pieceType).getCharacter() : mapToUnicode.get(color).get(pieceType);
-        if(pieceType != Constants.PieceType.EMPTY) {
+    private static String getStringRepresentation(
+            Constants.PieceType pieceType, Constants.Side color, int x, int y) {
+        String piece =
+                USE_ASCII
+                        ? mapToAscii.get(color).get(pieceType).getCharacter()
+                        : mapToUnicode.get(color).get(pieceType);
+        if (pieceType != Constants.PieceType.EMPTY) {
             return piece;
         }
 
