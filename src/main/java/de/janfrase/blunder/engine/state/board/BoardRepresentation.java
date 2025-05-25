@@ -61,6 +61,7 @@ public class BoardRepresentation {
      * @param color The color associated with the piece to be placed, represented by the {@link Constants.Side} enum.
      */
     public void fillSquare(int x, int y, Constants.PieceType pieceType, Constants.Side color) {
+        logger.trace("Placing {} from {} on x={} y={}", pieceType, color, x, y);
         this.squareBoard.fillSquare(x, y, pieceType, color);
     }
 }

@@ -19,7 +19,7 @@ public class GameStateTest {
     }
 
     @Test
-    void testSimpleMakeMove() {
+    void testSimpleUnmakeMove() {
         gameState.boardRepresentation.fillSquare(
                 2, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
         gameState.boardRepresentation.fillSquare(
@@ -34,7 +34,7 @@ public class GameStateTest {
                 gameState.boardRepresentation.getPieceAtPosition(3, 3),
                 "Target square should be empty before the move");
 
-        Move pawnMove = new Move(2, 2, 2, 3, Move.MoveType.QUIET_MOVE);
+        Move pawnMove = new Move(2, 2, 2, 3);
         gameState.makeMove(pawnMove);
 
         assertEquals(
@@ -53,7 +53,7 @@ public class GameStateTest {
                 gameState.irreversibleDataStack.peek().halfMoveClock(),
                 "Half move clock should be 0 since we just moved a pawn");
 
-        Move rookMove = new Move(6, 6, 6, 4, Move.MoveType.QUIET_MOVE);
+        Move rookMove = new Move(6, 6, 6, 4);
         gameState.makeMove(rookMove);
 
         assertEquals(
@@ -65,6 +65,36 @@ public class GameStateTest {
                 2,
                 gameState.fullMoveCounter,
                 "Full move counter should increment after Black's move");
+
+        gameState.unmakeMove(rookMove);
+
+        assertEquals(
+                0,
+                gameState.irreversibleDataStack.peek().halfMoveClock(),
+                "Half move clock should be 0 after unmaking a move");
+
+        assertEquals(
+                1,
+                gameState.fullMoveCounter,
+                "Full move counter should decrement after unmaking a move");
+
+        assertEquals(
+                Constants.PieceType.ROOK,
+                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                "Rook should be in the correct position after unmaking a move");
+
+        gameState.unmakeMove(pawnMove);
+
+        assertEquals(
+                Constants.PieceType.PAWN,
+                gameState.boardRepresentation.getPieceAtPosition(2, 2),
+                "Source square should be a pawn before the move");
+        assertEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(3, 3),
+                "Target square should be empty before the move");
+
+        assertTrue(gameState.isWhitesTurn, "Turn should toggle after a move");
     }
 
     @Test
@@ -85,7 +115,7 @@ public class GameStateTest {
                 gameState.boardRepresentation.getPieceAtPosition(2, 4),
                 "Target square should be empty before the move");
 
-        Move pawnMove = new Move(2, 5, 2, 4, Move.MoveType.QUIET_MOVE);
+        Move pawnMove = new Move(2, 5, 2, 4);
         gameState.makeMove(pawnMove);
 
         assertEquals(
@@ -104,13 +134,43 @@ public class GameStateTest {
                 gameState.irreversibleDataStack.peek().halfMoveClock(),
                 "Half move clock should be 0 since we just moved a pawn");
 
-        Move rookMove = new Move(6, 1, 6, 3, Move.MoveType.QUIET_MOVE);
+        Move rookMove = new Move(6, 1, 6, 3);
         gameState.makeMove(rookMove);
 
         assertEquals(
                 1,
                 gameState.irreversibleDataStack.peek().halfMoveClock(),
                 "Half move clock should be 1");
+
+        gameState.unmakeMove(rookMove);
+
+        assertEquals(
+                0,
+                gameState.irreversibleDataStack.peek().halfMoveClock(),
+                "Half move clock should be 0 after unmaking a move");
+
+        assertEquals(
+                1,
+                gameState.fullMoveCounter,
+                "Full move counter should decrement after unmaking a move");
+
+        assertEquals(
+                Constants.PieceType.ROOK,
+                gameState.boardRepresentation.getPieceAtPosition(6, 1),
+                "Rook should be in the correct position after unmaking a move");
+
+        gameState.unmakeMove(pawnMove);
+
+        assertEquals(
+                Constants.PieceType.PAWN,
+                gameState.boardRepresentation.getPieceAtPosition(2, 5),
+                "Source square should be a pawn before the move");
+        assertEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(2, 4),
+                "Target square should be empty before the move");
+
+        assertFalse(gameState.isWhitesTurn, "Turn should toggle after a move");
     }
 
     @Test
@@ -149,6 +209,16 @@ public class GameStateTest {
                 Constants.PieceType.PAWN,
                 gameState.boardRepresentation.getPieceAtPosition(5, 5),
                 "The capturing pawn should exist in the correct target square after en passant.");
+
+        gameState.unmakeMove(enPassant);
+
+        assertTrue(
+                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
+                "En passant target square should be present after a double pawn push");
+        assertEquals(
+                5,
+                gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
+                "En passant target square should be the correct square after a double pawn push");
     }
 
     @Test
@@ -189,6 +259,16 @@ public class GameStateTest {
                 Constants.PieceType.PAWN,
                 gameState.boardRepresentation.getPieceAtPosition(5, 2),
                 "The capturing pawn should exist in the correct target square after en passant.");
+
+        gameState.unmakeMove(enPassant);
+
+        assertTrue(
+                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
+                "En passant target square should be present after a double pawn push");
+        assertEquals(
+                5,
+                gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
+                "En passant target square should be the correct square after a double pawn push");
     }
 
     @Test
@@ -225,6 +305,34 @@ public class GameStateTest {
         assertFalse(
                 castlingRights.whiteLongCastle(),
                 "White should not be able to castle queenside after castling");
+
+        gameState.unmakeMove(kingCastle);
+
+        assertNotEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(7, 0),
+                "The rook's original position should be full before castling.");
+        assertNotEquals(
+                Constants.PieceType.ROOK,
+                gameState.boardRepresentation.getPieceAtPosition(5, 0),
+                "The rook should be in the correct position before castling.");
+        assertNotEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(4, 0),
+                "The king's original position should be full before castling.");
+        assertNotEquals(
+                Constants.PieceType.KING,
+                gameState.boardRepresentation.getPieceAtPosition(6, 0),
+                "The king should be in the correct position before castling.");
+
+        CastlingRights castlingRightsAfterUnmake =
+                gameState.irreversibleDataStack.peek().castlingRights();
+        assertTrue(
+                castlingRightsAfterUnmake.whiteShortCastle(),
+                "White should be able to castle kingside after unmaking castling");
+        assertTrue(
+                castlingRightsAfterUnmake.whiteLongCastle(),
+                "White should be able to castle queenside after unmaking castling");
     }
 
     @Test
@@ -263,6 +371,34 @@ public class GameStateTest {
         assertFalse(
                 castlingRights.blackLongCastle(),
                 "Black should not be able to castle queenside after castling");
+
+        gameState.unmakeMove(kingCastle);
+
+        assertNotEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(7, 7),
+                "The rook's original position should be full before castling.");
+        assertNotEquals(
+                Constants.PieceType.ROOK,
+                gameState.boardRepresentation.getPieceAtPosition(5, 7),
+                "The rook should be in the correct position before castling.");
+        assertNotEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(4, 7),
+                "The king's original position should be full before castling.");
+        assertNotEquals(
+                Constants.PieceType.KING,
+                gameState.boardRepresentation.getPieceAtPosition(6, 7),
+                "The king should be in the correct position before castling.");
+
+        CastlingRights castlingRightsAfterUnmake =
+                gameState.irreversibleDataStack.peek().castlingRights();
+        assertTrue(
+                castlingRightsAfterUnmake.blackShortCastle(),
+                "Black should be able to castle kingside before castling");
+        assertTrue(
+                castlingRightsAfterUnmake.blackLongCastle(),
+                "Black should be able to castle queenside before castling");
     }
 
     @Test
@@ -281,6 +417,17 @@ public class GameStateTest {
                 Constants.PieceType.QUEEN,
                 gameState.boardRepresentation.getPieceAtPosition(7, 6),
                 "The promoted piece should be a queen in the correct position.");
+
+        gameState.unmakeMove(promotionMove);
+
+        assertNotEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                "The source square should be full before the pawn promotion.");
+        assertNotEquals(
+                Constants.PieceType.QUEEN,
+                gameState.boardRepresentation.getPieceAtPosition(7, 6),
+                "The promoted piece should be a empty in the correct position.");
     }
 
     @Test
@@ -290,7 +437,8 @@ public class GameStateTest {
         gameState.boardRepresentation.fillSquare(
                 7, 7, Constants.PieceType.BISHOP, Constants.Side.BLACK);
 
-        Move promotionCaptureMove = new Move(6, 6, 7, 7, Move.MoveType.QUEEN_PROMOTION_CAPTURE);
+        Move promotionCaptureMove =
+                new Move(6, 6, 7, 7, Move.MoveType.QUEEN_PROMOTION, Constants.PieceType.BISHOP);
         gameState.makeMove(promotionCaptureMove);
 
         assertEquals(
@@ -301,6 +449,18 @@ public class GameStateTest {
                 Constants.PieceType.QUEEN,
                 gameState.boardRepresentation.getPieceAtPosition(7, 7),
                 "The promoted piece should replace the captured piece, becoming a queen in the"
+                        + " correct position.");
+
+        gameState.unmakeMove(promotionCaptureMove);
+
+        assertNotEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                "The source square should not be empty before the pawn promotion capture.");
+        assertNotEquals(
+                Constants.PieceType.QUEEN,
+                gameState.boardRepresentation.getPieceAtPosition(7, 7),
+                "The promoted piece should not replace the captured piece, becoming a queen in the"
                         + " correct position.");
     }
 
@@ -323,6 +483,17 @@ public class GameStateTest {
         assertFalse(
                 castlingRights.whiteLongCastle(),
                 "White should not be able to castle queenside after king movement");
+
+        gameState.unmakeMove(kingMove);
+
+        CastlingRights castlingRightsAfterUnmake =
+                gameState.irreversibleDataStack.peek().castlingRights();
+        assertTrue(
+                castlingRightsAfterUnmake.whiteShortCastle(),
+                "White should be able to castle kingside before king movement");
+        assertTrue(
+                castlingRightsAfterUnmake.whiteLongCastle(),
+                "White should be able to castle queenside before king movement");
     }
 
     @Test
@@ -346,6 +517,17 @@ public class GameStateTest {
         assertFalse(
                 castlingRights.blackLongCastle(),
                 "Black should not be able to castle queenside after king movement");
+
+        gameState.unmakeMove(kingMove);
+
+        CastlingRights castlingRightsAfterUnmake =
+                gameState.irreversibleDataStack.peek().castlingRights();
+        assertTrue(
+                castlingRightsAfterUnmake.blackShortCastle(),
+                "Black should be able to castle kingside before king movement");
+        assertTrue(
+                castlingRightsAfterUnmake.blackLongCastle(),
+                "Black should be able to castle queenside before king movement");
     }
 
     @Test
@@ -367,6 +549,17 @@ public class GameStateTest {
         assertTrue(
                 castlingRights.whiteLongCastle(),
                 "White should still be able to castle queenside after kingside rook movement");
+
+        gameState.unmakeMove(kingSideRookMove);
+
+        CastlingRights castlingRightsAfterUnmake =
+                gameState.irreversibleDataStack.peek().castlingRights();
+        assertTrue(
+                castlingRightsAfterUnmake.whiteShortCastle(),
+                "White should be able to castle kingside before kingside rook movement");
+        assertTrue(
+                castlingRightsAfterUnmake.whiteLongCastle(),
+                "White should still be able to castle queenside before kingside rook movement");
     }
 
     @Test
@@ -390,5 +583,16 @@ public class GameStateTest {
         assertTrue(
                 castlingRights.blackLongCastle(),
                 "Black should still be able to castle queenside after kingside rook movement");
+
+        gameState.unmakeMove(kingSideRookMove);
+
+        CastlingRights castlingRightsAfterUnmake =
+                gameState.irreversibleDataStack.peek().castlingRights();
+        assertTrue(
+                castlingRightsAfterUnmake.blackShortCastle(),
+                "Black should be able to castle kingside before kingside rook movement");
+        assertTrue(
+                castlingRightsAfterUnmake.blackLongCastle(),
+                "Black should still be able to castle queenside before kingside rook movement");
     }
 }

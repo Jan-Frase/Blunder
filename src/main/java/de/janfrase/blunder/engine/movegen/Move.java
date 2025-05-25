@@ -1,6 +1,8 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.movegen;
 
+import de.janfrase.blunder.utility.Constants;
+
 /**
  * Represents a move in a chess game. A move consists of a starting position
  * and an ending position, both represented by x and y coordinates on the board.
@@ -12,9 +14,16 @@ package de.janfrase.blunder.engine.movegen;
  * @param fromY           The starting y-coordinate of the move, specifying the row position (0-based).
  * @param toX             The ending x-coordinate of the move, specifying the column position (0-based).
  * @param toY             The ending y-coordinate of the move, specifying the row position (0-based).
- * @param moveType The type of special move, represented by {@code SpecialMoveType}.
+ * @param moveType          The type of special move, represented by {@code SpecialMoveType}.
+ * @param capturedPieceType The type of the captured piece, EMPTY if nothing was captured.
  */
-public record Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
+public record Move(
+        int fromX,
+        int fromY,
+        int toX,
+        int toY,
+        MoveType moveType,
+        Constants.PieceType capturedPieceType) {
 
     /**
      * Initializes a new move with the specified starting and ending positions, defaulting
@@ -26,7 +35,20 @@ public record Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
      * @param toY   The ending y-coordinate of the move, specifying the row position (0-based).
      */
     public Move(int fromX, int fromY, int toX, int toY) {
-        this(fromX, fromY, toX, toY, MoveType.QUIET_MOVE);
+        this(fromX, fromY, toX, toY, MoveType.QUIET_MOVE, Constants.PieceType.EMPTY);
+    }
+
+    /**
+     * Initializes a new move with the specified starting and ending positions, defaulting
+     * to a {@code Constants.PieceType.EMPTY} for the captured piece.
+     *
+     * @param fromX The starting x-coordinate of the move, specifying the column position (0-based).
+     * @param fromY The starting y-coordinate of the move, specifying the row position (0-based).
+     * @param toX   The ending x-coordinate of the move, specifying the column position (0-based).
+     * @param toY   The ending y-coordinate of the move, specifying the row position (0-based).
+     */
+    public Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
+        this(fromX, fromY, toX, toY, moveType, Constants.PieceType.EMPTY);
     }
 
     /**
@@ -35,8 +57,7 @@ public record Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
     public enum MoveType {
         QUIET_MOVE,
 
-        CAPTURE,
-        EP_CAPTURE,
+        EP_CAPTURE, // Technically not needed since we also store the captured piece type.
 
         DOUBLE_PAWN_PUSH,
 
@@ -44,12 +65,8 @@ public record Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
         LONG_CASTLE,
 
         ROOK_PROMOTION,
-        ROOK_PROMOTION_CAPTURE,
         BISHOP_PROMOTION,
-        BISHOP_PROMOTION_CAPTURE,
         KNIGHT_PROMOTION,
-        KNIGHT_PROMOTION_CAPTURE,
         QUEEN_PROMOTION,
-        QUEEN_PROMOTION_CAPTURE,
     }
 }

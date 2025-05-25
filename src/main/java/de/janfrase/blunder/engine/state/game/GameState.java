@@ -82,12 +82,8 @@ public class GameState {
             IrreversibleData.Builder irreversibleDataBuilder) {
         // now we can get to the edge cases :)
         boolean wasSomethingCaptured =
-                move.moveType().equals(Move.MoveType.CAPTURE)
-                        || move.moveType().equals(Move.MoveType.EP_CAPTURE)
-                        || move.moveType().equals(Move.MoveType.ROOK_PROMOTION_CAPTURE)
-                        || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION_CAPTURE)
-                        || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION_CAPTURE)
-                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION_CAPTURE);
+                move.capturedPieceType() != Constants.PieceType.EMPTY
+                        || move.moveType().equals(Move.MoveType.EP_CAPTURE);
 
         // half-move clock handling
         if (wasSomethingCaptured || fromPieceType.equals(Constants.PieceType.PAWN)) {
@@ -229,21 +225,15 @@ public class GameState {
                 move.moveType().equals(Move.MoveType.ROOK_PROMOTION)
                         || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION)
                         || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION)
-                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION)
-                        || move.moveType().equals(Move.MoveType.ROOK_PROMOTION_CAPTURE)
-                        || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION_CAPTURE)
-                        || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION_CAPTURE)
-                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION_CAPTURE);
+                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION);
 
         if (wasSomethingPromoted) {
             Constants.PieceType promotedPieceType =
                     switch (move.moveType()) {
-                        case ROOK_PROMOTION, ROOK_PROMOTION_CAPTURE -> Constants.PieceType.ROOK;
-                        case KNIGHT_PROMOTION, KNIGHT_PROMOTION_CAPTURE -> Constants.PieceType
-                                .KNIGHT;
-                        case BISHOP_PROMOTION, BISHOP_PROMOTION_CAPTURE -> Constants.PieceType
-                                .BISHOP;
-                        case QUEEN_PROMOTION, QUEEN_PROMOTION_CAPTURE -> Constants.PieceType.QUEEN;
+                        case ROOK_PROMOTION -> Constants.PieceType.ROOK;
+                        case KNIGHT_PROMOTION -> Constants.PieceType.KNIGHT;
+                        case BISHOP_PROMOTION -> Constants.PieceType.BISHOP;
+                        case QUEEN_PROMOTION -> Constants.PieceType.QUEEN;
                         default -> throw new IllegalStateException(
                                 "Unexpected value: " + move.moveType());
                     };
