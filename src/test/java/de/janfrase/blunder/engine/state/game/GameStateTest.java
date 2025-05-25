@@ -134,6 +134,11 @@ public class GameStateTest {
                 gameState.irreversibleDataStack.peek().halfMoveClock(),
                 "Half move clock should be 0 since we just moved a pawn");
 
+        assertEquals(
+                2,
+                gameState.fullMoveCounter,
+                "Full move counter should increment after making a black move");
+
         Move rookMove = new Move(6, 1, 6, 3);
         gameState.makeMove(rookMove);
 
@@ -141,6 +146,11 @@ public class GameStateTest {
                 1,
                 gameState.irreversibleDataStack.peek().halfMoveClock(),
                 "Half move clock should be 1");
+
+        assertEquals(
+                2,
+                gameState.fullMoveCounter,
+                "Full move counter should not increment after making a white move");
 
         gameState.unmakeMove(rookMove);
 
@@ -150,9 +160,9 @@ public class GameStateTest {
                 "Half move clock should be 0 after unmaking a move");
 
         assertEquals(
-                1,
+                2,
                 gameState.fullMoveCounter,
-                "Full move counter should decrement after unmaking a move");
+                "Full move counter should not decrement after unmaking a white move");
 
         assertEquals(
                 Constants.PieceType.ROOK,
@@ -169,6 +179,11 @@ public class GameStateTest {
                 Constants.PieceType.EMPTY,
                 gameState.boardRepresentation.getPieceAtPosition(2, 4),
                 "Target square should be empty before the move");
+
+        assertEquals(
+                1,
+                gameState.fullMoveCounter,
+                "Full move counter should decrement after unmaking a black move");
 
         assertFalse(gameState.isWhitesTurn, "Turn should toggle after a move");
     }
@@ -594,5 +609,58 @@ public class GameStateTest {
         assertTrue(
                 castlingRightsAfterUnmake.blackLongCastle(),
                 "Black should still be able to castle queenside before kingside rook movement");
+    }
+
+    @Test
+    void testUnmakingCapture() {
+        gameState.boardRepresentation.fillSquare(
+                4, 0, Constants.PieceType.QUEEN, Constants.Side.WHITE);
+        gameState.boardRepresentation.fillSquare(
+                5, 0, Constants.PieceType.QUEEN, Constants.Side.BLACK);
+
+        Move captureMove = new Move(4, 0, 5, 0, Constants.PieceType.QUEEN);
+        gameState.makeMove(captureMove);
+
+        assertEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAtPosition(4, 0),
+                "The white queen should be removed from the board after a capture.");
+
+        assertEquals(
+                Constants.Side.EMPTY,
+                gameState.boardRepresentation.getSideAtPosition(4, 0),
+                "The white queen should be removed from the board after a capture.");
+
+        assertEquals(
+                Constants.PieceType.QUEEN,
+                gameState.boardRepresentation.getPieceAtPosition(5, 0),
+                "The white queen should now be on the target square after a capture.");
+
+        assertEquals(
+                Constants.Side.WHITE,
+                gameState.boardRepresentation.getSideAtPosition(5, 0),
+                "The white queen should now be on the target square after a capture.");
+
+        gameState.unmakeMove(captureMove);
+
+        assertEquals(
+                Constants.PieceType.QUEEN,
+                gameState.boardRepresentation.getPieceAtPosition(4, 0),
+                "The white queen should be put back on the board after an unmake.");
+
+        assertEquals(
+                Constants.Side.WHITE,
+                gameState.boardRepresentation.getSideAtPosition(4, 0),
+                "The white queen should be put back on the board after an unmake.");
+
+        assertEquals(
+                Constants.PieceType.QUEEN,
+                gameState.boardRepresentation.getPieceAtPosition(5, 0),
+                "The black queen should be put back on the board after an unmake.");
+
+        assertEquals(
+                Constants.Side.BLACK,
+                gameState.boardRepresentation.getSideAtPosition(5, 0),
+                "The white queen should be put back on the board after an unmake.");
     }
 }

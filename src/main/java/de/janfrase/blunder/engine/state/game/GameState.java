@@ -76,22 +76,6 @@ public class GameState {
     // Make Section
     // ------------------------------
 
-    private static void halfMoveRelatedMakeMove(
-            Move move,
-            Constants.PieceType fromPieceType,
-            IrreversibleData.Builder irreversibleDataBuilder) {
-        // now we can get to the edge cases :)
-        boolean wasSomethingCaptured =
-                move.capturedPieceType() != Constants.PieceType.EMPTY
-                        || move.moveType().equals(Move.MoveType.EP_CAPTURE);
-
-        // half-move clock handling
-        if (wasSomethingCaptured || fromPieceType.equals(Constants.PieceType.PAWN)) {
-            // reset the half-move clock on capture or if a pawn was moved
-            irreversibleDataBuilder.halfMoveClock(0);
-        }
-    }
-
     /**
      * Executes a move in the current game state.
      * <p>
@@ -107,10 +91,10 @@ public class GameState {
      */
     public void makeMove(Move move) {
         // set the square we are moving to, to have the piece we moved
-        Constants.Side fromSide =
-                this.boardRepresentation.getSideAtPosition(move.fromX(), move.fromY());
         Constants.PieceType fromPieceType =
                 this.boardRepresentation.getPieceAtPosition(move.fromX(), move.fromY());
+        Constants.Side fromSide =
+                this.boardRepresentation.getSideAtPosition(move.fromX(), move.fromY());
         this.boardRepresentation.fillSquare(move.toX(), move.toY(), fromPieceType, fromSide);
 
         // set the square we are moving away from, to empty
@@ -124,13 +108,13 @@ public class GameState {
                 new CastlingRights.Builder()
                         .transferFromOldState(irreversibleDataStack.peek().castlingRights());
 
-        halfMoveRelatedMakeMove(move, fromPieceType, irreversibleDataBuilder);
+        this.halfMoveRelatedMakeMove(move, fromPieceType, irreversibleDataBuilder);
 
-        enPassantRelatedMakeMove(move, fromSide, irreversibleDataBuilder);
+        this.enPassantRelatedMakeMove(move, fromSide, irreversibleDataBuilder);
 
-        castlingRelatedMakeMove(move, fromSide, castlingRightsBuilder, fromPieceType);
+        this.castlingRelatedMakeMove(move, fromSide, castlingRightsBuilder, fromPieceType);
 
-        promotionRelatedMakeMove(move, fromSide);
+        this.promotionRelatedMakeMove(move, fromSide);
 
         // if this was blacks turn -> increment full move counter
         if (!this.isWhitesTurn) fullMoveCounter++;
@@ -140,6 +124,22 @@ public class GameState {
 
         irreversibleDataBuilder.castlingRights(castlingRightsBuilder.build());
         this.irreversibleDataStack.push(irreversibleDataBuilder.build());
+    }
+
+    private void halfMoveRelatedMakeMove(
+            Move move,
+            Constants.PieceType fromPieceType,
+            IrreversibleData.Builder irreversibleDataBuilder) {
+        // now we can get to the edge cases :)
+        boolean wasSomethingCaptured =
+                move.capturedPieceType() != Constants.PieceType.EMPTY
+                        || move.moveType().equals(Move.MoveType.EP_CAPTURE);
+
+        // half-move clock handling
+        if (wasSomethingCaptured || fromPieceType.equals(Constants.PieceType.PAWN)) {
+            // reset the half-move clock on capture or if a pawn was moved
+            irreversibleDataBuilder.halfMoveClock(0);
+        }
     }
 
     private void enPassantRelatedMakeMove(
@@ -227,25 +227,118 @@ public class GameState {
                         || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION)
                         || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION);
 
-        if (wasSomethingPromoted) {
-            Constants.PieceType promotedPieceType =
-                    switch (move.moveType()) {
-                        case ROOK_PROMOTION -> Constants.PieceType.ROOK;
-                        case KNIGHT_PROMOTION -> Constants.PieceType.KNIGHT;
-                        case BISHOP_PROMOTION -> Constants.PieceType.BISHOP;
-                        case QUEEN_PROMOTION -> Constants.PieceType.QUEEN;
-                        default -> throw new IllegalStateException(
-                                "Unexpected value: " + move.moveType());
-                    };
-
-            this.boardRepresentation.fillSquare(
-                    move.toX(), move.toY(), promotedPieceType, fromSide);
+        if (!wasSomethingPromoted) {
+            return;
         }
+
+        Constants.PieceType promotedPieceType =
+                switch (move.moveType()) {
+                    case ROOK_PROMOTION -> Constants.PieceType.ROOK;
+                    case KNIGHT_PROMOTION -> Constants.PieceType.KNIGHT;
+                    case BISHOP_PROMOTION -> Constants.PieceType.BISHOP;
+                    case QUEEN_PROMOTION -> Constants.PieceType.QUEEN;
+                    default -> throw new IllegalStateException(
+                            "Unexpected value: " + move.moveType());
+                };
+
+        this.boardRepresentation.fillSquare(move.toX(), move.toY(), promotedPieceType, fromSide);
     }
 
     // ------------------------------
     // Unmake Section
     // ------------------------------
 
-    public void unmakeMove(Move move) {}
+    public void unmakeMove(Move move) {
+        // set the square we moved from, to have the piece we moved
+        Constants.PieceType fromPieceType =
+                this.boardRepresentation.getPieceAtPosition(move.toX(), move.toY());
+        Constants.Side fromSide =
+                this.boardRepresentation.getSideAtPosition(move.toX(), move.toY());
+        this.boardRepresentation.fillSquare(move.fromX(), move.fromY(), fromPieceType, fromSide);
+
+        // set the square we moved to, to contain what was previously there
+        if (move.capturedPieceType() == Constants.PieceType.EMPTY)
+            this.boardRepresentation.fillSquare(
+                    move.toX(), move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+        else
+            this.boardRepresentation.fillSquare(
+                    move.toX(),
+                    move.toY(),
+                    move.capturedPieceType(),
+                    isWhitesTurn ? Constants.Side.WHITE : Constants.Side.BLACK);
+
+        // go back to the previous stack frame of irreversible data
+        this.irreversibleDataStack.pop();
+
+        this.enPassantRelatedUnmakeMove(move, fromSide);
+
+        this.castlingRelatedUnmakeMove(move, fromSide);
+
+        this.promotionRelatedUnmakeMove(move, fromSide);
+
+        // if this was blacks turn -> increment full move counter
+        if (this.isWhitesTurn) fullMoveCounter--;
+
+        // the other player can now make his turn
+        this.isWhitesTurn = !this.isWhitesTurn;
+    }
+
+    private void enPassantRelatedUnmakeMove(Move move, Constants.Side fromSide) {
+        // en passant capture handling
+        if (move.moveType().equals(Move.MoveType.EP_CAPTURE)) {
+            // off set the move.toY value depending on who took the piece
+            // if black took, we need to raise the value and vice versa
+            int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
+
+            Constants.Side sideOfTheRemovedPawn =
+                    (fromSide.equals(Constants.Side.BLACK))
+                            ? Constants.Side.WHITE
+                            : Constants.Side.BLACK;
+
+            // add the captured pawn back to the board
+            this.boardRepresentation.fillSquare(
+                    move.toX(),
+                    move.toY() + yOffset,
+                    Constants.PieceType.PAWN,
+                    sideOfTheRemovedPawn);
+        }
+    }
+
+    private void castlingRelatedUnmakeMove(Move move, Constants.Side fromSide) {
+
+        // castle move handling
+        if (move.moveType().equals(Move.MoveType.SHORT_CASTLE)
+                || move.moveType().equals(Move.MoveType.LONG_CASTLE)) {
+            int rookXOffset = (move.moveType().equals(Move.MoveType.SHORT_CASTLE)) ? LEFT : RIGHT;
+            int rookXCurrent = move.toX() + rookXOffset;
+            int rookXStart =
+                    (move.moveType().equals(Move.MoveType.SHORT_CASTLE))
+                            ? RIGHT_X_ROOK_START
+                            : LEFT_X_ROOK_START;
+
+            // empty the square the rook is currently standing on
+            boardRepresentation.fillSquare(
+                    rookXCurrent, move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+
+            // put the rook back on its starting square
+            boardRepresentation.fillSquare(
+                    rookXStart, move.toY(), Constants.PieceType.ROOK, fromSide);
+        }
+    }
+
+    private void promotionRelatedUnmakeMove(Move move, Constants.Side fromSide) {
+        boolean wasSomethingPromoted =
+                move.moveType().equals(Move.MoveType.ROOK_PROMOTION)
+                        || move.moveType().equals(Move.MoveType.KNIGHT_PROMOTION)
+                        || move.moveType().equals(Move.MoveType.BISHOP_PROMOTION)
+                        || move.moveType().equals(Move.MoveType.QUEEN_PROMOTION);
+
+        if (!wasSomethingPromoted) {
+            return;
+        }
+
+        // put the pawn back :)
+        this.boardRepresentation.fillSquare(
+                move.fromX(), move.fromY(), Constants.PieceType.PAWN, fromSide);
+    }
 }
