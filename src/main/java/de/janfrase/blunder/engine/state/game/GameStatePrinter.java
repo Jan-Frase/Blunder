@@ -122,8 +122,8 @@ public class GameStatePrinter {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n");
-        for (int y = 0; y < Constants.BOARD_WIDTH; y++) {
-            for (int x = 0; x < Constants.BOARD_WIDTH; x++) {
+        for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
+            for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
                 Constants.Side side = gameState.boardRepresentation.getSideAtPosition(x, y);
                 Constants.PieceType pieceType =
                         gameState.boardRepresentation.getPieceAtPosition(x, y);

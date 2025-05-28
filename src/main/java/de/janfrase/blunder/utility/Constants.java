@@ -2,9 +2,9 @@
 package de.janfrase.blunder.utility;
 
 public class Constants {
-    public static final int BOARD_WIDTH = 8;
+    public static final int BOARD_SIDE_LENGTH = 8;
 
-    public static final int BOARD_TOTAL_SIZE = BOARD_WIDTH * BOARD_WIDTH;
+    public static final int BOARD_TOTAL_SIZE = BOARD_SIDE_LENGTH * BOARD_SIDE_LENGTH;
 
     public enum PieceType {
         KING,

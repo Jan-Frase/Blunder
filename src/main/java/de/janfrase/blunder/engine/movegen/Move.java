@@ -27,7 +27,7 @@ public record Move(
 
     /**
      * Initializes a new move with the specified starting and ending positions, defaulting
-     * to a {@code SpecialMoveType.QUIET_MOVE}.
+     * to a {@code SpecialMoveType.NORMAL_MOVE} and a {@code Constants.PieceType.EMPTY} for the captured piece.}.
      *
      * @param fromX The starting x-coordinate of the move, specifying the column position (0-based).
      * @param fromY The starting y-coordinate of the move, specifying the row position (0-based).
@@ -68,7 +68,7 @@ public record Move(
      * Based on this <a href="https://www.chessprogramming.org/Encoding_Moves#From-To_Based">chessprogramming</a> page.
      */
     public enum MoveType {
-        NORMAL_MOVE,
+        NORMAL_MOVE, // A quiet move OR if capturedPieceType is set -> a capture move.
 
         EP_CAPTURE, // Technically not needed since we also store the captured piece type.
 

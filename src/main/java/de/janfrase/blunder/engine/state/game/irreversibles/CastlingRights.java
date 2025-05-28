@@ -1,11 +1,29 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.game.irreversibles;
 
+import de.janfrase.blunder.utility.Constants;
+
 public record CastlingRights(
         boolean whiteLongCastle,
         boolean whiteShortCastle,
         boolean blackLongCastle,
         boolean blackShortCastle) {
+
+    public boolean getLongCastle(Constants.Side side) {
+        if (side == Constants.Side.WHITE) {
+            return this.whiteLongCastle;
+        } else {
+            return this.blackLongCastle;
+        }
+    }
+
+    public boolean getShortCastle(Constants.Side side) {
+        if (side == Constants.Side.WHITE) {
+            return this.whiteShortCastle;
+        } else {
+            return this.blackShortCastle;
+        }
+    }
 
     public static class Builder {
         boolean whiteLongCastle, whiteShortCastle, blackLongCastle, blackShortCastle;
