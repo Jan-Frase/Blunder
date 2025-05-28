@@ -122,6 +122,10 @@ public class GameStatePrinter {
         StringBuilder sb = new StringBuilder();
 
         sb.append("\n");
+
+        // TODO
+        // sb.append(FenParser.export());
+
         for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
             for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
                 Constants.Side side = gameState.boardRepresentation.getSideAtPosition(x, y);

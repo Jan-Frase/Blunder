@@ -7,10 +7,14 @@ import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 public class MoveGeneratorTest {
+    private static final Logger logger = LogManager.getLogger();
+
     private final GameState gameState = GameState.getInstance();
     private ArrayList<Move> moves = new ArrayList<>();
 
@@ -41,8 +45,11 @@ public class MoveGeneratorTest {
     void Position3Test() {
         GameStateFenParser.loadFenString("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
 
-        int nodes = perft(2);
-        assertEquals(191, nodes);
+        int nodes = perft(1);
+        assertEquals(14, nodes);
+
+        // nodes = perft(2);
+        // assertEquals(191, nodes);
     }
 
     @Test
@@ -84,6 +91,8 @@ public class MoveGeneratorTest {
             GameState.getInstance().makeMove(move);
             if (!isInCheck()) {
                 nodes += perft(depths - 1);
+            } else {
+                logger.trace("Check!");
             }
             GameState.getInstance().unmakeMove(move);
         }

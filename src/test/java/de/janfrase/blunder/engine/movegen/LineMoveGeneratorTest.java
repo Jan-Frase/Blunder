@@ -150,4 +150,29 @@ public class LineMoveGeneratorTest {
         assertEquals(Constants.Side.WHITE, board.getSideAtPosition(3, 5));
         assertEquals(Constants.PieceType.EMPTY, board.getPieceAtPosition(3, 3));
     }
+
+    @Test
+    void testPosition3Part() {
+        GameStateFenParser.loadFenString("8/2p5/3p4/KP5r/2R2p1k/8/4P1P1/8 w - - 0 1");
+        BoardRepresentation board = gameState.getBoardRepresentation();
+
+        LineMoveGenerator.generateStraightMoves(moves, 7, 3, board, Constants.Side.BLACK);
+
+        assertEquals(9, moves.size());
+        assertEquals(
+                8,
+                moves.stream()
+                        .filter(move -> move.capturedPieceType() == Constants.PieceType.EMPTY)
+                        .count());
+        assertEquals(
+                1,
+                moves.stream()
+                        .filter(move -> move.capturedPieceType() == Constants.PieceType.PAWN)
+                        .count());
+        assertEquals(
+                0,
+                moves.stream()
+                        .filter(move -> move.capturedPieceType() == Constants.PieceType.KING)
+                        .count());
+    }
 }

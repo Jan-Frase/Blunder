@@ -51,6 +51,7 @@ public class LineMoveGenerator {
                 }
                 // Enemy piece - add capture move and stop in this direction
                 moves.add(new Move(x, y, currentX, currentY, pieceAtDestination));
+                break;
             }
         }
     }
