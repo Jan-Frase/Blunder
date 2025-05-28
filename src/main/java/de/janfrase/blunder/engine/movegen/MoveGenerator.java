@@ -60,8 +60,10 @@ public class MoveGenerator {
                             moves, x, y, board, activeSide);
                     case BISHOP -> LineMoveGenerator.generateDiagonalMoves(
                             moves, x, y, board, activeSide);
-                    case KNIGHT -> {}
-                    case PAWN -> {}
+                    case KNIGHT -> KnightMoveGenerator.generateKnightMoves(
+                            moves, x, y, board, activeSide);
+                    case PAWN -> PawnMoveGenerator.generatePawnMove(
+                            moves, x, y, board, activeSide, irreversibleData.enPassantX());
                     case EMPTY -> throw new IllegalStateException(
                             "Empty piece type should have been skipped");
                 }

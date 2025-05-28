@@ -6,6 +6,9 @@ import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 
+/**
+ * A utility class that provides functionality for generating valid moves for a king in a chess game.
+ */
 public class KingMoveGenerator {
     protected static final int LONG_CASTLE_X_OFFSET = -2;
     protected static final int SHORT_CASTLE_X_OFFSET = 2;

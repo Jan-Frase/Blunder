@@ -5,6 +5,9 @@ import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 
+/**
+ * A utility class that provides functionality for generating valid moves for a bishop, rook and queen in a chess game.
+ */
 public class LineMoveGenerator {
 
     // Diagonal directions: bot-right, bot-left, top-right, top-left
