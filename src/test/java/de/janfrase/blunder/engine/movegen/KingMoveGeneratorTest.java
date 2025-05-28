@@ -25,13 +25,6 @@ public class KingMoveGeneratorTest {
     }
 
     @Test
-    public void testGenerateMoves_EmptyBoard() {
-        MoveGenerator.generateMoves();
-
-        assertTrue(moves.isEmpty(), "Moves should be empty on an empty board.");
-    }
-
-    @Test
     public void testGenerateMoves_OnlyWhiteKing() {
         GameStateFenParser.loadFenString("8/8/8/8/4K3/8/8/8 w - - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();

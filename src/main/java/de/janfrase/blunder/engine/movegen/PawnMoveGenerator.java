@@ -63,6 +63,8 @@ public class PawnMoveGenerator {
         for (int x_attack_dir : x_attack_directions) {
             int xDestination = x + x_attack_dir;
 
+            if (MoveGenerator.isOffBoard(xDestination, yDestination)) continue;
+
             // we can capture an en passant :D
             if (enPassantX.isPresent() && xDestination == enPassantX.getAsInt()) {
                 moves.add(

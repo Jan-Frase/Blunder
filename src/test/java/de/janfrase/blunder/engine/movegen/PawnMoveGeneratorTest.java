@@ -116,4 +116,18 @@ public class PawnMoveGeneratorTest {
                         .filter(m -> m.capturedPieceType() == Constants.PieceType.KNIGHT)
                         .count());
     }
+
+    @Test
+    void testPawnOnLeftEdge() {
+        GameStateFenParser.loadFenString("8/8/8/8/P7/8/8/8 w - - 0 1");
+        PawnMoveGenerator.generatePawnMove(
+                moves,
+                0,
+                4,
+                gameState.getBoardRepresentation(),
+                Constants.Side.WHITE,
+                OptionalInt.empty());
+        assertEquals(1, moves.size());
+        assertTrue(moves.stream().anyMatch(m -> m.toY() == 3 && m.toX() == 0));
+    }
 }

@@ -6,7 +6,6 @@ import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
-import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,7 +23,7 @@ public class MoveGenerator {
      * @return a list of {@code Move} objects representing all legal moves
      *         for the active player in the current game state.
      */
-    public static List<Move> generateMoves() {
+    protected static ArrayList<Move> generatePseudoLegalMoves() {
         logger.trace("Starting move generation");
         ArrayList<Move> moves = new ArrayList<>();
 
