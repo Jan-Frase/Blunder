@@ -28,10 +28,7 @@ public class LineMoveGenerator {
                 currentY += direction[1];
 
                 // Check if we're still on the board
-                if (currentX < 0
-                        || currentX >= Constants.BOARD_SIDE_LENGTH
-                        || currentY < 0
-                        || currentY >= Constants.BOARD_SIDE_LENGTH) {
+                if (MoveGenerator.isOffBoard(currentX, currentY)) {
                     break;
                 }
 

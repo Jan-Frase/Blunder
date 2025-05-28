@@ -71,4 +71,11 @@ public class MoveGenerator {
         logger.trace("Finished move generation");
         return moves;
     }
+
+    protected static boolean isOffBoard(int x, int y) {
+        return x < 0
+                || x >= Constants.BOARD_SIDE_LENGTH
+                || y < 0
+                || y >= Constants.BOARD_SIDE_LENGTH;
+    }
 }
