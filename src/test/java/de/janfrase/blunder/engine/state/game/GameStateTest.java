@@ -20,9 +20,9 @@ public class GameStateTest {
 
     @Test
     void testSimpleUnmakeMove() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 2, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 6, 6, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
         assertEquals(
@@ -101,9 +101,9 @@ public class GameStateTest {
     void testSimpleMakeMoveBlack() {
         GameState.resetGameState();
         gameState.isWhitesTurn = false;
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 2, 5, Constants.PieceType.PAWN, Constants.Side.BLACK);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 6, 1, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         assertEquals(
@@ -190,9 +190,9 @@ public class GameStateTest {
 
     @Test
     void testEnPassant() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 5, 6, Constants.PieceType.PAWN, Constants.Side.BLACK);
 
         Move blackDoublePawnPush = new Move(5, 6, 5, 4, Move.MoveType.DOUBLE_PAWN_PUSH);
@@ -240,9 +240,9 @@ public class GameStateTest {
     void testEnPassantBlack() {
         GameState.resetGameState();
         gameState.isWhitesTurn = false;
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 3, Constants.PieceType.PAWN, Constants.Side.BLACK);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 5, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         Move whiteDoublePawnPush = new Move(5, 1, 5, 3, Move.MoveType.DOUBLE_PAWN_PUSH);
@@ -288,9 +288,9 @@ public class GameStateTest {
 
     @Test
     void testCastle() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 0, Constants.PieceType.KING, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 7, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         Move kingCastle = new Move(4, 0, 6, 0, Move.MoveType.SHORT_CASTLE);
@@ -354,9 +354,9 @@ public class GameStateTest {
     void testCastleBlack() {
         GameState.resetGameState();
         gameState.isWhitesTurn = false;
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 7, Constants.PieceType.KING, Constants.Side.BLACK);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 7, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
         Move kingCastle = new Move(4, 7, 6, 7, Move.MoveType.SHORT_CASTLE);
@@ -418,7 +418,7 @@ public class GameStateTest {
 
     @Test
     void testPromotion() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 6, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         Move promotionMove = new Move(6, 6, 7, 6, Move.MoveType.QUEEN_PROMOTION);
@@ -447,9 +447,9 @@ public class GameStateTest {
 
     @Test
     void testPromotionCapture() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 6, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 7, 7, Constants.PieceType.BISHOP, Constants.Side.BLACK);
 
         Move promotionCaptureMove =
@@ -481,11 +481,11 @@ public class GameStateTest {
 
     @Test
     void testKingMovementRemovesCastlingRights() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 0, Constants.PieceType.KING, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 7, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 0, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         Move kingMove = new Move(4, 0, 4, 1);
@@ -515,11 +515,11 @@ public class GameStateTest {
     void testKingMovementRemovesCastlingRightsBlack() {
         GameState.resetGameState();
         gameState.isWhitesTurn = false;
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 7, Constants.PieceType.KING, Constants.Side.BLACK);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 7, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 0, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
         Move kingMove = new Move(4, 7, 4, 6);
@@ -547,11 +547,11 @@ public class GameStateTest {
 
     @Test
     void testRookMovementRemovesSpecificCastlingRight() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 0, Constants.PieceType.KING, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 7, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 0, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         Move kingSideRookMove = new Move(7, 0, 7, 1);
@@ -581,11 +581,11 @@ public class GameStateTest {
     void testRookMovementRemovesSpecificCastlingRightBlack() {
         GameState.resetGameState();
         gameState.isWhitesTurn = false;
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 7, Constants.PieceType.KING, Constants.Side.BLACK);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 7, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 0, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
         Move kingSideRookMove = new Move(7, 7, 7, 6);
@@ -613,9 +613,9 @@ public class GameStateTest {
 
     @Test
     void testUnmakingCapture() {
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 4, 0, Constants.PieceType.QUEEN, Constants.Side.WHITE);
-        gameState.boardRepresentation.fillSquare(
+        gameState.boardRepresentation.placePiece(
                 5, 0, Constants.PieceType.QUEEN, Constants.Side.BLACK);
 
         Move captureMove = new Move(4, 0, 5, 0, Constants.PieceType.QUEEN);

@@ -74,7 +74,7 @@ public class GameStateFenParser {
 
                     GameState.getInstance()
                             .boardRepresentation
-                            .fillSquare(xPos, yPos, pieceType, pieceSide);
+                            .placePiece(xPos, yPos, pieceType, pieceSide);
 
                     xPos++;
                 }

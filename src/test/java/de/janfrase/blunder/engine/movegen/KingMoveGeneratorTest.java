@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-public class MoveGeneratorTest {
+public class KingMoveGeneratorTest {
 
     private final GameState gameState = GameState.getInstance();
     private ArrayList<Move> moves = new ArrayList<>();
