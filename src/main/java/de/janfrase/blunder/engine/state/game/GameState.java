@@ -1,7 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.game;
 
-import de.janfrase.blunder.engine.movegen.Move;
+import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;

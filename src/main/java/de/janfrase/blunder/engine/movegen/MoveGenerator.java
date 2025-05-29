@@ -1,6 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.movegen;
 
+import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
@@ -71,6 +72,39 @@ public class MoveGenerator {
 
         logger.trace("Finished move generation");
         return moves;
+    }
+
+    /**
+     * Generates a list of all possible legal moves for the active side
+     * in the current game state.
+     * <p>
+     * This works by first generating all pseudo legal moves,
+     * then making each one and checking if the opponent can capture our king.
+     * <p>
+     * This needs one make and one unmake causing the method to be rather slow.
+     *
+     * @return a list of {@code Move} objects representing all legal moves
+     *         for the active player in the current game state.
+     */
+    protected static ArrayList<Move> generateLegalMoves() {
+        ArrayList<Move> pseudoLegalMoves = MoveGenerator.generatePseudoLegalMoves();
+        ArrayList<Move> legalMoves = new ArrayList<>();
+
+        for (Move move : pseudoLegalMoves) {
+            GameState.getInstance().makeMove(move);
+            if (!canCaptureKing()) {
+                legalMoves.add(move);
+            }
+            GameState.getInstance().unmakeMove(move);
+        }
+        return legalMoves;
+    }
+
+    protected static boolean canCaptureKing() {
+        ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
+        // if the opponent can capture our king -> we are in check
+        return moves.stream()
+                .anyMatch(move -> move.capturedPieceType() == Constants.PieceType.KING);
     }
 
     protected static boolean isOffBoard(int x, int y) {

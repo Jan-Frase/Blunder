@@ -19,7 +19,7 @@ public class GameStateFenParser {
             "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
     private static final String RANK_SEPARATOR = "/";
     private static final String SEGMENT_SEPARATOR = " ";
-    private static final Map<String, Constants.PieceType> charToPieceMap =
+    public static final Map<String, Constants.PieceType> charToPieceMap =
             new HashMap<>() {
                 {
                     put("K", Constants.PieceType.KING);

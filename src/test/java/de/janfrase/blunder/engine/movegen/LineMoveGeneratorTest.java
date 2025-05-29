@@ -4,6 +4,7 @@ package de.janfrase.blunder.engine.movegen;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;

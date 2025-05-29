@@ -1,5 +1,5 @@
 /* Made by Jan Frase :) */
-package de.janfrase.blunder.engine.movegen;
+package de.janfrase.blunder.engine.movegen.move;
 
 import de.janfrase.blunder.utility.Constants;
 
@@ -62,6 +62,25 @@ public record Move(
      */
     public Move(int fromX, int fromY, int toX, int toY, Constants.PieceType capturedPieceType) {
         this(fromX, fromY, toX, toY, MoveType.NORMAL_MOVE, capturedPieceType);
+    }
+
+    @Override
+    public String toString() {
+        return xToLetter(fromX) + fromY + xToLetter(toX) + toY;
+    }
+
+    private static String xToLetter(int x) {
+        return switch (x) {
+            case 0 -> "a";
+            case 1 -> "b";
+            case 2 -> "c";
+            case 3 -> "d";
+            case 4 -> "e";
+            case 5 -> "f";
+            case 6 -> "g";
+            case 7 -> "h";
+            default -> throw new IllegalArgumentException("x must be between 0 and 7");
+        };
     }
 
     /**

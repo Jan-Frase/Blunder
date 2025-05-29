@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# README: Copy this to .git/hooks! This will make sure that spotless gets applied before each commit :)
+# README: Linux only. Copy this to .git/hooks! This will make sure that spotless gets applied before each commit :)
 
 echo "*********************************************************"
 echo "Running git pre-commit hook. Running Spotless Apply... "
