@@ -21,10 +21,10 @@ public class UciMoveParser {
      */
     public static Move parseUciMove(String uciMove) {
         int fromX = uciMove.charAt(0) - 'a';
-        int fromY = uciMove.charAt(1) - '1' + Constants.BOARD_SIDE_LENGTH;
+        int fromY = Constants.BOARD_SIDE_LENGTH - (uciMove.charAt(1) - '1');
 
         int toX = uciMove.charAt(2) - 'a';
-        int toY = uciMove.charAt(3) - '1' + Constants.BOARD_SIDE_LENGTH;
+        int toY = Constants.BOARD_SIDE_LENGTH - (uciMove.charAt(3) - '1');
 
         Constants.PieceType movingPieceType =
                 GameState.getInstance().getBoardRepresentation().getPieceAtPosition(fromX, fromY);
