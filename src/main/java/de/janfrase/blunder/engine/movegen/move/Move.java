@@ -66,7 +66,7 @@ public record Move(
 
     @Override
     public String toString() {
-        return xToLetter(fromX) + fromY + xToLetter(toX) + toY;
+        return xToLetter(fromX) + yToInverse(fromY) + xToLetter(toX) + yToInverse(toY);
     }
 
     private static String xToLetter(int x) {
@@ -80,6 +80,20 @@ public record Move(
             case 6 -> "g";
             case 7 -> "h";
             default -> throw new IllegalArgumentException("x must be between 0 and 7");
+        };
+    }
+
+    private static String yToInverse(int y) {
+        return switch (y) {
+            case 0 -> "8";
+            case 1 -> "7";
+            case 2 -> "6";
+            case 3 -> "5";
+            case 4 -> "4";
+            case 5 -> "3";
+            case 6 -> "2";
+            case 7 -> "1";
+            default -> throw new IllegalStateException("Unexpected value: " + y);
         };
     }
 

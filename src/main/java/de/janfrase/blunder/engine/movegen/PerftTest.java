@@ -43,6 +43,7 @@ public class PerftTest {
             GameState.getInstance().makeMove(move);
 
             int current_nodes = perft(depths - 1);
+            nodes += current_nodes;
             System.out.println(move.toString() + " " + current_nodes);
 
             GameState.getInstance().unmakeMove(move);

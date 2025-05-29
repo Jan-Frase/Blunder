@@ -1,10 +1,20 @@
 plugins {
+	id "application"
 	id 'java'
 	id("com.diffplug.spotless") version "7.0.3"
 }
 
 group = 'de.janfrase'
 version = '1.0-SNAPSHOT'
+
+apply plugin : "java"
+ext {
+	javaMainClass = "de.janfrase.blunder.Main"
+}
+
+application {
+	mainClassName = javaMainClass
+}
 
 repositories {
 	mavenCentral()
@@ -20,6 +30,20 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+
+tasks.register('runPerftTest', JavaExec) {
+	group = "application"
+
+	jvmArgs = [
+			'--enable-native-access=ALL-UNNAMED',
+			'-Dfile.encoding=UTF-8'
+	]
+
+	classpath = sourceSets.main.runtimeClasspath
+
+	mainClass = 'de.janfrase.blunder.engine.movegen.PerftTest'
 }
 
 spotless {

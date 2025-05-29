@@ -14,5 +14,8 @@ shift 2
 # Compile moves array from remaining arguments
 MOVES_ARRAY=("$@")
 
+# Change to the project root directory
+cd .. || exit
+
 # Execute Java program with arguments
-java -cp target/classes:target/test-classes de.janfrase.blunder.engine.movegen.PerftTest "$DEPTH" "$FEN_STRING" "${MOVES_ARRAY[@]}"
+./gradlew --quiet --console=plain runPerftTest --args="$DEPTH \"$FEN_STRING\" ${MOVES_ARRAY[*]}"
