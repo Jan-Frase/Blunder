@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <Configuration status="warn">
+    <!-- Common Properties -->
+    <Properties>
+        <Property name="LOG_PATTERN">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+        <Property name="LOG_DIR">logs</Property>
+        <Property name="APP_NAME">blunder</Property>
+    </Properties>
+
     <Appenders>
-        <!-- Console appender -->
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        <!-- Console Output Configuration -->
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
+
+        <!-- Rolling File Configuration -->
+        <RollingFile name="RollingFileAppender"
+                     fileName="${LOG_DIR}/${APP_NAME}.log"
+                     filePattern="${LOG_DIR}/${APP_NAME}-%d{yyyy-MM-dd}-%i.log"
+                     append="false">
+        <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
     </Appenders>
 
     <Loggers>
-        <!-- Chess engine packages TODO: Revert this - needs to be warn for perftree-->
-        <Logger name="de.janfrase" level="warn" additivity="false">
-            <AppenderRef ref="Console"/>
+        <!-- Application Specific Logger -->
+        <Logger name="de.janfrase" level="trace" additivity="false">
+            <AppenderRef ref="ConsoleAppender" level="warn"/>
+            <AppenderRef ref="RollingFileAppender" level="trace"/>
         </Logger>
 
-        <!-- Root logger -->
+        <!-- Root Logger Configuration -->
         <Root level="warn">
-            <AppenderRef ref="Console"/>
+            <AppenderRef ref="ConsoleAppender"/>
         </Root>
     </Loggers>
 </Configuration>

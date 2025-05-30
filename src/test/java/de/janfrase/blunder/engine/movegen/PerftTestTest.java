@@ -11,7 +11,6 @@ public class PerftTestTest {
 
     private static final String fenString =
             "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    ;
 
     @AfterEach
     void setUp() {
@@ -20,9 +19,7 @@ public class PerftTestTest {
 
     @Test
     void testPerft1() {
-        String move = "a2a4";
-
         PerftTest.main(new String[] {Integer.toString(2), fenString});
-        PerftTest.main(new String[] {Integer.toString(1), fenString, move});
+        PerftTest.main(new String[] {Integer.toString(1), fenString, "a2a4"});
     }
 }
