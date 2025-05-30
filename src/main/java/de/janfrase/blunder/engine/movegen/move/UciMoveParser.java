@@ -21,10 +21,10 @@ public class UciMoveParser {
      */
     public static Move parseUciMove(String uciMove) {
         int fromX = uciMove.charAt(0) - 'a';
-        int fromY = Constants.BOARD_SIDE_LENGTH - (uciMove.charAt(1) - '1');
+        int fromY = Constants.BOARD_SIDE_LENGTH - (uciMove.charAt(1) - '1') - 1;
 
         int toX = uciMove.charAt(2) - 'a';
-        int toY = Constants.BOARD_SIDE_LENGTH - (uciMove.charAt(3) - '1');
+        int toY = Constants.BOARD_SIDE_LENGTH - (uciMove.charAt(3) - '1') - 1;
 
         Constants.PieceType movingPieceType =
                 GameState.getInstance().getBoardRepresentation().getPieceAtPosition(fromX, fromY);
@@ -86,8 +86,8 @@ public class UciMoveParser {
 
         if (movingPieceType == Constants.PieceType.KING) {
             // we are moving 2 squares -> castle
-            if (Math.abs(fromY - toY) == 2) {
-                int dir = fromY - toY;
+            if (Math.abs(fromX - toX) == 2) {
+                int dir = fromX - toX;
                 // short castle
                 if (dir > 0) {
                     return new Move(fromX, fromY, toX, toY, Move.MoveType.LONG_CASTLE);
