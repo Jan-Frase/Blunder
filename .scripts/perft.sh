@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# ReadMe:
+# This is used for: https://lib.rs/crates/perftree
+# This way i can compare my results to those from stockfish step by step.
+
+
 # Check if required arguments are provided
 if [ "$#" -lt 2 ]; then
     echo "Usage: $0 <depth> <fen_string> [moves...]"
