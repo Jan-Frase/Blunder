@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 public class PerftTest {
     private static final Logger logger = LogManager.getLogger();
+    private static final GameState gameState = GameState.getInstance();
 
     public static void main(String[] args) {
         int depths = Integer.parseInt(args[0]);
@@ -33,20 +34,25 @@ public class PerftTest {
         GameStateFenParser.loadFenString(fenString);
 
         for (Move move : moves) {
-            GameState.getInstance().makeMove(move);
+            gameState.makeMove(move);
         }
 
         int nodes = 0;
 
-        ArrayList<Move> legalMoves = MoveGenerator.generateLegalMoves();
-        for (Move move : legalMoves) {
-            GameState.getInstance().makeMove(move);
+        ArrayList<Move> pseudoLegalMoves = MoveGenerator.generatePseudoLegalMoves();
+        for (Move move : pseudoLegalMoves) {
+            gameState.makeMove(move);
+
+            if (MoveGenerator.canCaptureKing()) {
+                gameState.unmakeMove(move);
+                continue;
+            }
 
             int current_nodes = perft(depths - 1);
             nodes += current_nodes;
             System.out.println(move.toString() + " " + current_nodes);
 
-            GameState.getInstance().unmakeMove(move);
+            gameState.unmakeMove(move);
         }
 
         System.out.println();
@@ -63,13 +69,14 @@ public class PerftTest {
         ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
 
         for (Move move : moves) {
-            GameState.getInstance().makeMove(move);
-            if (!MoveGenerator.canCaptureKing()) {
-                nodes += perft(depths - 1);
-            } else {
-                logger.trace("Check!");
+            gameState.makeMove(move);
+            if (MoveGenerator.canCaptureKing()) {
+                gameState.unmakeMove(move);
+                continue;
             }
-            GameState.getInstance().unmakeMove(move);
+
+            nodes += perft(depths - 1);
+            gameState.unmakeMove(move);
         }
 
         return nodes;

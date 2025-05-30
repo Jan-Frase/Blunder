@@ -36,7 +36,7 @@ public class GameState {
      * This instance is lazily initialized and can be accessed or reset using provided
      * static methods.
      */
-    private static GameState instance = new GameState();
+    private static final GameState instance = new GameState();
 
     public BoardRepresentation getBoardRepresentation() {
         return boardRepresentation;
@@ -50,18 +50,13 @@ public class GameState {
         return isWhitesTurn;
     }
 
-    final BoardRepresentation boardRepresentation;
-    final Stack<IrreversibleData> irreversibleDataStack;
+    BoardRepresentation boardRepresentation;
+    Stack<IrreversibleData> irreversibleDataStack;
     boolean isWhitesTurn;
     int fullMoveCounter;
 
     private GameState() {
-        this.boardRepresentation = new BoardRepresentation();
-        this.irreversibleDataStack = new Stack<>();
-        this.irreversibleDataStack.push(new IrreversibleData.Builder().buildDefault());
-
-        this.isWhitesTurn = true;
-        this.fullMoveCounter = 1;
+        init();
     }
 
     /**
@@ -85,7 +80,16 @@ public class GameState {
      * This is mostly here to easily implement unit tests.
      */
     public static void resetGameState() {
-        instance = new GameState();
+        GameState.getInstance().init();
+    }
+
+    private void init() {
+        this.boardRepresentation = new BoardRepresentation();
+        this.irreversibleDataStack = new Stack<>();
+        this.irreversibleDataStack.push(new IrreversibleData.Builder().buildDefault());
+
+        this.isWhitesTurn = true;
+        this.fullMoveCounter = 1;
     }
 
     // ------------------------------

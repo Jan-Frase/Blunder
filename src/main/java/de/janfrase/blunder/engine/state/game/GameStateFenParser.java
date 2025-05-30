@@ -43,6 +43,7 @@ public class GameStateFenParser {
 
     public static void loadFenString(String fenString) {
         logger.info("Starting fen parsing on : {}", fenString);
+        GameState.resetGameState();
         String[] fenSegments = fenString.split(SEGMENT_SEPARATOR);
 
         parsePiecePlacement(fenSegments[FenSegments.PIECE_PLACEMENT.getIndex()]);
@@ -92,6 +93,9 @@ public class GameStateFenParser {
         CastlingRights castlingRights = parseCastlingAbility(castlingAbility);
         OptionalInt enPassantTargetSquare = parseEnPassantSquare(enPassantSquare);
         int halfMoveCount = Integer.parseInt(halfMoveClock);
+
+        // Clear the stack of irreversible data, as we're about to parse a new one.
+        GameState.getInstance().irreversibleDataStack.clear();
 
         GameState.getInstance()
                 .irreversibleDataStack
