@@ -74,6 +74,21 @@ public class PawnMoveGeneratorTest {
     }
 
     @Test
+    void testWrongEnPassantCapture() {
+        GameStateFenParser.loadFenString("1k6/8/8/5p2/8/4P3/8/1K6 w - - 0 1");
+        PawnMoveGenerator.generatePawnMove(
+                moves,
+                4,
+                5,
+                gameState.getBoardRepresentation(),
+                Constants.Side.WHITE,
+                OptionalInt.of(5));
+
+        assertEquals(1, moves.size());
+        assertFalse(moves.stream().anyMatch(m -> m.moveType() == Move.MoveType.EP_CAPTURE));
+    }
+
+    @Test
     void testPawnPromotion() {
         GameStateFenParser.loadFenString("1k6/4P3/8/8/8/8/8/1K6 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(

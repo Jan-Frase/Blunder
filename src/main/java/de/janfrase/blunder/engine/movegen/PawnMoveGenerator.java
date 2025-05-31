@@ -66,8 +66,12 @@ public class PawnMoveGenerator {
 
             if (MoveGenerator.isOffBoard(xDestination, yDestination)) continue;
 
+            int enPassantY = activeSide == Constants.Side.WHITE ? 2 : 5;
+
             // we can capture an en passant :D
-            if (enPassantX.isPresent() && xDestination == enPassantX.getAsInt()) {
+            if (enPassantX.isPresent()
+                    && xDestination == enPassantX.getAsInt()
+                    && yDestination == enPassantY) {
                 moves.add(
                         new Move(
                                 x,
@@ -76,6 +80,7 @@ public class PawnMoveGenerator {
                                 yDestination,
                                 Move.MoveType.EP_CAPTURE,
                                 Constants.PieceType.PAWN));
+                continue;
             }
 
             Constants.Side sideAtAttackDestination =
