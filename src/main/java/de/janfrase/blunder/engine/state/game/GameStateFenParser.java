@@ -113,7 +113,7 @@ public class GameStateFenParser {
     }
 
     private static OptionalInt parseEnPassantSquare(String enPassantSquare) {
-        if (enPassantSquare.isEmpty()) {
+        if ("-".equals(enPassantSquare)) {
             return OptionalInt.empty();
         }
         int xPos = enPassantSquare.charAt(0) - 'a';
