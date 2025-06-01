@@ -284,6 +284,10 @@ public class GameStateTest {
                 5,
                 gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
                 "En passant target square should be the correct square after a double pawn push");
+        assertEquals(
+                Constants.PieceType.PAWN,
+                gameState.boardRepresentation.getPieceAt(5, 3),
+                "The capturing pawn should exist in the correct target square after en passant.");
     }
 
     @Test

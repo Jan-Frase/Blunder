@@ -170,7 +170,7 @@ public class GameState {
         if (move.moveType().equals(Move.MoveType.EP_CAPTURE)) {
             // off set the move.toY value depending on who took the piece
             // if black took, we need to raise the value and vice versa
-            int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
+            int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? DOWN : UP;
 
             // remove the captured pawn from the board
             this.boardRepresentation.placePiece(
@@ -321,10 +321,6 @@ public class GameState {
     private void enPassantRelatedUnmakeMove(Move move, Constants.Side fromSide) {
         // en passant capture handling
         if (move.moveType().equals(Move.MoveType.EP_CAPTURE)) {
-            // off set the move.toY value depending on who took the piece
-            // if black took, we need to raise the value and vice versa
-            int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
-
             Constants.Side sideOfTheRemovedPawn =
                     (fromSide.equals(Constants.Side.BLACK))
                             ? Constants.Side.WHITE
@@ -332,10 +328,7 @@ public class GameState {
 
             // add the captured pawn back to the board
             this.boardRepresentation.placePiece(
-                    move.toX(),
-                    move.toY() + yOffset,
-                    Constants.PieceType.PAWN,
-                    sideOfTheRemovedPawn);
+                    move.toX(), move.fromY(), Constants.PieceType.PAWN, sideOfTheRemovedPawn);
         }
     }
 
