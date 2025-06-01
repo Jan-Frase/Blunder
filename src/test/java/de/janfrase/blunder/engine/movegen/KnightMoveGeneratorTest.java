@@ -27,7 +27,7 @@ public class KnightMoveGeneratorTest {
     @Test
     void testKnightMovementAllDirections() {
         BoardRepresentation board = gameState.getBoardRepresentation();
-        board.placePiece(3, 3, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
+        board.setPieceAt(3, 3, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
 
         KnightMoveGenerator.generateKnightMoves(moves, 3, 3, board, Constants.Side.WHITE);
 
@@ -45,9 +45,9 @@ public class KnightMoveGeneratorTest {
     @Test
     void testKnightBlockedByFriendlyPieces() {
         BoardRepresentation board = gameState.getBoardRepresentation();
-        board.placePiece(3, 3, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
-        board.placePiece(1, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        board.placePiece(5, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        board.setPieceAt(3, 3, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
+        board.setPieceAt(1, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        board.setPieceAt(5, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         KnightMoveGenerator.generateKnightMoves(moves, 3, 3, board, Constants.Side.WHITE);
 

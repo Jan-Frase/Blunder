@@ -115,11 +115,10 @@ public class GameState {
         Constants.PieceType fromPieceType =
                 this.boardRepresentation.getPieceAt(move.fromX(), move.fromY());
         Constants.Side fromSide = this.boardRepresentation.getSideAt(move.fromX(), move.fromY());
-        this.boardRepresentation.placePiece(move.toX(), move.toY(), fromPieceType, fromSide);
+        this.boardRepresentation.setPieceAt(move.toX(), move.toY(), fromPieceType, fromSide);
 
         // set the square we are moving away from, to empty
-        this.boardRepresentation.placePiece(
-                move.fromX(), move.fromY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+        this.boardRepresentation.clearSquare(move.fromX(), move.fromY());
 
         // copy the old irreversibleData
         IrreversibleData.Builder irreversibleDataBuilder =
@@ -173,11 +172,7 @@ public class GameState {
             int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
 
             // remove the captured pawn from the board
-            this.boardRepresentation.placePiece(
-                    move.toX(),
-                    move.toY() + yOffset,
-                    Constants.PieceType.EMPTY,
-                    Constants.Side.EMPTY);
+            this.boardRepresentation.clearSquare(move.toX(), move.toY() + yOffset);
         }
 
         // en passant move handling
@@ -197,7 +192,7 @@ public class GameState {
                 || move.moveType().equals(Move.MoveType.LONG_CASTLE)) {
             // the rook goes to the left of the king on a king side castle and vice versa
             int rookXOffset = (move.moveType().equals(Move.MoveType.SHORT_CASTLE)) ? LEFT : RIGHT;
-            this.boardRepresentation.placePiece(
+            this.boardRepresentation.setPieceAt(
                     move.toX() + rookXOffset, move.toY(), Constants.PieceType.ROOK, fromSide);
 
             // clear the rooks starting square
@@ -205,8 +200,7 @@ public class GameState {
                     (move.moveType().equals(Move.MoveType.SHORT_CASTLE))
                             ? RIGHT_X_ROOK_START
                             : LEFT_X_ROOK_START;
-            this.boardRepresentation.placePiece(
-                    rookXStart, move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+            this.boardRepresentation.clearSquare(rookXStart, move.toY());
 
             // disable the castling rights
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, true);
@@ -263,7 +257,7 @@ public class GameState {
                             "Unexpected value: " + move.moveType());
                 };
 
-        this.boardRepresentation.placePiece(move.toX(), move.toY(), promotedPieceType, fromSide);
+        this.boardRepresentation.setPieceAt(move.toX(), move.toY(), promotedPieceType, fromSide);
     }
 
     // ------------------------------
@@ -287,14 +281,13 @@ public class GameState {
         Constants.PieceType fromPieceType =
                 this.boardRepresentation.getPieceAt(move.toX(), move.toY());
         Constants.Side fromSide = this.boardRepresentation.getSideAt(move.toX(), move.toY());
-        this.boardRepresentation.placePiece(move.fromX(), move.fromY(), fromPieceType, fromSide);
+        this.boardRepresentation.setPieceAt(move.fromX(), move.fromY(), fromPieceType, fromSide);
 
         // set the square we moved to, to contain what was previously there
         if (move.capturedPieceType() == Constants.PieceType.EMPTY)
-            this.boardRepresentation.placePiece(
-                    move.toX(), move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+            this.boardRepresentation.clearSquare(move.toX(), move.toY());
         else
-            this.boardRepresentation.placePiece(
+            this.boardRepresentation.setPieceAt(
                     move.toX(),
                     move.toY(),
                     move.capturedPieceType(),
@@ -327,7 +320,7 @@ public class GameState {
                             : Constants.Side.BLACK;
 
             // add the captured pawn back to the board
-            this.boardRepresentation.placePiece(
+            this.boardRepresentation.setPieceAt(
                     move.toX(), move.fromY(), Constants.PieceType.PAWN, sideOfTheRemovedPawn);
         }
     }
@@ -345,11 +338,10 @@ public class GameState {
                             : LEFT_X_ROOK_START;
 
             // empty the square the rook is currently standing on
-            boardRepresentation.placePiece(
-                    rookXCurrent, move.toY(), Constants.PieceType.EMPTY, Constants.Side.EMPTY);
+            boardRepresentation.clearSquare(rookXCurrent, move.toY());
 
             // put the rook back on its starting square
-            boardRepresentation.placePiece(
+            boardRepresentation.setPieceAt(
                     rookXStart, move.toY(), Constants.PieceType.ROOK, fromSide);
         }
     }
@@ -366,7 +358,7 @@ public class GameState {
         }
 
         // put the pawn back :)
-        this.boardRepresentation.placePiece(
+        this.boardRepresentation.setPieceAt(
                 move.fromX(), move.fromY(), Constants.PieceType.PAWN, fromSide);
     }
 }

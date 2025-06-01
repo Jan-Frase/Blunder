@@ -251,4 +251,31 @@ public class KingMoveGeneratorTest {
                 board.getPieceAt(4, 7),
                 "Original king position should be empty");
     }
+
+    @Test
+    void testLongCastleAttackedByKnight() {
+        GameStateFenParser.loadFenString(
+                "r3k2r/p1ppqpb1/bnN1pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
+
+        KingMoveGenerator.generateKingMoves(
+                moves,
+                4,
+                0,
+                gameState.getBoardRepresentation(),
+                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getIrreversibleData().castlingRights());
+
+        assertEquals(
+                3, moves.size(), "White king should have 3 possible moves, including one castle.");
+        assertEquals(
+                1,
+                moves.stream()
+                        .filter(move -> move.moveType() == Move.MoveType.SHORT_CASTLE)
+                        .count(),
+                "White king can short castle.");
+        assertEquals(
+                2,
+                moves.stream().filter(move -> move.moveType() == Move.MoveType.NORMAL_MOVE).count(),
+                "White king move in two directions.");
+    }
 }

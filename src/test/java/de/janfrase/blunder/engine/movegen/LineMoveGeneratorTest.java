@@ -27,7 +27,7 @@ public class LineMoveGeneratorTest {
     @Test
     void testDiagonalMovementAllDirections() {
         BoardRepresentation board = gameState.getBoardRepresentation();
-        board.placePiece(3, 3, Constants.PieceType.BISHOP, Constants.Side.WHITE);
+        board.setPieceAt(3, 3, Constants.PieceType.BISHOP, Constants.Side.WHITE);
 
         LineMoveGenerator.generateDiagonalMoves(moves, 3, 3, board, Constants.Side.WHITE);
 
@@ -50,9 +50,9 @@ public class LineMoveGeneratorTest {
     @Test
     void testDiagonalBlockedByFriendlyPieces() {
         BoardRepresentation board = gameState.getBoardRepresentation();
-        board.placePiece(3, 3, Constants.PieceType.BISHOP, Constants.Side.WHITE);
-        board.placePiece(4, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        board.placePiece(2, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        board.setPieceAt(3, 3, Constants.PieceType.BISHOP, Constants.Side.WHITE);
+        board.setPieceAt(4, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        board.setPieceAt(2, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         LineMoveGenerator.generateDiagonalMoves(moves, 3, 3, board, Constants.Side.WHITE);
 
@@ -91,7 +91,7 @@ public class LineMoveGeneratorTest {
     @Test
     void testStraightMovementAllDirections() {
         BoardRepresentation board = gameState.getBoardRepresentation();
-        board.placePiece(3, 3, Constants.PieceType.ROOK, Constants.Side.WHITE);
+        board.setPieceAt(3, 3, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         LineMoveGenerator.generateStraightMoves(moves, 3, 3, board, Constants.Side.WHITE);
 
@@ -115,9 +115,9 @@ public class LineMoveGeneratorTest {
     @Test
     void testStraightBlockedByFriendlyPieces() {
         BoardRepresentation board = gameState.getBoardRepresentation();
-        board.placePiece(3, 3, Constants.PieceType.ROOK, Constants.Side.WHITE);
-        board.placePiece(3, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        board.placePiece(3, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        board.setPieceAt(3, 3, Constants.PieceType.ROOK, Constants.Side.WHITE);
+        board.setPieceAt(3, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        board.setPieceAt(3, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         LineMoveGenerator.generateStraightMoves(moves, 3, 3, board, Constants.Side.WHITE);
 

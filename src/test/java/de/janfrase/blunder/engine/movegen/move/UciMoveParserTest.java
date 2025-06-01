@@ -28,7 +28,7 @@ public class UciMoveParserTest {
     public void testParsePawnNormalMove() {
         gameState
                 .getBoardRepresentation()
-                .placePiece(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
+                .setPieceAt(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e2e3";
@@ -47,7 +47,7 @@ public class UciMoveParserTest {
         // Arrange: Set up board with a pawn
         gameState
                 .getBoardRepresentation()
-                .placePiece(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
+                .setPieceAt(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e2e4";
@@ -66,10 +66,10 @@ public class UciMoveParserTest {
         // Arrange: Set up board with king
         gameState
                 .getBoardRepresentation()
-                .placePiece(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
+                .setPieceAt(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
         gameState
                 .getBoardRepresentation()
-                .placePiece(7, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
+                .setPieceAt(7, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e1g1";
@@ -88,10 +88,10 @@ public class UciMoveParserTest {
         // Arrange: Set up board with king
         gameState
                 .getBoardRepresentation()
-                .placePiece(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
+                .setPieceAt(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
         gameState
                 .getBoardRepresentation()
-                .placePiece(0, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
+                .setPieceAt(0, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e1c1";
@@ -110,7 +110,7 @@ public class UciMoveParserTest {
         // Arrange: Set up board with pawn
         gameState
                 .getBoardRepresentation()
-                .placePiece(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
+                .setPieceAt(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         // Act
         String uciMove = "a7a8q";
@@ -130,10 +130,10 @@ public class UciMoveParserTest {
         // Arrange: Set up board with pieces
         gameState
                 .getBoardRepresentation()
-                .placePiece(4, 4, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
+                .setPieceAt(4, 4, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
         gameState
                 .getBoardRepresentation()
-                .placePiece(5, 2, Constants.PieceType.BISHOP, Constants.Side.BLACK);
+                .setPieceAt(5, 2, Constants.PieceType.BISHOP, Constants.Side.BLACK);
 
         // Act
         String uciMove = "e4f6";
@@ -153,10 +153,10 @@ public class UciMoveParserTest {
         // Arrange: Set up board with pieces
         gameState
                 .getBoardRepresentation()
-                .placePiece(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
+                .setPieceAt(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
         gameState
                 .getBoardRepresentation()
-                .placePiece(1, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
+                .setPieceAt(1, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
         // Act
         String uciMove = "a7b8q";
@@ -176,10 +176,10 @@ public class UciMoveParserTest {
         // Arrange: Set up board with pawns
         gameState
                 .getBoardRepresentation()
-                .placePiece(4, 3, Constants.PieceType.PAWN, Constants.Side.WHITE);
+                .setPieceAt(4, 3, Constants.PieceType.PAWN, Constants.Side.WHITE);
         gameState
                 .getBoardRepresentation()
-                .placePiece(5, 3, Constants.PieceType.PAWN, Constants.Side.BLACK);
+                .setPieceAt(5, 3, Constants.PieceType.PAWN, Constants.Side.BLACK);
 
         // Act
         String uciMove = "e5f6";
