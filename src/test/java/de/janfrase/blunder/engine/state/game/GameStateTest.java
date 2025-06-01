@@ -189,74 +189,21 @@ public class GameStateTest {
     }
 
     @Test
-    void testEnPassant() {
-        gameState.boardRepresentation.placePiece(
-                4, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        gameState.boardRepresentation.placePiece(
-                5, 6, Constants.PieceType.PAWN, Constants.Side.BLACK);
+    void testEnPassantBlackTakes() {
+        GameStateFenParser.loadFenString("8/8/8/8/1p6/8/P7/8 w - - 0 1");
 
-        Move blackDoublePawnPush = new Move(5, 6, 5, 4, Move.MoveType.DOUBLE_PAWN_PUSH);
-        gameState.makeMove(blackDoublePawnPush);
-
-        assertTrue(
-                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
-                "En passant target square should be present after a double pawn push");
-        assertEquals(
-                5,
-                gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
-                "En passant target square should be the correct square after a double pawn push");
-
-        Move enPassant = new Move(4, 4, 5, 5, Move.MoveType.EP_CAPTURE);
-        gameState.makeMove(enPassant);
-
-        assertFalse(
-                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
-                "En passant target square should not be present en passant capture");
-        assertEquals(
-                Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAt(5, 4),
-                "The captured pawn square should be empty after en passant.");
-        assertEquals(
-                Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAt(4, 4),
-                "The source square should be empty after en passant.");
-        assertEquals(
-                Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAt(5, 5),
-                "The capturing pawn should exist in the correct target square after en passant.");
-
-        gameState.unmakeMove(enPassant);
-
-        assertTrue(
-                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
-                "En passant target square should be present after a double pawn push");
-        assertEquals(
-                5,
-                gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
-                "En passant target square should be the correct square after a double pawn push");
-    }
-
-    @Test
-    void testEnPassantBlack() {
-        GameState.resetGameState();
-        gameState.isWhitesTurn = false;
-        gameState.boardRepresentation.placePiece(
-                4, 3, Constants.PieceType.PAWN, Constants.Side.BLACK);
-        gameState.boardRepresentation.placePiece(
-                5, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
-
-        Move whiteDoublePawnPush = new Move(5, 1, 5, 3, Move.MoveType.DOUBLE_PAWN_PUSH);
+        Move whiteDoublePawnPush = new Move(0, 6, 0, 4, Move.MoveType.DOUBLE_PAWN_PUSH);
         gameState.makeMove(whiteDoublePawnPush);
 
         assertTrue(
                 gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
                 "En passant target square should be present after a double pawn push");
         assertEquals(
-                5,
+                0,
                 gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
                 "En passant target square should be the correct square after a double pawn push");
 
-        Move enPassant = new Move(4, 3, 5, 2, Move.MoveType.EP_CAPTURE);
+        Move enPassant = new Move(1, 4, 0, 5, Move.MoveType.EP_CAPTURE);
         gameState.makeMove(enPassant);
 
         assertFalse(
@@ -264,15 +211,15 @@ public class GameStateTest {
                 "En passant target square should not be present en passant capture");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAt(5, 3),
+                gameState.boardRepresentation.getPieceAt(0, 4),
                 "The captured pawn square should be empty after en passant.");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAt(4, 3),
+                gameState.boardRepresentation.getPieceAt(1, 4),
                 "The source square should be empty after en passant.");
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAt(5, 2),
+                gameState.boardRepresentation.getPieceAt(0, 5),
                 "The capturing pawn should exist in the correct target square after en passant.");
 
         gameState.unmakeMove(enPassant);
@@ -281,12 +228,61 @@ public class GameStateTest {
                 gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
                 "En passant target square should be present after a double pawn push");
         assertEquals(
-                5,
+                0,
+                gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
+                "En passant target square should be the correct square after a double pawn push");
+    }
+
+    @Test
+    void testEnPassantWhiteTakes() {
+        GameStateFenParser.loadFenString("8/p7/8/1P6/8/8/8/8 b - - 0 1");
+
+        Move blackDoublePawnPush = new Move(0, 1, 0, 3, Move.MoveType.DOUBLE_PAWN_PUSH);
+        gameState.makeMove(blackDoublePawnPush);
+
+        assertTrue(
+                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
+                "En passant target square should be present after a double pawn push");
+        assertEquals(
+                0,
+                gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
+                "En passant target square should be the correct square after a double pawn push");
+
+        Move enPassant = new Move(1, 3, 0, 2, Move.MoveType.EP_CAPTURE);
+        gameState.makeMove(enPassant);
+
+        assertFalse(
+                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
+                "En passant target square should not be present en passant capture");
+        assertEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAt(0, 3),
+                "The captured pawn square should be empty after en passant.");
+        assertEquals(
+                Constants.PieceType.EMPTY,
+                gameState.boardRepresentation.getPieceAt(1, 3),
+                "The source square should be empty after en passant.");
+        assertEquals(
+                Constants.PieceType.PAWN,
+                gameState.boardRepresentation.getPieceAt(0, 2),
+                "The capturing pawn should exist in the correct target square after en passant.");
+
+        gameState.unmakeMove(enPassant);
+
+        assertTrue(
+                gameState.irreversibleDataStack.peek().enPassantX().isPresent(),
+                "En passant target square should be present after a double pawn push");
+        assertEquals(
+                0,
                 gameState.irreversibleDataStack.peek().enPassantX().getAsInt(),
                 "En passant target square should be the correct square after a double pawn push");
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAt(5, 3),
+                gameState.boardRepresentation.getPieceAt(0, 3),
+                "The capturing pawn should exist in the correct target square after en passant.");
+        assertEquals(
+                Constants.PieceType.PAWN,
+                gameState.boardRepresentation.getPieceAt(1, 3),
                 "The capturing pawn should exist in the correct target square after en passant.");
     }
 

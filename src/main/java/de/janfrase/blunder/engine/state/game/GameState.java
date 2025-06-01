@@ -170,7 +170,7 @@ public class GameState {
         if (move.moveType().equals(Move.MoveType.EP_CAPTURE)) {
             // off set the move.toY value depending on who took the piece
             // if black took, we need to raise the value and vice versa
-            int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? DOWN : UP;
+            int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
 
             // remove the captured pawn from the board
             this.boardRepresentation.placePiece(
