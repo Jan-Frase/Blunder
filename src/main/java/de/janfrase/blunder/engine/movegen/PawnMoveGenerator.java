@@ -44,8 +44,8 @@ public class PawnMoveGenerator {
         int yInBetween = y + moveDirection;
         int yDestination = y + 2 * moveDirection;
 
-        Constants.Side sideInBetween = board.getSideAtPosition(x, yInBetween);
-        Constants.Side sideAtDestination = board.getSideAtPosition(x, yDestination);
+        Constants.Side sideInBetween = board.getSideAt(x, yInBetween);
+        Constants.Side sideAtDestination = board.getSideAt(x, yDestination);
 
         // both squares in front are empty
         if (sideInBetween == Constants.Side.EMPTY && sideAtDestination == Constants.Side.EMPTY) {
@@ -72,21 +72,13 @@ public class PawnMoveGenerator {
             if (enPassantX.isPresent()
                     && xDestination == enPassantX.getAsInt()
                     && yDestination == enPassantY) {
-                moves.add(
-                        new Move(
-                                x,
-                                y,
-                                xDestination,
-                                yDestination,
-                                Move.MoveType.EP_CAPTURE,
-                                Constants.PieceType.PAWN));
+                moves.add(new Move(x, y, xDestination, yDestination, Move.MoveType.EP_CAPTURE));
                 continue;
             }
 
-            Constants.Side sideAtAttackDestination =
-                    board.getSideAtPosition(xDestination, yDestination);
+            Constants.Side sideAtAttackDestination = board.getSideAt(xDestination, yDestination);
             Constants.PieceType pieceAtAttackDestination =
-                    board.getPieceAtPosition(xDestination, yDestination);
+                    board.getPieceAt(xDestination, yDestination);
 
             // nothing to capture
             if (sideAtAttackDestination == Constants.Side.EMPTY) {
@@ -140,7 +132,7 @@ public class PawnMoveGenerator {
 
     private static void generateStepForward(
             ArrayList<Move> moves, int x, int y, BoardRepresentation board, int yDestination) {
-        Constants.Side sideAtDestination = board.getSideAtPosition(x, yDestination);
+        Constants.Side sideAtDestination = board.getSideAt(x, yDestination);
         // the square in front is empty
         if (sideAtDestination == Constants.Side.EMPTY) {
             // we are promoting!

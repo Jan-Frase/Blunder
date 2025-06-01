@@ -83,9 +83,9 @@ public class LineMoveGeneratorTest {
                         .findFirst()
                         .orElseThrow();
         gameState.makeMove(captureMove);
-        assertEquals(Constants.PieceType.BISHOP, board.getPieceAtPosition(5, 5));
-        assertEquals(Constants.Side.WHITE, board.getSideAtPosition(5, 5));
-        assertEquals(Constants.PieceType.EMPTY, board.getPieceAtPosition(3, 3));
+        assertEquals(Constants.PieceType.BISHOP, board.getPieceAt(5, 5));
+        assertEquals(Constants.Side.WHITE, board.getSideAt(5, 5));
+        assertEquals(Constants.PieceType.EMPTY, board.getPieceAt(3, 3));
     }
 
     @Test
@@ -147,9 +147,9 @@ public class LineMoveGeneratorTest {
                         .findFirst()
                         .orElseThrow();
         gameState.makeMove(capturePawnMove);
-        assertEquals(Constants.PieceType.ROOK, board.getPieceAtPosition(3, 5));
-        assertEquals(Constants.Side.WHITE, board.getSideAtPosition(3, 5));
-        assertEquals(Constants.PieceType.EMPTY, board.getPieceAtPosition(3, 3));
+        assertEquals(Constants.PieceType.ROOK, board.getPieceAt(3, 5));
+        assertEquals(Constants.Side.WHITE, board.getSideAt(3, 5));
+        assertEquals(Constants.PieceType.EMPTY, board.getPieceAt(3, 3));
     }
 
     @Test

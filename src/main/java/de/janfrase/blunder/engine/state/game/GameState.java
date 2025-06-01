@@ -20,8 +20,8 @@ public class GameState {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public static final int UP = 1;
-    public static final int DOWN = -1;
+    public static final int UP = -1;
+    public static final int DOWN = 1;
     public static final int LEFT = -1;
     public static final int RIGHT = 1;
     public static final int RIGHT_X_ROOK_START = 7;
@@ -113,9 +113,8 @@ public class GameState {
         logger.trace("Making move {}.", move);
         // set the square we are moving to, to have the piece we moved
         Constants.PieceType fromPieceType =
-                this.boardRepresentation.getPieceAtPosition(move.fromX(), move.fromY());
-        Constants.Side fromSide =
-                this.boardRepresentation.getSideAtPosition(move.fromX(), move.fromY());
+                this.boardRepresentation.getPieceAt(move.fromX(), move.fromY());
+        Constants.Side fromSide = this.boardRepresentation.getSideAt(move.fromX(), move.fromY());
         this.boardRepresentation.placePiece(move.toX(), move.toY(), fromPieceType, fromSide);
 
         // set the square we are moving away from, to empty
@@ -286,9 +285,8 @@ public class GameState {
         logger.trace("Unmaking move {}.", move);
         // set the square we moved from, to have the piece we moved
         Constants.PieceType fromPieceType =
-                this.boardRepresentation.getPieceAtPosition(move.toX(), move.toY());
-        Constants.Side fromSide =
-                this.boardRepresentation.getSideAtPosition(move.toX(), move.toY());
+                this.boardRepresentation.getPieceAt(move.toX(), move.toY());
+        Constants.Side fromSide = this.boardRepresentation.getSideAt(move.toX(), move.toY());
         this.boardRepresentation.placePiece(move.fromX(), move.fromY(), fromPieceType, fromSide);
 
         // set the square we moved to, to contain what was previously there

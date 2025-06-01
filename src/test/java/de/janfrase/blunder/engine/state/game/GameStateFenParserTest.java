@@ -32,29 +32,29 @@ public class GameStateFenParserTest {
 
         assertEquals(
                 Constants.PieceType.ROOK,
-                board.getPieceAtPosition(0, 0),
+                board.getPieceAt(0, 0),
                 "Expected a rook at position (0, 0).");
         assertEquals(
                 Constants.Side.BLACK,
-                board.getSideAtPosition(0, 0),
+                board.getSideAt(0, 0),
                 "Expected a white rook at position (0, 0).");
 
         assertEquals(
                 Constants.PieceType.KING,
-                board.getPieceAtPosition(4, 0),
+                board.getPieceAt(4, 0),
                 "Expected a king at position (4, 0).");
         assertEquals(
                 Constants.Side.BLACK,
-                board.getSideAtPosition(4, 0),
+                board.getSideAt(4, 0),
                 "Expected a white king at position (4, 0).");
 
         assertEquals(
                 Constants.PieceType.PAWN,
-                board.getPieceAtPosition(3, 1),
+                board.getPieceAt(3, 1),
                 "Expected a white pawn at position (4, 0).");
         assertEquals(
                 Constants.Side.BLACK,
-                board.getSideAtPosition(3, 1),
+                board.getSideAt(3, 1),
                 "Expected a white pawn at position (4, 0).");
 
         assertTrue(this.gameState.isWhitesTurn, "White should move first in starting position");
@@ -88,29 +88,29 @@ public class GameStateFenParserTest {
         assertNotNull(board, "Board representation should not be null after loading FEN.");
         assertEquals(
                 Constants.PieceType.KNIGHT,
-                board.getPieceAtPosition(0, 0),
+                board.getPieceAt(0, 0),
                 "Expected a white knight at position (0, 0).");
         assertEquals(
                 Constants.Side.WHITE,
-                board.getSideAtPosition(0, 0),
+                board.getSideAt(0, 0),
                 "Expected a white knight at position (0, 0).");
 
         assertEquals(
                 Constants.PieceType.KING,
-                board.getPieceAtPosition(5, 0),
+                board.getPieceAt(5, 0),
                 "Expected a black king at position (5, 0).");
         assertEquals(
                 Constants.Side.BLACK,
-                board.getSideAtPosition(5, 0),
+                board.getSideAt(5, 0),
                 "Expected a black king at position (5, 0).");
 
         assertEquals(
                 Constants.PieceType.PAWN,
-                board.getPieceAtPosition(2, 3),
+                board.getPieceAt(2, 3),
                 "Expected a black pawn at position (2, 3).");
         assertEquals(
                 Constants.Side.BLACK,
-                board.getSideAtPosition(2, 3),
+                board.getSideAt(2, 3),
                 "Expected a black pawn at position (2, 3).");
 
         assertFalse(gameState.isWhitesTurn, "Black should be to move");
@@ -141,7 +141,7 @@ public class GameStateFenParserTest {
             for (int x = 0; x < 8; x++) {
                 assertEquals(
                         Constants.Side.EMPTY,
-                        board.getSideAtPosition(x, y),
+                        board.getSideAt(x, y),
                         "Expected no piece at position (" + x + ", " + y + ").");
             }
         }

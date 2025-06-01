@@ -26,7 +26,7 @@ public class BoardRepresentation {
      * @param y The row index (0-based) of the board.
      * @return The piece located at the specified position, represented by the {@link Constants.PieceType} enum.
      */
-    public Constants.PieceType getPieceAtPosition(int x, int y) {
+    public Constants.PieceType getPieceAt(int x, int y) {
         return this.squareBoard.getPieceAtPosition(x, y);
     }
 
@@ -37,7 +37,7 @@ public class BoardRepresentation {
      * @param y The row index (0-based) of the board.
      * @return The color of the specified tile, represented by the {@link Constants.Side} enum.
      */
-    public Constants.Side getSideAtPosition(int x, int y) {
+    public Constants.Side getSideAt(int x, int y) {
         return this.squareBoard.getSideAtPosition(x, y);
     }
 

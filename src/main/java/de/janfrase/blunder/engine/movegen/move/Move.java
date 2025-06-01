@@ -103,7 +103,8 @@ public record Move(
     public enum MoveType {
         NORMAL_MOVE, // A quiet move OR if capturedPieceType is set -> a capture move.
 
-        EP_CAPTURE, // Technically not needed since we also store the captured piece type.
+        EP_CAPTURE, // When an En Passant happens, do NOT store the captured piece but only the
+        // special move type.
 
         DOUBLE_PAWN_PUSH,
 

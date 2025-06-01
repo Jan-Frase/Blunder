@@ -4,6 +4,7 @@ package de.janfrase.blunder.engine.movegen;
 import static org.junit.jupiter.api.Assertions.*;
 
 import de.janfrase.blunder.engine.movegen.move.Move;
+import de.janfrase.blunder.engine.movegen.move.UciMoveParser;
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import de.janfrase.blunder.utility.Constants;
@@ -145,5 +146,131 @@ public class PawnMoveGeneratorTest {
                 OptionalInt.empty());
         assertEquals(1, moves.size());
         assertTrue(moves.stream().anyMatch(m -> m.toY() == 3 && m.toX() == 0));
+    }
+
+    @Test
+    void testEnPassantDiscoveredCheck() {
+        GameStateFenParser.loadFenString("8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b e3 - 0 1");
+        PawnMoveGenerator.generatePawnMove(
+                moves,
+                5,
+                4,
+                gameState.getBoardRepresentation(),
+                Constants.Side.BLACK,
+                OptionalInt.of(4));
+    }
+
+    /*
+        * 13:05:29.478 [Test worker] TRACE de.janfrase.blunder.engine.movegen.MoveGenerator - Starting move generation
+    13:05:29.478 [Test worker] TRACE de.janfrase.blunder.engine.movegen.MoveGenerator - Finished move generation
+    13:05:29.479 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Unmaking move h5h8.
+    13:05:29.479 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing ROOK from BLACK on x=7 y=3
+    13:05:29.479 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing EMPTY from EMPTY on x=7 y=0
+    13:05:29.480 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Finished unmaking move:
+    ◻◼◻◼◻◼◻◼
+    ◼◻♟◻◼◻◼◻
+    ◻◼◻♟◻◼◻◼
+    ♔♙◼◻◼◻◼♜
+    ◻♖◻◼♙♟◻♚
+    ◼◻◼◻◼◻◼◻
+    ◻◼◻◼◻◼♙◼
+    ◼◻◼◻◼◻◼◻
+
+    13:05:29.480 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Making move f4f3.
+    13:05:29.480 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing PAWN from BLACK on x=5 y=5
+    13:05:29.481 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing EMPTY from EMPTY on x=5 y=4
+    13:05:29.481 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Finished making move:
+    ◻◼◻◼◻◼◻◼
+    ◼◻♟◻◼◻◼◻
+    ◻◼◻♟◻◼◻◼
+    ♔♙◼◻◼◻◼♜
+    ◻♖◻◼♙◼◻♚
+    ◼◻◼◻◼♟◼◻
+    ◻◼◻◼◻◼♙◼
+    ◼◻◼◻◼◻◼◻
+
+    13:05:29.481 [Test worker] TRACE de.janfrase.blunder.engine.movegen.MoveGenerator - Starting move generation
+    13:05:29.482 [Test worker] TRACE de.janfrase.blunder.engine.movegen.MoveGenerator - Finished move generation
+    13:05:29.482 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Unmaking move f4f3.
+    13:05:29.482 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing PAWN from BLACK on x=5 y=4
+    13:05:29.482 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing EMPTY from EMPTY on x=5 y=5
+    13:05:29.483 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Finished unmaking move:
+    ◻◼◻◼◻◼◻◼
+    ◼◻♟◻◼◻◼◻
+    ◻◼◻♟◻◼◻◼
+    ♔♙◼◻◼◻◼♜
+    ◻♖◻◼♙♟◻♚
+    ◼◻◼◻◼◻◼◻
+    ◻◼◻◼◻◼♙◼
+    ◼◻◼◻◼◻◼◻
+
+    13:05:29.483 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Making move f4e3.
+    13:05:29.483 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing PAWN from BLACK on x=4 y=5
+    13:05:29.484 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing EMPTY from EMPTY on x=5 y=4
+    13:05:29.484 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing EMPTY from EMPTY on x=4 y=6
+    13:05:29.484 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Finished making move:
+    ◻◼◻◼◻◼◻◼
+    ◼◻♟◻◼◻◼◻
+    ◻◼◻♟◻◼◻◼
+    ♔♙◼◻◼◻◼♜
+    ◻♖◻◼♙◼◻♚
+    ◼◻◼◻♟◻◼◻
+    ◻◼◻◼◻◼♙◼
+    ◼◻◼◻◼◻◼◻
+
+    13:05:29.485 [Test worker] TRACE de.janfrase.blunder.engine.movegen.MoveGenerator - Starting move generation
+    13:05:29.485 [Test worker] TRACE de.janfrase.blunder.engine.movegen.MoveGenerator - Finished move generation
+    13:05:29.485 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Unmaking move f4e3.
+    13:05:29.485 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing PAWN from BLACK on x=5 y=4
+    13:05:29.486 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing PAWN from WHITE on x=4 y=5
+    13:05:29.486 [Test worker] TRACE de.janfrase.blunder.engine.state.board.BoardRepresentation - Placing PAWN from WHITE on x=4 y=6
+    13:05:29.486 [Test worker] TRACE de.janfrase.blunder.engine.state.game.GameState - Finished unmaking move:
+    ◻◼◻◼◻◼◻◼
+    ◼◻♟◻◼◻◼◻
+    ◻◼◻♟◻◼◻◼
+    ♔♙◼◻◼◻◼♜
+    ◻♖◻◼♙♟◻♚
+    ◼◻◼◻♙◻◼◻
+    ◻◼◻◼♙◼♙◼
+    ◼◻◼◻◼◻◼◻
+        * */
+    @Test
+    void testMakingUnmakingEnPassant() {
+        GameStateFenParser.loadFenString("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
+
+        Move doublePawnPushMove = UciMoveParser.parseUciMove("e2e4");
+        gameState.makeMove(doublePawnPushMove);
+
+        // assertTrue(gameState.getIrreversibleData().enPassantX().isPresent());
+        // assertEquals(5, gameState.getIrreversibleData().enPassantX().getAsInt());
+
+        // Move enPassantCaptureMove = UciMoveParser.parseUciMove("f4e3");
+
+        PawnMoveGenerator.generatePawnMove(
+                moves,
+                5,
+                4,
+                gameState.getBoardRepresentation(),
+                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getIrreversibleData().enPassantX());
+
+        Move enPassantCaptureMove =
+                moves.stream()
+                        .filter(m -> m.moveType() == Move.MoveType.EP_CAPTURE)
+                        .findFirst()
+                        .get();
+
+        gameState.makeMove(enPassantCaptureMove);
+
+        assertEquals(
+                Constants.PieceType.EMPTY, gameState.getBoardRepresentation().getPieceAt(4, 4));
+        assertEquals(Constants.PieceType.PAWN, gameState.getBoardRepresentation().getPieceAt(4, 5));
+
+        gameState.unmakeMove(enPassantCaptureMove);
+
+        assertEquals(Constants.PieceType.PAWN, gameState.getBoardRepresentation().getPieceAt(5, 4));
+        assertEquals(Constants.PieceType.PAWN, gameState.getBoardRepresentation().getPieceAt(4, 4));
+        assertEquals(
+                Constants.PieceType.EMPTY, gameState.getBoardRepresentation().getPieceAt(4, 5));
     }
 }

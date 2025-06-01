@@ -76,8 +76,8 @@ public class KnightMoveGeneratorTest {
                         .findFirst()
                         .orElseThrow();
         gameState.makeMove(capturePawnMove);
-        assertEquals(Constants.PieceType.KNIGHT, board.getPieceAtPosition(1, 2));
-        assertEquals(Constants.Side.WHITE, board.getSideAtPosition(1, 2));
-        assertEquals(Constants.PieceType.EMPTY, board.getPieceAtPosition(3, 3));
+        assertEquals(Constants.PieceType.KNIGHT, board.getPieceAt(1, 2));
+        assertEquals(Constants.Side.WHITE, board.getSideAt(1, 2));
+        assertEquals(Constants.PieceType.EMPTY, board.getPieceAt(3, 3));
     }
 }

@@ -36,8 +36,8 @@ public class MoveGenerator {
 
         for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
             for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
-                Constants.PieceType pieceType = board.getPieceAtPosition(x, y);
-                Constants.Side pieceSide = board.getSideAtPosition(x, y);
+                Constants.PieceType pieceType = board.getPieceAt(x, y);
+                Constants.Side pieceSide = board.getSideAt(x, y);
 
                 // skip empty squares
                 if (pieceType == Constants.PieceType.EMPTY) {

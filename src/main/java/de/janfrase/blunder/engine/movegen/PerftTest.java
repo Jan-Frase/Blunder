@@ -39,14 +39,9 @@ public class PerftTest {
 
         int nodes = 0;
 
-        ArrayList<Move> pseudoLegalMoves = MoveGenerator.generatePseudoLegalMoves();
-        for (Move move : pseudoLegalMoves) {
+        ArrayList<Move> legalMoves = MoveGenerator.generateLegalMoves();
+        for (Move move : legalMoves) {
             gameState.makeMove(move);
-
-            if (MoveGenerator.canCaptureKing()) {
-                gameState.unmakeMove(move);
-                continue;
-            }
 
             int current_nodes = perft(depths - 1);
             nodes += current_nodes;

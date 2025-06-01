@@ -165,31 +165,31 @@ public class KingMoveGeneratorTest {
         // Verify king's new position
         assertEquals(
                 Constants.PieceType.KING,
-                board.getPieceAtPosition(2, 7),
+                board.getPieceAt(2, 7),
                 "King should be at c1 after long castle");
         assertEquals(
                 Constants.Side.WHITE,
-                board.getSideAtPosition(2, 7),
+                board.getSideAt(2, 7),
                 "White king should be at c1 after long castle");
 
         // Verify rook's new position
         assertEquals(
                 Constants.PieceType.ROOK,
-                board.getPieceAtPosition(3, 7),
+                board.getPieceAt(3, 7),
                 "Rook should be at d1 after long castle");
         assertEquals(
                 Constants.Side.WHITE,
-                board.getSideAtPosition(3, 7),
+                board.getSideAt(3, 7),
                 "White rook should be at d1 after long castle");
 
         // Verify old positions are empty
         assertEquals(
                 Constants.PieceType.EMPTY,
-                board.getPieceAtPosition(0, 7),
+                board.getPieceAt(0, 7),
                 "Original rook position should be empty");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                board.getPieceAtPosition(4, 7),
+                board.getPieceAt(4, 7),
                 "Original king position should be empty");
     }
 
@@ -224,31 +224,31 @@ public class KingMoveGeneratorTest {
         // Verify king's new position
         assertEquals(
                 Constants.PieceType.KING,
-                board.getPieceAtPosition(6, 7),
+                board.getPieceAt(6, 7),
                 "King should be at g1 after short castle");
         assertEquals(
                 Constants.Side.WHITE,
-                board.getSideAtPosition(6, 7),
+                board.getSideAt(6, 7),
                 "White king should be at g1 after short castle");
 
         // Verify rook's new position
         assertEquals(
                 Constants.PieceType.ROOK,
-                board.getPieceAtPosition(5, 7),
+                board.getPieceAt(5, 7),
                 "Rook should be at f1 after short castle");
         assertEquals(
                 Constants.Side.WHITE,
-                board.getSideAtPosition(5, 7),
+                board.getSideAt(5, 7),
                 "White rook should be at f1 after short castle");
 
         // Verify old positions are empty
         assertEquals(
                 Constants.PieceType.EMPTY,
-                board.getPieceAtPosition(7, 7),
+                board.getPieceAt(7, 7),
                 "Original rook position should be empty");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                board.getPieceAtPosition(4, 7),
+                board.getPieceAt(4, 7),
                 "Original king position should be empty");
     }
 }

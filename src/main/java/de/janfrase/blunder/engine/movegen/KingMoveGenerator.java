@@ -35,8 +35,8 @@ public class KingMoveGenerator {
                 // we are left or right of the board - nothing to do
                 if (targetX < 0 || targetX >= Constants.BOARD_SIDE_LENGTH) continue;
 
-                Constants.PieceType targetPieceType = board.getPieceAtPosition(targetX, targetY);
-                Constants.Side targetPieceSide = board.getSideAtPosition(targetX, targetY);
+                Constants.PieceType targetPieceType = board.getPieceAt(targetX, targetY);
+                Constants.Side targetPieceSide = board.getSideAt(targetX, targetY);
 
                 // a quiet move since the square is empty
                 if (targetPieceSide == Constants.Side.EMPTY) {
@@ -67,8 +67,8 @@ public class KingMoveGenerator {
         }
 
         if (canShortCastle) {
-            Constants.Side sideOneRight = board.getSideAtPosition(x + 1, y);
-            Constants.Side sideTwoRight = board.getSideAtPosition(x + 2, y);
+            Constants.Side sideOneRight = board.getSideAt(x + 1, y);
+            Constants.Side sideTwoRight = board.getSideAt(x + 2, y);
 
             // there is nothing between the king and the rook
             if (sideOneRight == Constants.Side.EMPTY && sideTwoRight == Constants.Side.EMPTY) {
@@ -79,9 +79,9 @@ public class KingMoveGenerator {
         }
 
         if (canLongCastle) {
-            Constants.Side sideOneRight = board.getSideAtPosition(x - 1, y);
-            Constants.Side sideTwoRight = board.getSideAtPosition(x - 2, y);
-            Constants.Side sideThreeRight = board.getSideAtPosition(x - 3, y);
+            Constants.Side sideOneRight = board.getSideAt(x - 1, y);
+            Constants.Side sideTwoRight = board.getSideAt(x - 2, y);
+            Constants.Side sideThreeRight = board.getSideAt(x - 3, y);
 
             // there is nothing between the king and the rook
             if (sideOneRight == Constants.Side.EMPTY

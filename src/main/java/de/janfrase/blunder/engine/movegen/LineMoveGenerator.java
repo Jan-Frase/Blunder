@@ -36,9 +36,8 @@ public class LineMoveGenerator {
                     break;
                 }
 
-                Constants.PieceType pieceAtDestination =
-                        board.getPieceAtPosition(currentX, currentY);
-                Constants.Side sideAtDestination = board.getSideAtPosition(currentX, currentY);
+                Constants.PieceType pieceAtDestination = board.getPieceAt(currentX, currentY);
+                Constants.Side sideAtDestination = board.getSideAt(currentX, currentY);
 
                 // Empty square - add move and continue
                 if (pieceAtDestination == Constants.PieceType.EMPTY) {

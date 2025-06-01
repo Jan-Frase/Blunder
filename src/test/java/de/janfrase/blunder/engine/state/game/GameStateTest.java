@@ -27,11 +27,11 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(2, 2),
+                gameState.boardRepresentation.getPieceAt(2, 2),
                 "Source square should be a pawn before the move");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(3, 3),
+                gameState.boardRepresentation.getPieceAt(3, 3),
                 "Target square should be empty before the move");
 
         Move pawnMove = new Move(2, 2, 2, 3);
@@ -39,11 +39,11 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(2, 2),
+                gameState.boardRepresentation.getPieceAt(2, 2),
                 "Source square should be empty after the move");
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(2, 3),
+                gameState.boardRepresentation.getPieceAt(2, 3),
                 "Target square should contain the moved piece");
 
         assertFalse(gameState.isWhitesTurn, "Turn should toggle after a move");
@@ -80,18 +80,18 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.ROOK,
-                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                gameState.boardRepresentation.getPieceAt(6, 6),
                 "Rook should be in the correct position after unmaking a move");
 
         gameState.unmakeMove(pawnMove);
 
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(2, 2),
+                gameState.boardRepresentation.getPieceAt(2, 2),
                 "Source square should be a pawn before the move");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(3, 3),
+                gameState.boardRepresentation.getPieceAt(3, 3),
                 "Target square should be empty before the move");
 
         assertTrue(gameState.isWhitesTurn, "Turn should toggle after a move");
@@ -108,11 +108,11 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(2, 5),
+                gameState.boardRepresentation.getPieceAt(2, 5),
                 "Source square should be a pawn before the move");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(2, 4),
+                gameState.boardRepresentation.getPieceAt(2, 4),
                 "Target square should be empty before the move");
 
         Move pawnMove = new Move(2, 5, 2, 4);
@@ -120,11 +120,11 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(2, 5),
+                gameState.boardRepresentation.getPieceAt(2, 5),
                 "Source square should be empty after the move");
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(2, 4),
+                gameState.boardRepresentation.getPieceAt(2, 4),
                 "Target square should contain the moved piece");
 
         assertTrue(gameState.isWhitesTurn, "Turn should toggle after a move");
@@ -166,18 +166,18 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.ROOK,
-                gameState.boardRepresentation.getPieceAtPosition(6, 1),
+                gameState.boardRepresentation.getPieceAt(6, 1),
                 "Rook should be in the correct position after unmaking a move");
 
         gameState.unmakeMove(pawnMove);
 
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(2, 5),
+                gameState.boardRepresentation.getPieceAt(2, 5),
                 "Source square should be a pawn before the move");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(2, 4),
+                gameState.boardRepresentation.getPieceAt(2, 4),
                 "Target square should be empty before the move");
 
         assertEquals(
@@ -214,15 +214,15 @@ public class GameStateTest {
                 "En passant target square should not be present en passant capture");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(5, 4),
+                gameState.boardRepresentation.getPieceAt(5, 4),
                 "The captured pawn square should be empty after en passant.");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(4, 4),
+                gameState.boardRepresentation.getPieceAt(4, 4),
                 "The source square should be empty after en passant.");
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(5, 5),
+                gameState.boardRepresentation.getPieceAt(5, 5),
                 "The capturing pawn should exist in the correct target square after en passant.");
 
         gameState.unmakeMove(enPassant);
@@ -264,15 +264,15 @@ public class GameStateTest {
                 "En passant target square should not be present en passant capture");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(5, 3),
+                gameState.boardRepresentation.getPieceAt(5, 3),
                 "The captured pawn square should be empty after en passant.");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(4, 3),
+                gameState.boardRepresentation.getPieceAt(4, 3),
                 "The source square should be empty after en passant.");
         assertEquals(
                 Constants.PieceType.PAWN,
-                gameState.boardRepresentation.getPieceAtPosition(5, 2),
+                gameState.boardRepresentation.getPieceAt(5, 2),
                 "The capturing pawn should exist in the correct target square after en passant.");
 
         gameState.unmakeMove(enPassant);
@@ -298,19 +298,19 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(7, 0),
+                gameState.boardRepresentation.getPieceAt(7, 0),
                 "The rook's original position should be empty after castling.");
         assertEquals(
                 Constants.PieceType.ROOK,
-                gameState.boardRepresentation.getPieceAtPosition(5, 0),
+                gameState.boardRepresentation.getPieceAt(5, 0),
                 "The rook should be in the correct position after castling.");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(4, 0),
+                gameState.boardRepresentation.getPieceAt(4, 0),
                 "The king's original position should be empty after castling.");
         assertEquals(
                 Constants.PieceType.KING,
-                gameState.boardRepresentation.getPieceAtPosition(6, 0),
+                gameState.boardRepresentation.getPieceAt(6, 0),
                 "The king should be in the correct position after castling.");
 
         CastlingRights castlingRights = gameState.irreversibleDataStack.peek().castlingRights();
@@ -325,19 +325,19 @@ public class GameStateTest {
 
         assertNotEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(7, 0),
+                gameState.boardRepresentation.getPieceAt(7, 0),
                 "The rook's original position should be full before castling.");
         assertNotEquals(
                 Constants.PieceType.ROOK,
-                gameState.boardRepresentation.getPieceAtPosition(5, 0),
+                gameState.boardRepresentation.getPieceAt(5, 0),
                 "The rook should be in the correct position before castling.");
         assertNotEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(4, 0),
+                gameState.boardRepresentation.getPieceAt(4, 0),
                 "The king's original position should be full before castling.");
         assertNotEquals(
                 Constants.PieceType.KING,
-                gameState.boardRepresentation.getPieceAtPosition(6, 0),
+                gameState.boardRepresentation.getPieceAt(6, 0),
                 "The king should be in the correct position before castling.");
 
         CastlingRights castlingRightsAfterUnmake =
@@ -364,19 +364,19 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(7, 7),
+                gameState.boardRepresentation.getPieceAt(7, 7),
                 "The rook's original position should be empty after castling.");
         assertEquals(
                 Constants.PieceType.ROOK,
-                gameState.boardRepresentation.getPieceAtPosition(5, 7),
+                gameState.boardRepresentation.getPieceAt(5, 7),
                 "The rook should be in the correct position after castling.");
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(4, 7),
+                gameState.boardRepresentation.getPieceAt(4, 7),
                 "The king's original position should be empty after castling.");
         assertEquals(
                 Constants.PieceType.KING,
-                gameState.boardRepresentation.getPieceAtPosition(6, 7),
+                gameState.boardRepresentation.getPieceAt(6, 7),
                 "The king should be in the correct position after castling.");
 
         CastlingRights castlingRights = gameState.irreversibleDataStack.peek().castlingRights();
@@ -391,19 +391,19 @@ public class GameStateTest {
 
         assertNotEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(7, 7),
+                gameState.boardRepresentation.getPieceAt(7, 7),
                 "The rook's original position should be full before castling.");
         assertNotEquals(
                 Constants.PieceType.ROOK,
-                gameState.boardRepresentation.getPieceAtPosition(5, 7),
+                gameState.boardRepresentation.getPieceAt(5, 7),
                 "The rook should be in the correct position before castling.");
         assertNotEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(4, 7),
+                gameState.boardRepresentation.getPieceAt(4, 7),
                 "The king's original position should be full before castling.");
         assertNotEquals(
                 Constants.PieceType.KING,
-                gameState.boardRepresentation.getPieceAtPosition(6, 7),
+                gameState.boardRepresentation.getPieceAt(6, 7),
                 "The king should be in the correct position before castling.");
 
         CastlingRights castlingRightsAfterUnmake =
@@ -426,22 +426,22 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                gameState.boardRepresentation.getPieceAt(6, 6),
                 "The source square should be empty after the pawn promotion.");
         assertEquals(
                 Constants.PieceType.QUEEN,
-                gameState.boardRepresentation.getPieceAtPosition(7, 6),
+                gameState.boardRepresentation.getPieceAt(7, 6),
                 "The promoted piece should be a queen in the correct position.");
 
         gameState.unmakeMove(promotionMove);
 
         assertNotEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                gameState.boardRepresentation.getPieceAt(6, 6),
                 "The source square should be full before the pawn promotion.");
         assertNotEquals(
                 Constants.PieceType.QUEEN,
-                gameState.boardRepresentation.getPieceAtPosition(7, 6),
+                gameState.boardRepresentation.getPieceAt(7, 6),
                 "The promoted piece should be a empty in the correct position.");
     }
 
@@ -458,11 +458,11 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                gameState.boardRepresentation.getPieceAt(6, 6),
                 "The source square should be empty after the pawn promotion capture.");
         assertEquals(
                 Constants.PieceType.QUEEN,
-                gameState.boardRepresentation.getPieceAtPosition(7, 7),
+                gameState.boardRepresentation.getPieceAt(7, 7),
                 "The promoted piece should replace the captured piece, becoming a queen in the"
                         + " correct position.");
 
@@ -470,11 +470,11 @@ public class GameStateTest {
 
         assertNotEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(6, 6),
+                gameState.boardRepresentation.getPieceAt(6, 6),
                 "The source square should not be empty before the pawn promotion capture.");
         assertNotEquals(
                 Constants.PieceType.QUEEN,
-                gameState.boardRepresentation.getPieceAtPosition(7, 7),
+                gameState.boardRepresentation.getPieceAt(7, 7),
                 "The promoted piece should not replace the captured piece, becoming a queen in the"
                         + " correct position.");
     }
@@ -623,44 +623,44 @@ public class GameStateTest {
 
         assertEquals(
                 Constants.PieceType.EMPTY,
-                gameState.boardRepresentation.getPieceAtPosition(4, 0),
+                gameState.boardRepresentation.getPieceAt(4, 0),
                 "The white queen should be removed from the board after a capture.");
 
         assertEquals(
                 Constants.Side.EMPTY,
-                gameState.boardRepresentation.getSideAtPosition(4, 0),
+                gameState.boardRepresentation.getSideAt(4, 0),
                 "The white queen should be removed from the board after a capture.");
 
         assertEquals(
                 Constants.PieceType.QUEEN,
-                gameState.boardRepresentation.getPieceAtPosition(5, 0),
+                gameState.boardRepresentation.getPieceAt(5, 0),
                 "The white queen should now be on the target square after a capture.");
 
         assertEquals(
                 Constants.Side.WHITE,
-                gameState.boardRepresentation.getSideAtPosition(5, 0),
+                gameState.boardRepresentation.getSideAt(5, 0),
                 "The white queen should now be on the target square after a capture.");
 
         gameState.unmakeMove(captureMove);
 
         assertEquals(
                 Constants.PieceType.QUEEN,
-                gameState.boardRepresentation.getPieceAtPosition(4, 0),
+                gameState.boardRepresentation.getPieceAt(4, 0),
                 "The white queen should be put back on the board after an unmake.");
 
         assertEquals(
                 Constants.Side.WHITE,
-                gameState.boardRepresentation.getSideAtPosition(4, 0),
+                gameState.boardRepresentation.getSideAt(4, 0),
                 "The white queen should be put back on the board after an unmake.");
 
         assertEquals(
                 Constants.PieceType.QUEEN,
-                gameState.boardRepresentation.getPieceAtPosition(5, 0),
+                gameState.boardRepresentation.getPieceAt(5, 0),
                 "The black queen should be put back on the board after an unmake.");
 
         assertEquals(
                 Constants.Side.BLACK,
-                gameState.boardRepresentation.getSideAtPosition(5, 0),
+                gameState.boardRepresentation.getSideAt(5, 0),
                 "The white queen should be put back on the board after an unmake.");
     }
 }
