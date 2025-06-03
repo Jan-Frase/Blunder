@@ -64,7 +64,7 @@ public class PawnMoveGenerator {
         for (int x_attack_dir : x_attack_directions) {
             int xDestination = x + x_attack_dir;
 
-            if (MoveGenerator.isOffBoard(xDestination, yDestination)) continue;
+            if (Constants.isOffBoard(xDestination, yDestination)) continue;
 
             int enPassantY = activeSide == Constants.Side.WHITE ? 2 : 5;
 

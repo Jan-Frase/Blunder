@@ -13,7 +13,6 @@ public class LineMoveGenerator {
 
     // Diagonal directions: bot-right, bot-left, top-right, top-left
     private static final int[][] diagonal_directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
-
     private static final int[][] straight_directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     private static void generateLineMoves(
@@ -32,7 +31,7 @@ public class LineMoveGenerator {
                 currentY += direction[1];
 
                 // Check if we're still on the board
-                if (MoveGenerator.isOffBoard(currentX, currentY)) {
+                if (Constants.isOffBoard(currentX, currentY)) {
                     break;
                 }
 

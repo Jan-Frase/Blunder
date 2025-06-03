@@ -6,6 +6,10 @@ public class Constants {
 
     public static final int BOARD_TOTAL_SIZE = BOARD_SIDE_LENGTH * BOARD_SIDE_LENGTH;
 
+    public static boolean isOffBoard(int x, int y) {
+        return x < 0 || x >= BOARD_SIDE_LENGTH || y < 0 || y >= BOARD_SIDE_LENGTH;
+    }
+
     public enum PieceType {
         KING,
         QUEEN,

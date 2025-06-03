@@ -26,7 +26,7 @@ public class KnightMoveGenerator {
             int currentY = y + direction[1];
 
             // Check if we're still on the board
-            if (MoveGenerator.isOffBoard(currentX, currentY)) {
+            if (Constants.isOffBoard(currentX, currentY)) {
                 continue;
             }
 
