@@ -11,10 +11,6 @@ import java.util.ArrayList;
  */
 public class LineMoveGenerator {
 
-    // Diagonal directions: bot-right, bot-left, top-right, top-left
-    private static final int[][] diagonal_directions = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
-    private static final int[][] straight_directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-
     private static void generateLineMoves(
             ArrayList<Move> moves,
             int x,
@@ -61,7 +57,7 @@ public class LineMoveGenerator {
             int y,
             BoardRepresentation board,
             Constants.Side activeSide) {
-        generateLineMoves(moves, x, y, board, activeSide, diagonal_directions);
+        generateLineMoves(moves, x, y, board, activeSide, Constants.DIAGONAL_DIRECTIONS);
     }
 
     protected static void generateStraightMoves(
@@ -70,6 +66,6 @@ public class LineMoveGenerator {
             int y,
             BoardRepresentation board,
             Constants.Side activeSide) {
-        generateLineMoves(moves, x, y, board, activeSide, straight_directions);
+        generateLineMoves(moves, x, y, board, activeSide, Constants.STRAIGHT_DIRECTIONS);
     }
 }

@@ -2,6 +2,7 @@
 package de.janfrase.blunder.engine.movegen;
 
 import de.janfrase.blunder.engine.movegen.move.Move;
+import de.janfrase.blunder.engine.state.board.AttackDecider;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.utility.Constants;
@@ -70,6 +71,9 @@ public class KingMoveGenerator {
             Constants.Side sideOneRight = board.getSideAt(x + 1, y);
             Constants.Side sideTwoRight = board.getSideAt(x + 2, y);
 
+            if (AttackDecider.isAttacked(x + 1, y, activeSide)
+                    || AttackDecider.isAttacked(x + 2, y, activeSide)) return;
+
             // there is nothing between the king and the rook
             if (sideOneRight == Constants.Side.EMPTY && sideTwoRight == Constants.Side.EMPTY) {
                 Move castleMove =
@@ -82,6 +86,9 @@ public class KingMoveGenerator {
             Constants.Side sideOneRight = board.getSideAt(x - 1, y);
             Constants.Side sideTwoRight = board.getSideAt(x - 2, y);
             Constants.Side sideThreeRight = board.getSideAt(x - 3, y);
+
+            if (AttackDecider.isAttacked(x - 1, y, activeSide)
+                    || AttackDecider.isAttacked(x - 2, y, activeSide)) return;
 
             // there is nothing between the king and the rook
             if (sideOneRight == Constants.Side.EMPTY

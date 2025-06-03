@@ -11,17 +11,13 @@ import java.util.ArrayList;
  */
 public class KnightMoveGenerator {
 
-    private static final int[][] directions = {
-        {1, 2}, {-1, 2}, {1, -2}, {-1, -2}, {2, 1}, {-2, 1}, {2, -1}, {-2, -1}
-    };
-
     protected static void generateKnightMoves(
             ArrayList<Move> moves,
             int x,
             int y,
             BoardRepresentation board,
             Constants.Side activeSide) {
-        for (int[] direction : directions) {
+        for (int[] direction : Constants.KNIGHT_DIRECTIONS) {
             int currentX = x + direction[0];
             int currentY = y + direction[1];
 

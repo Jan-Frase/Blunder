@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-public class PinFinder {
+public class PinDecider {
 
-    public static boolean isPinned(int x, int y) {
+    protected static boolean isPinned(int x, int y) {
         int[][][] straights = {{{1, 0}, {-1, 0}}, {{0, 1}, {0, -1}}};
         int[][][] diagonals = {{{1, 1}, {-1, -1}}, {{1, -1}, {-1, 1}}};
 
@@ -21,17 +21,19 @@ public class PinFinder {
 
     private static boolean isPinned(
             int x, int y, int[][][] directions, Constants.PieceType pinningPiece) {
+        // Could be improved by looking up the king position over a secondary piece-centric board
+        // representation.
+        BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
+
         for (int[][] dir_pair : directions) {
             ArrayList<Optional<int[]>> obstacles = new ArrayList<>(2);
-            obstacles.add(firstObstacleInDir(x, y, dir_pair[0]));
-            obstacles.add(firstObstacleInDir(x, y, dir_pair[1]));
+            obstacles.add(board.firstObstacleInDir(x, y, dir_pair[0]));
+            obstacles.add(board.firstObstacleInDir(x, y, dir_pair[1]));
 
             // cant be pinned if we are running of the board in one direction
             if (obstacles.stream().anyMatch(Optional::isEmpty)) {
                 continue;
             }
-
-            BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
 
             // get the pieces and their sides in both directions
             Constants.PieceType[] pieces =
@@ -77,25 +79,5 @@ public class PinFinder {
         }
 
         return false;
-    }
-
-    private static Optional<int[]> firstObstacleInDir(int x, int y, int[] dir) {
-        int currentX = x;
-        int currentY = y;
-
-        BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
-
-        while (true) {
-            currentX += dir[0];
-            currentY += dir[1];
-
-            if (Constants.isOffBoard(currentX, currentY)) {
-                return Optional.empty();
-            }
-
-            if (board.getPieceAt(currentX, currentY) != Constants.PieceType.EMPTY) {
-                return Optional.of(new int[] {currentX, currentY});
-            }
-        }
     }
 }
