@@ -482,13 +482,13 @@ public class GameStateTest {
     @Test
     void testKingMovementRemovesCastlingRights() {
         gameState.boardRepresentation.setPieceAt(
-                4, 0, Constants.PieceType.KING, Constants.Side.WHITE);
+                4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
         gameState.boardRepresentation.setPieceAt(
-                7, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
+                7, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
         gameState.boardRepresentation.setPieceAt(
-                0, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
+                0, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
-        Move kingMove = new Move(4, 0, 4, 1);
+        Move kingMove = new Move(4, 7, 4, 6);
         gameState.makeMove(kingMove);
 
         CastlingRights castlingRights = gameState.irreversibleDataStack.peek().castlingRights();
@@ -516,13 +516,13 @@ public class GameStateTest {
         GameState.resetGameState();
         gameState.isWhitesTurn = false;
         gameState.boardRepresentation.setPieceAt(
-                4, 7, Constants.PieceType.KING, Constants.Side.BLACK);
+                4, 0, Constants.PieceType.KING, Constants.Side.BLACK);
         gameState.boardRepresentation.setPieceAt(
-                7, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
+                7, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
         gameState.boardRepresentation.setPieceAt(
-                0, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
+                0, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
-        Move kingMove = new Move(4, 7, 4, 6);
+        Move kingMove = new Move(4, 0, 4, 1);
         gameState.makeMove(kingMove);
 
         CastlingRights castlingRights = gameState.irreversibleDataStack.peek().castlingRights();
@@ -548,13 +548,13 @@ public class GameStateTest {
     @Test
     void testRookMovementRemovesSpecificCastlingRight() {
         gameState.boardRepresentation.setPieceAt(
-                4, 0, Constants.PieceType.KING, Constants.Side.WHITE);
+                4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
         gameState.boardRepresentation.setPieceAt(
-                7, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
+                7, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
         gameState.boardRepresentation.setPieceAt(
-                0, 0, Constants.PieceType.ROOK, Constants.Side.WHITE);
+                0, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
-        Move kingSideRookMove = new Move(7, 0, 7, 1);
+        Move kingSideRookMove = new Move(7, 7, 7, 6);
         gameState.makeMove(kingSideRookMove);
 
         CastlingRights castlingRights = gameState.irreversibleDataStack.peek().castlingRights();
@@ -582,13 +582,13 @@ public class GameStateTest {
         GameState.resetGameState();
         gameState.isWhitesTurn = false;
         gameState.boardRepresentation.setPieceAt(
-                4, 7, Constants.PieceType.KING, Constants.Side.BLACK);
+                4, 0, Constants.PieceType.KING, Constants.Side.BLACK);
         gameState.boardRepresentation.setPieceAt(
-                7, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
+                7, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
         gameState.boardRepresentation.setPieceAt(
-                0, 7, Constants.PieceType.ROOK, Constants.Side.BLACK);
+                0, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
-        Move kingSideRookMove = new Move(7, 7, 7, 6);
+        Move kingSideRookMove = new Move(7, 0, 7, 1);
         gameState.makeMove(kingSideRookMove);
 
         CastlingRights castlingRights = gameState.irreversibleDataStack.peek().castlingRights();
