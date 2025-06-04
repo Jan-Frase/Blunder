@@ -207,7 +207,7 @@ public class GameState {
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, false);
         }
 
-        int startingY = isWhitesTurn ? 0 : 7;
+        int startingY = isWhitesTurn ? 7 : 0;
 
         // castle right loss on king move
         if (fromPieceType.equals(Constants.PieceType.KING)
