@@ -69,19 +69,6 @@ public class BoardRepresentation {
     }
 
     /**
-     * Determines whether a piece at the given position on the board is pinned.
-     * A piece is considered pinned if it is blocking a move that would expose
-     * its own king to check.
-     *
-     * @param x The column index (0-based) of the board.
-     * @param y The row index (0-based) of the board.
-     * @return {@code true} if the piece at the specified position is pinned, {@code false} otherwise.
-     */
-    public boolean isPinned(int x, int y) {
-        return PinDecider.isPinned(x, y);
-    }
-
-    /**
      * Finds the first obstacle in a given direction starting from the specified position on the board.
      * An obstacle is defined as a board square that contains a piece (not empty). The search continues
      * in the specified direction until an obstacle is encountered or the edge of the board is reached.

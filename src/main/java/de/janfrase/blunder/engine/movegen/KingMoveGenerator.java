@@ -23,6 +23,17 @@ public class KingMoveGenerator {
             Constants.Side activeSide,
             CastlingRights castlingRights) {
         // takes care of normal king moves - leaves castles for later
+        generateNormalMoves(moves, x, y, board, activeSide);
+
+        generateCastleMoves(moves, x, y, board, activeSide, castlingRights);
+    }
+
+    private static void generateNormalMoves(
+            ArrayList<Move> moves,
+            int x,
+            int y,
+            BoardRepresentation board,
+            Constants.Side activeSide) {
         for (int yOffset = -1; yOffset <= 1; yOffset++) {
             int targetY = y + yOffset;
             // we are above or below the board - nothing to do
@@ -57,7 +68,15 @@ public class KingMoveGenerator {
                 moves.add(captureMove);
             }
         }
+    }
 
+    private static void generateCastleMoves(
+            ArrayList<Move> moves,
+            int x,
+            int y,
+            BoardRepresentation board,
+            Constants.Side activeSide,
+            CastlingRights castlingRights) {
         // let's make some castles. 🏰
         boolean canLongCastle = castlingRights.getLongCastle(activeSide);
         boolean canShortCastle = castlingRights.getShortCastle(activeSide);
@@ -67,37 +86,56 @@ public class KingMoveGenerator {
             return;
         }
 
-        if (canShortCastle) {
-            Constants.Side sideOneRight = board.getSideAt(x + 1, y);
-            Constants.Side sideTwoRight = board.getSideAt(x + 2, y);
+        generateShortCastles(moves, x, y, board, activeSide, canShortCastle);
 
-            if (AttackDecider.isAttacked(x + 1, y, activeSide)
-                    || AttackDecider.isAttacked(x + 2, y, activeSide)) return;
+        generateLongCastles(moves, x, y, board, activeSide, canLongCastle);
+    }
 
-            // there is nothing between the king and the rook
-            if (sideOneRight == Constants.Side.EMPTY && sideTwoRight == Constants.Side.EMPTY) {
-                Move castleMove =
-                        new Move(x, y, x + SHORT_CASTLE_X_OFFSET, y, Move.MoveType.SHORT_CASTLE);
-                moves.add(castleMove);
-            }
-        }
+    private static void generateShortCastles(
+            ArrayList<Move> moves,
+            int x,
+            int y,
+            BoardRepresentation board,
+            Constants.Side activeSide,
+            boolean canShortCastle) {
+        if (!canShortCastle) return;
 
-        if (canLongCastle) {
-            Constants.Side sideOneRight = board.getSideAt(x - 1, y);
-            Constants.Side sideTwoRight = board.getSideAt(x - 2, y);
-            Constants.Side sideThreeRight = board.getSideAt(x - 3, y);
+        Constants.Side sideOneRight = board.getSideAt(x + 1, y);
+        Constants.Side sideTwoRight = board.getSideAt(x + 2, y);
 
-            if (AttackDecider.isAttacked(x - 1, y, activeSide)
-                    || AttackDecider.isAttacked(x - 2, y, activeSide)) return;
+        // there is something between the king and the rook -> return
+        if (sideOneRight != Constants.Side.EMPTY || sideTwoRight != Constants.Side.EMPTY) return;
 
-            // there is nothing between the king and the rook
-            if (sideOneRight == Constants.Side.EMPTY
-                    && sideTwoRight == Constants.Side.EMPTY
-                    && sideThreeRight == Constants.Side.EMPTY) {
-                Move castleMove =
-                        new Move(x, y, x + LONG_CASTLE_X_OFFSET, y, Move.MoveType.LONG_CASTLE);
-                moves.add(castleMove);
-            }
-        }
+        // if one of the squares the king is passing through -> return
+        if (AttackDecider.isAttacked(x + 1, y, activeSide)
+                || AttackDecider.isAttacked(x + 2, y, activeSide)) return;
+
+        Move castleMove = new Move(x, y, x + SHORT_CASTLE_X_OFFSET, y, Move.MoveType.SHORT_CASTLE);
+        moves.add(castleMove);
+    }
+
+    private static void generateLongCastles(
+            ArrayList<Move> moves,
+            int x,
+            int y,
+            BoardRepresentation board,
+            Constants.Side activeSide,
+            boolean canLongCastle) {
+        if (!canLongCastle) return;
+
+        Constants.Side sideOneRight = board.getSideAt(x - 1, y);
+        Constants.Side sideTwoRight = board.getSideAt(x - 2, y);
+        Constants.Side sideThreeRight = board.getSideAt(x - 3, y);
+
+        // there is nothing between the king and the rook
+        if (sideOneRight != Constants.Side.EMPTY
+                || sideTwoRight != Constants.Side.EMPTY
+                || sideThreeRight != Constants.Side.EMPTY) return;
+
+        if (AttackDecider.isAttacked(x - 1, y, activeSide)
+                || AttackDecider.isAttacked(x - 2, y, activeSide)) return;
+
+        Move castleMove = new Move(x, y, x + LONG_CASTLE_X_OFFSET, y, Move.MoveType.LONG_CASTLE);
+        moves.add(castleMove);
     }
 }
