@@ -8,16 +8,24 @@ import java.util.Optional;
 public class AttackDecider {
 
     public static boolean isAttacked(int x, int y, Constants.Side friendlySide) {
-        boolean isAttackByKnight = isAttackedByKnight(x, y, friendlySide);
+        return isAttacked(x, y, friendlySide, false);
+    }
+
+    public static boolean isAttacked(
+            int x, int y, Constants.Side friendlySide, boolean isKingOnSquare) {
+        boolean isAttackByKnight = isAttackedByKnight(x, y, friendlySide, isKingOnSquare);
         boolean isAttackedOnDiagonal =
-                isAttackedOnLine(x, y, Constants.DIAGONAL_DIRECTIONS, true, friendlySide);
+                isAttackedOnLine(
+                        x, y, Constants.DIAGONAL_DIRECTIONS, true, friendlySide, isKingOnSquare);
         boolean isAttackOnStraight =
-                isAttackedOnLine(x, y, Constants.STRAIGHT_DIRECTIONS, false, friendlySide);
+                isAttackedOnLine(
+                        x, y, Constants.STRAIGHT_DIRECTIONS, false, friendlySide, isKingOnSquare);
 
         return isAttackByKnight | isAttackedOnDiagonal | isAttackOnStraight;
     }
 
-    private static boolean isAttackedByKnight(int x, int y, Constants.Side friendlySide) {
+    private static boolean isAttackedByKnight(
+            int x, int y, Constants.Side friendlySide, boolean isKingOnSquare) {
         BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
 
         for (int[] dir : Constants.KNIGHT_DIRECTIONS) {
@@ -36,7 +44,8 @@ public class AttackDecider {
                 continue;
             }
 
-            if (PinDecider.isPinned(xTarget, yTarget)) {
+            // cant be pinned if we are attacking the king
+            if (!isKingOnSquare && PinDecider.isPinned(xTarget, yTarget)) {
                 continue;
             }
 
@@ -47,7 +56,12 @@ public class AttackDecider {
     }
 
     private static boolean isAttackedOnLine(
-            int x, int y, int[][] dirs, boolean diagonal, Constants.Side friendlySide) {
+            int x,
+            int y,
+            int[][] dirs,
+            boolean diagonal,
+            Constants.Side friendlySide,
+            boolean isKingOnSquare) {
         BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
 
         for (int[] dir : dirs) {
@@ -66,7 +80,8 @@ public class AttackDecider {
 
             Constants.PieceType attackingType = board.getPieceAt(obstacle[0], obstacle[1]);
 
-            if (PinDecider.isPinned(obstacle[0], obstacle[1])) {
+            // cant be pinned if we are attacking the king
+            if (!isKingOnSquare && PinDecider.isPinned(obstacle[0], obstacle[1])) {
                 continue;
             }
 

@@ -86,6 +86,9 @@ public class KingMoveGenerator {
             return;
         }
 
+        // if the king is under attack, we can't castle -> return
+        if (AttackDecider.isAttacked(x, y, activeSide, true)) return;
+
         generateShortCastles(moves, x, y, board, activeSide, canShortCastle);
 
         generateLongCastles(moves, x, y, board, activeSide, canLongCastle);
