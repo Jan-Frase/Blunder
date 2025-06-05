@@ -22,17 +22,17 @@
         <PatternLayout pattern="${LOG_PATTERN}"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="100MB"/>
+                <!-- <SizeBasedTriggeringPolicy size="100MB"/> -->
             </Policies>
-            <DefaultRolloverStrategy max="100"/>
-        </RollingFile>
-    </Appenders>
+            <!-- <DefaultRolloverStrategy max="100"/> -->
+         </RollingFile>
+     </Appenders>
 
-    <Loggers>
-        <!-- Application Specific Logger -->
-        <Logger name="de.janfrase" level="trace" additivity="false">
+     <Loggers>
+         <!-- Application Specific Logger -->
+        <Logger name="de.janfrase" level="warn" additivity="false">
             <AppenderRef ref="ConsoleAppender" level="warn"/>
-            <AppenderRef ref="RollingFileAppender" level="trace"/>
+            <AppenderRef ref="RollingFileAppender" level="warn"/>
         </Logger>
 
         <!-- Root Logger Configuration -->

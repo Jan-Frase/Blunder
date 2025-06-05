@@ -7,11 +7,8 @@ import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class PerftRunner {
-    private static final Logger logger = LogManager.getLogger();
     private static final GameState gameState = GameState.getInstance();
 
     public static void main(String[] args) {
