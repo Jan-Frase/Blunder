@@ -7,6 +7,9 @@ import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.config.Configurator;
 
 public class PerftRunner {
     private static final GameState gameState = GameState.getInstance();
@@ -52,7 +55,9 @@ public class PerftRunner {
         return nodes;
     }
 
-    protected static int perft(int depths) {
+    public static int perft(int depths) {
+        Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ERROR);
+
         int nodes = 0;
 
         if (depths == 0) {
