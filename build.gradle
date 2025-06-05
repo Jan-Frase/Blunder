@@ -30,9 +30,18 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	// exclude the quite long running deep perft test
+	exclude '**/DeepPerftRunnerTest.class'
 }
 
+// only runs the long perf test
+tasks.register('testDeepPerft', Test) {
+	group = "verification"
+	useJUnitPlatform()
+	include '**/DeepPerftRunnerTest.class'
+}
 
+// register the perf test task for the perf tree script
 tasks.register('runPerftTest', JavaExec) {
 	group = "application"
 
@@ -43,9 +52,10 @@ tasks.register('runPerftTest', JavaExec) {
 
 	classpath = sourceSets.main.runtimeClasspath
 
-	mainClass = 'de.janfrase.blunder.engine.movegen.PerftTest'
+	mainClass = 'de.janfrase.blunder.engine.movegen.PerftRunner'
 }
 
+// the set up for spotless - largely copied from the documentation
 spotless {
 	// optional: limit format enforcement to just the files changed by this feature branch
 	// ratchetFrom 'origin/master'

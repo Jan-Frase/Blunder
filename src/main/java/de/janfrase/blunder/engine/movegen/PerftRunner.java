@@ -10,7 +10,7 @@ import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class PerftTest {
+public class PerftRunner {
     private static final Logger logger = LogManager.getLogger();
     private static final GameState gameState = GameState.getInstance();
 
