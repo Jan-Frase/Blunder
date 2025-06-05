@@ -126,11 +126,24 @@ public class GameStatePrinter {
         // TODO
         // sb.append(FenParser.export());
 
+        sb.append("Full move counter: ").append(gameState.fullMoveCounter).append("\n");
+        sb.append("Is whites turn: ").append(gameState.isWhitesTurn).append("\n");
+        sb.append("Stack size: ").append(gameState.irreversibleDataStack.size()).append("\n");
+        sb.append("Half move clock: ")
+                .append(gameState.irreversibleDataStack.peek().halfMoveClock())
+                .append("\n");
+        sb.append("En Passant X: ")
+                .append(gameState.irreversibleDataStack.peek().enPassantX())
+                .append("\n");
+        sb.append(gameState.irreversibleDataStack.peek().castlingRights()).append("\n");
+
+        sb.append("\n");
         for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
             for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
                 Constants.Side side = gameState.boardRepresentation.getSideAt(x, y);
                 Constants.PieceType pieceType = gameState.boardRepresentation.getPieceAt(x, y);
                 sb.append(getStringRepresentation(pieceType, side, x, y));
+                sb.append(" ");
             }
             sb.append("\n");
         }
