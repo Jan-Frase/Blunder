@@ -1,6 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.state.board;
 
+import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
@@ -66,6 +67,34 @@ public class BoardRepresentation {
     public void setPieceAt(int x, int y, Constants.PieceType pieceType, Constants.Side color) {
         logger.trace("Placing {} from {} on x={} y={}", pieceType, color, x, y);
         this.squareBoard.fillSquare(x, y, pieceType, color);
+    }
+
+    /**
+     * Retrieves the position of the first piece on the board that matches the specified piece type
+     * and side.
+     *
+     * @param pieceType The type of the piece to search for, represented by the {@link Constants.PieceType} enum.
+     * @param side      The side of the piece to search for, represented by the {@link Constants.Side} enum.
+     * @return An {@code Optional<int[]>} containing the coordinates of the piece as an array {x, y}
+     *         if found, or {@code Optional.empty()} if no matching piece is found.
+     */
+    public Optional<int[]> getPiece(Constants.PieceType pieceType, Constants.Side side) {
+        int[] piecePosition = new int[2];
+        GameState gameState = GameState.getInstance();
+        BoardRepresentation board = gameState.getBoardRepresentation();
+        for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
+            for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
+                Constants.PieceType currentPieceType = board.getPieceAt(x, y);
+                Constants.Side pieceSide = board.getSideAt(x, y);
+
+                if (currentPieceType == pieceType && pieceSide == side) {
+                    piecePosition[0] = x;
+                    piecePosition[1] = y;
+                    return Optional.of(piecePosition);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     /**

@@ -2,11 +2,13 @@
 package de.janfrase.blunder.engine.movegen;
 
 import de.janfrase.blunder.engine.movegen.move.Move;
+import de.janfrase.blunder.engine.state.board.AttackDecider;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
+import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,8 +37,7 @@ public class MoveGenerator {
         GameState gameState = GameState.getInstance();
         BoardRepresentation board = gameState.getBoardRepresentation();
         IrreversibleData irreversibleData = gameState.getIrreversibleData();
-        Constants.Side activeSide =
-                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK;
+        Constants.Side activeSide = gameState.getFriendlySide();
 
         for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
             for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
@@ -105,9 +106,16 @@ public class MoveGenerator {
     }
 
     public static boolean canCaptureKing() {
-        ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
-        // if the opponent can capture our king -> we are in check
-        return moves.stream()
-                .anyMatch(move -> move.capturedPieceType() == Constants.PieceType.KING);
+        Optional<int[]> kingPos =
+                GameState.getInstance()
+                        .getBoardRepresentation()
+                        .getPiece(Constants.PieceType.KING, GameState.getInstance().getEnemySide());
+
+        if (kingPos.isEmpty()) {
+            return false;
+        }
+
+        return AttackDecider.isKingUnderAttack(
+                kingPos.get()[0], kingPos.get()[1], GameState.getInstance().getEnemySide());
     }
 }

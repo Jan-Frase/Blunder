@@ -251,7 +251,7 @@ public class PawnMoveGeneratorTest {
                 5,
                 4,
                 gameState.getBoardRepresentation(),
-                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getFriendlySide(),
                 gameState.getIrreversibleData().enPassantX());
 
         Move enPassantCaptureMove =
@@ -283,7 +283,7 @@ public class PawnMoveGeneratorTest {
                 1,
                 6,
                 gameState.getBoardRepresentation(),
-                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getFriendlySide(),
                 OptionalInt.empty());
 
         assertEquals(8, moves.size());

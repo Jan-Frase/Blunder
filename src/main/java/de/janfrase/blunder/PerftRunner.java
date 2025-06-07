@@ -118,7 +118,6 @@ public class PerftRunner {
 
         for (Move move : moves) {
             gameState.makeMove(move);
-            // TODO: Benchmark if attack decider is quicker instead.
             if (MoveGenerator.canCaptureKing()) {
                 gameState.unmakeMove(move);
                 continue;
@@ -127,6 +126,12 @@ public class PerftRunner {
             nodes += perft(depths - 1);
             gameState.unmakeMove(move);
         }
+
+        return nodes;
+    }
+
+    public static long benchmarkPerft(int depths) {
+        long nodes = perft(depths);
 
         return nodes;
     }

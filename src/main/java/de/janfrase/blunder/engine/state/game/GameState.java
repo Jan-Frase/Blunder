@@ -50,6 +50,14 @@ public class GameState {
         return isWhitesTurn;
     }
 
+    public Constants.Side getFriendlySide() {
+        return isWhitesTurn ? Constants.Side.WHITE : Constants.Side.BLACK;
+    }
+
+    public Constants.Side getEnemySide() {
+        return isWhitesTurn ? Constants.Side.BLACK : Constants.Side.WHITE;
+    }
+
     BoardRepresentation boardRepresentation;
     Stack<IrreversibleData> irreversibleDataStack;
     boolean isWhitesTurn;

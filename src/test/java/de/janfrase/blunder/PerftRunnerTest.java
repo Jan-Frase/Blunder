@@ -1,9 +1,8 @@
 /* Made by Jan Frase :) */
-package de.janfrase.blunder.engine.movegen;
+package de.janfrase.blunder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import de.janfrase.blunder.PerftRunner;
 import de.janfrase.blunder.engine.state.game.FenParser;
 import de.janfrase.blunder.engine.state.game.GameState;
 import org.junit.jupiter.api.AfterEach;

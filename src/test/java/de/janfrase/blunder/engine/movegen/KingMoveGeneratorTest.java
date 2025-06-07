@@ -262,7 +262,7 @@ public class KingMoveGeneratorTest {
                 4,
                 0,
                 gameState.getBoardRepresentation(),
-                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getFriendlySide(),
                 gameState.getIrreversibleData().castlingRights());
 
         assertEquals(
@@ -289,7 +289,7 @@ public class KingMoveGeneratorTest {
                 4,
                 0,
                 gameState.getBoardRepresentation(),
-                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getFriendlySide(),
                 gameState.getIrreversibleData().castlingRights());
 
         assertEquals(
@@ -314,7 +314,7 @@ public class KingMoveGeneratorTest {
                 4,
                 0,
                 gameState.getBoardRepresentation(),
-                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getFriendlySide(),
                 gameState.getIrreversibleData().castlingRights());
 
         assertEquals(
