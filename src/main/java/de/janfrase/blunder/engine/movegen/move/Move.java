@@ -66,7 +66,20 @@ public record Move(
 
     @Override
     public String toString() {
-        return xToLetter(fromX) + yToInverse(fromY) + xToLetter(toX) + yToInverse(toY);
+        StringBuilder builder = new StringBuilder();
+        builder.append(xToLetter(fromX))
+                .append(yToInverse(fromY))
+                .append(xToLetter(toX))
+                .append(yToInverse(toY));
+
+        if (moveType == MoveType.BISHOP_PROMOTION
+                || moveType == MoveType.KNIGHT_PROMOTION
+                || moveType == MoveType.QUEEN_PROMOTION
+                || moveType == MoveType.ROOK_PROMOTION) {
+            builder.append(promotionToLetter(moveType));
+        }
+
+        return builder.toString();
     }
 
     private static String xToLetter(int x) {
@@ -94,6 +107,16 @@ public record Move(
             case 6 -> "2";
             case 7 -> "1";
             default -> throw new IllegalStateException("Unexpected value: " + y);
+        };
+    }
+
+    private static String promotionToLetter(MoveType moveType) {
+        return switch (moveType) {
+            case BISHOP_PROMOTION -> "b";
+            case KNIGHT_PROMOTION -> "n";
+            case QUEEN_PROMOTION -> "q";
+            case ROOK_PROMOTION -> "r";
+            default -> throw new IllegalArgumentException("moveType must be a promotion move type");
         };
     }
 

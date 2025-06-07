@@ -273,4 +273,20 @@ public class PawnMoveGeneratorTest {
         assertEquals(
                 Constants.PieceType.EMPTY, gameState.getBoardRepresentation().getPieceAt(4, 5));
     }
+
+    @Test
+    void testMakingUnmakingEnPassantCapture2() {
+        GameStateFenParser.loadFenString(
+                "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1R1K b kq - 0 1");
+
+        PawnMoveGenerator.generatePawnMove(
+                moves,
+                1,
+                6,
+                gameState.getBoardRepresentation(),
+                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                OptionalInt.empty());
+
+        assertEquals(8, moves.size());
+    }
 }
