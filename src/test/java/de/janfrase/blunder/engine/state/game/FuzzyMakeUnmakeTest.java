@@ -47,6 +47,8 @@ public class FuzzyMakeUnmakeTest {
                                 + " equal!");
             }
 
+            if (moves.isEmpty()) return;
+
             Random random = new Random();
             int randomNumber = random.nextInt(0, moves.size()); // Generates a number
             GameState.getInstance().makeMove(moves.get(randomNumber));

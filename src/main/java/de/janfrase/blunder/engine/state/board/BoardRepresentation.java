@@ -97,14 +97,17 @@ public class BoardRepresentation {
         int currentX = x;
         int currentY = y;
 
+        // loop until we find something or leave the board
         while (true) {
             currentX += dir[0];
             currentY += dir[1];
 
+            // we have left the board -> there is nothing in this direction
             if (Constants.isOffBoard(currentX, currentY)) {
                 return Optional.empty();
             }
 
+            // we have found something!
             if (getPieceAt(currentX, currentY) != Constants.PieceType.EMPTY) {
                 return Optional.of(new int[] {currentX, currentY});
             }

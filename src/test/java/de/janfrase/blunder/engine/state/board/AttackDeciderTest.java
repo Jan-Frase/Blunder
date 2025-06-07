@@ -17,97 +17,51 @@ class AttackDeciderTest {
     }
 
     @Test
-    void isAttackedStraightSimple() {
+    void isKingUnderAttackStraightSimple() {
         FenParser.loadFenString("8/1r6/8/8/8/8/8/8 w - - 0 1");
 
-        assertTrue(AttackDecider.isAttacked(0, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(2, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(3, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(4, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(5, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(6, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(7, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(0, 1, Constants.Side.WHITE));
+        assertFalse(AttackDecider.isKingUnderAttack(1, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(2, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(3, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(4, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(5, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(6, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(7, 1, Constants.Side.WHITE));
 
-        assertTrue(AttackDecider.isAttacked(1, 0, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(1, 2, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(1, 3, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(1, 4, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(1, 5, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(1, 6, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(1, 7, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 0, Constants.Side.WHITE));
+        assertFalse(AttackDecider.isKingUnderAttack(1, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 2, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 3, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 4, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 5, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 6, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 7, Constants.Side.WHITE));
     }
 
     @Test
-    void isAttackedDiagonalSimple() {
+    void isKingUnderAttackDiagonalSimple() {
         FenParser.loadFenString("8/8/2b5/8/8/8/8/8 w - - 0 1");
 
-        assertTrue(AttackDecider.isAttacked(0, 0, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(2, 2, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(3, 3, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(0, 0, Constants.Side.WHITE));
+        assertFalse(AttackDecider.isKingUnderAttack(2, 2, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(3, 3, Constants.Side.WHITE));
     }
 
     @Test
-    void isAttackedKnightSimple() {
+    void isKingUnderAttackKnightSimple() {
         FenParser.loadFenString("8/8/2n5/8/8/8/8/8 w - - 0 1");
 
-        assertTrue(AttackDecider.isAttacked(1, 0, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(3, 0, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 0, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(3, 0, Constants.Side.WHITE));
 
-        assertTrue(AttackDecider.isAttacked(0, 1, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(4, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(0, 1, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(4, 1, Constants.Side.WHITE));
 
-        assertTrue(AttackDecider.isAttacked(0, 3, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(4, 3, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(0, 3, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(4, 3, Constants.Side.WHITE));
 
-        assertTrue(AttackDecider.isAttacked(1, 4, Constants.Side.WHITE));
-        assertTrue(AttackDecider.isAttacked(3, 4, Constants.Side.WHITE));
-    }
-
-    @Test
-    void isAttackedStraightPin() {
-        FenParser.loadFenString("B7/1r6/2k5/8/8/8/8/8 w - - 0 1");
-
-        assertFalse(AttackDecider.isAttacked(0, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(2, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(3, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(4, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(5, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(6, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(7, 1, Constants.Side.WHITE));
-
-        assertFalse(AttackDecider.isAttacked(1, 0, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 2, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 3, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 4, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 5, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 6, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(1, 7, Constants.Side.WHITE));
-    }
-
-    @Test
-    void isAttackedDiagonalPin() {
-        FenParser.loadFenString("8/8/1Rbk4/8/8/8/8/8 w - - 0 1");
-
-        assertFalse(AttackDecider.isAttacked(0, 0, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(3, 3, Constants.Side.WHITE));
-    }
-
-    @Test
-    void isAttackedKnightPin() {
-        FenParser.loadFenString("8/1B6/2n5/3k4/8/8/8/8 w - - 0 1");
-
-        assertFalse(AttackDecider.isAttacked(1, 0, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(3, 0, Constants.Side.WHITE));
-
-        assertFalse(AttackDecider.isAttacked(0, 1, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(4, 1, Constants.Side.WHITE));
-
-        assertFalse(AttackDecider.isAttacked(0, 3, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(4, 3, Constants.Side.WHITE));
-
-        assertFalse(AttackDecider.isAttacked(1, 4, Constants.Side.WHITE));
-        assertFalse(AttackDecider.isAttacked(3, 4, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(1, 4, Constants.Side.WHITE));
+        assertTrue(AttackDecider.isKingUnderAttack(3, 4, Constants.Side.WHITE));
     }
 }
