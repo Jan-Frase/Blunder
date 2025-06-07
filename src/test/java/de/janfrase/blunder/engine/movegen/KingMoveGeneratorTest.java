@@ -303,4 +303,21 @@ public class KingMoveGeneratorTest {
                 moves.stream().filter(move -> move.moveType() == Move.MoveType.NORMAL_MOVE).count(),
                 "White king move in two directions.");
     }
+
+    @Test
+    void testShortCastleAttackedByBishop() {
+        GameStateFenParser.loadFenString(
+                "r3k2r/Pppp1ppp/1b3nb1/nPB2N2/B1P1P3/5N2/qp1P2PP/R2Q1RK1 b kq - 1 2");
+
+        KingMoveGenerator.generateKingMoves(
+                moves,
+                4,
+                0,
+                gameState.getBoardRepresentation(),
+                gameState.isWhitesTurn() ? Constants.Side.WHITE : Constants.Side.BLACK,
+                gameState.getIrreversibleData().castlingRights());
+
+        assertEquals(
+                4, moves.size(), "Black king should have 4 possible moves, including one castle.");
+    }
 }

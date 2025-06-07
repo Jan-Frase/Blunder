@@ -5,6 +5,7 @@ import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
 import java.util.Optional;
 
+// TODO: Refactor me.
 public class AttackDecider {
 
     public static boolean isAttacked(int x, int y, Constants.Side friendlySide) {
