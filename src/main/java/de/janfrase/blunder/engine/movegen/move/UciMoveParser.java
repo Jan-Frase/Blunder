@@ -39,8 +39,7 @@ public class UciMoveParser {
             }
             // en passant capture?
             if (fromX != toX && capturedPieceType == Constants.PieceType.EMPTY) {
-                return new Move(
-                        fromX, fromY, toX, toY, Move.MoveType.EP_CAPTURE, Constants.PieceType.PAWN);
+                return new Move(fromX, fromY, toX, toY, Move.MoveType.EP_CAPTURE);
             }
 
             // we are promoting!

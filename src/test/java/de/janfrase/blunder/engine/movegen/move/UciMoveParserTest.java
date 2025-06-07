@@ -2,6 +2,7 @@
 package de.janfrase.blunder.engine.movegen.move;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
@@ -191,6 +192,6 @@ public class UciMoveParserTest {
         assertEquals(5, move.toX());
         assertEquals(2, move.toY());
         assertEquals(Move.MoveType.EP_CAPTURE, move.moveType());
-        assertEquals(Constants.PieceType.PAWN, move.capturedPieceType());
+        assertNotEquals(Constants.PieceType.PAWN, move.capturedPieceType());
     }
 }
