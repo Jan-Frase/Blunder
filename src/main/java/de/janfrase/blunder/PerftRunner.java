@@ -87,8 +87,6 @@ public class PerftRunner {
         // order.
         legalMoves.sort(Comparator.comparing(Move::toString));
         for (Move move : legalMoves) {
-            // TODO: Remove hashing logic.
-            int preHash = gameState.hashCode();
             gameState.makeMove(move);
             logger.info(StatePrinter.stateToString());
 
@@ -97,9 +95,6 @@ public class PerftRunner {
             System.out.println(move.toString() + " " + current_nodes);
 
             gameState.unmakeMove(move);
-            int postHash = gameState.hashCode();
-
-            assert preHash == postHash : "Hashcode of game state changed after move!";
         }
 
         System.out.println();

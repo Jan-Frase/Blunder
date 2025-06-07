@@ -6,7 +6,6 @@ import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
-import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.Stack;
 import org.apache.logging.log4j.LogManager;
@@ -93,24 +92,6 @@ public class GameState {
 
         this.isWhitesTurn = true;
         this.fullMoveCounter = 1;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof GameState gameState)) return false;
-        return isWhitesTurn == gameState.isWhitesTurn
-                && fullMoveCounter == gameState.fullMoveCounter
-                && Objects.equals(boardRepresentation, gameState.boardRepresentation)
-                && Objects.equals(irreversibleDataStack, gameState.irreversibleDataStack);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(
-                boardRepresentation.hashCode(),
-                irreversibleDataStack.hashCode(),
-                isWhitesTurn,
-                fullMoveCounter);
     }
 
     // ------------------------------
