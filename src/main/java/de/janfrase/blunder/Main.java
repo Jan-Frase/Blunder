@@ -2,7 +2,6 @@
 package de.janfrase.blunder;
 
 import de.janfrase.blunder.engine.movegen.MoveGenerator;
-import de.janfrase.blunder.engine.movegen.PerftRunner;
 import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;

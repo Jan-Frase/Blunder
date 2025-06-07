@@ -52,7 +52,7 @@ tasks.register('runPerftTest', JavaExec) {
 
 	classpath = sourceSets.main.runtimeClasspath
 
-	mainClass = 'de.janfrase.blunder.engine.movegen.PerftRunner'
+	mainClass = 'de.janfrase.blunder.PerftRunner'
 }
 
 // the set up for spotless - largely copied from the documentation

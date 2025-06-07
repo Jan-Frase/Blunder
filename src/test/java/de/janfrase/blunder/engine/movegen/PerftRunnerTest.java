@@ -3,6 +3,7 @@ package de.janfrase.blunder.engine.movegen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import de.janfrase.blunder.PerftRunner;
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import org.junit.jupiter.api.AfterEach;
