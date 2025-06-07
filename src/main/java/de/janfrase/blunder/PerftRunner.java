@@ -33,14 +33,14 @@ public class PerftRunner {
         perft(depths, fenString, moves);
     }
 
-    public static int perft(int depths, String fenString, Move... moves) {
+    public static long perft(int depths, String fenString, Move... moves) {
         GameStateFenParser.loadFenString(fenString);
 
         for (Move move : moves) {
             gameState.makeMove(move);
         }
 
-        int nodes = 0;
+        long nodes = 0;
 
         ArrayList<Move> legalMoves = MoveGenerator.generateLegalMoves();
         legalMoves.sort(Comparator.comparing(Move::toString));
@@ -49,7 +49,7 @@ public class PerftRunner {
             gameState.makeMove(move);
             logger.info(GameStatePrinter.print());
 
-            int current_nodes = perft(depths - 1);
+            long current_nodes = perft(depths - 1);
             nodes += current_nodes;
             System.out.println(move.toString() + " " + current_nodes);
 
@@ -64,10 +64,10 @@ public class PerftRunner {
         return nodes;
     }
 
-    public static int perft(int depths) {
+    public static long perft(int depths) {
         // Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ERROR);
 
-        int nodes = 0;
+        long nodes = 0;
 
         if (depths == 0) {
             return 1;
