@@ -663,4 +663,28 @@ public class GameStateTest {
                 gameState.boardRepresentation.getSideAt(5, 0),
                 "The white queen should be put back on the board after an unmake.");
     }
+
+    @Test
+    void testCastlingLossOnRightRookCapture() {
+        GameStateFenParser.loadFenString(
+                "r3k2r/p1ppqNb1/1n2pnp1/1b1P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 1 2");
+
+        Move captureMove = new Move(5, 1, 7, 0, Constants.PieceType.ROOK);
+        gameState.makeMove(captureMove);
+
+        assertFalse(gameState.irreversibleDataStack.peek().castlingRights().blackShortCastle());
+        assertTrue(gameState.irreversibleDataStack.peek().castlingRights().blackLongCastle());
+    }
+
+    @Test
+    void testCastlingLossOnLeftRookCapture() {
+        GameStateFenParser.loadFenString(
+                "r3k2r/p1p1qpb1/bN1ppnp1/1B1P4/1p2P3/2N2Q1p/PPPB1PPP/1R3K1R w KAkq - 0 1");
+
+        Move captureMove = new Move(1, 2, 0, 0, Constants.PieceType.ROOK);
+        gameState.makeMove(captureMove);
+
+        assertTrue(gameState.irreversibleDataStack.peek().castlingRights().blackShortCastle());
+        assertFalse(gameState.irreversibleDataStack.peek().castlingRights().blackLongCastle());
+    }
 }

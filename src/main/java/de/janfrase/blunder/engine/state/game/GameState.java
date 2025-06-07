@@ -254,7 +254,20 @@ public class GameState {
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, false);
         }
 
-        // castle right loss on rook capture
+        // castle right loss on rook capture -> short castle side
+        int enemyStartingY = isWhitesTurn ? 0 : 7;
+        if (move.capturedPieceType().equals(Constants.PieceType.ROOK)
+                && move.toY() == enemyStartingY
+                && move.toX() == RIGHT_X_ROOK_START) {
+            castlingRightsBuilder.disableSpecifiedCastle(!isWhitesTurn, true);
+        }
+
+        // castle right loss on rook capture -> long castle side
+        if (move.capturedPieceType().equals(Constants.PieceType.ROOK)
+                && move.toY() == enemyStartingY
+                && move.toX() == LEFT_X_ROOK_START) {
+            castlingRightsBuilder.disableSpecifiedCastle(!isWhitesTurn, false);
+        }
     }
 
     private void promotionRelatedMakeMove(Move move, Constants.Side fromSide) {

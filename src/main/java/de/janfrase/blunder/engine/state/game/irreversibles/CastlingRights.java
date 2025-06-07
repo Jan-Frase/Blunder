@@ -57,8 +57,9 @@ public record CastlingRights(
             return this;
         }
 
-        public Builder disableSpecifiedCastle(boolean isWhitesTurn, boolean shortCastle) {
-            if (isWhitesTurn) {
+        public Builder disableSpecifiedCastle(
+                boolean sideToDisabledRightsFor, boolean shortCastle) {
+            if (sideToDisabledRightsFor) {
                 if (shortCastle) {
                     this.whiteShortCastle = false;
                 } else {
