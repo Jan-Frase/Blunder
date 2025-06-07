@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.state.game.FenParser;
 import de.janfrase.blunder.engine.state.game.GameState;
-import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
@@ -67,7 +67,7 @@ public class LineMoveGeneratorTest {
 
     @Test
     void testDiagonalCapturingEnemyPieces() {
-        GameStateFenParser.loadFenString("8/1n6/8/3B4/8/5p2/8/8 w - - 0 1");
+        FenParser.loadFenString("8/1n6/8/3B4/8/5p2/8/8 w - - 0 1");
 
         BoardRepresentation board = gameState.getBoardRepresentation();
 
@@ -132,7 +132,7 @@ public class LineMoveGeneratorTest {
 
     @Test
     void testStraightCapturingEnemyPieces() {
-        GameStateFenParser.loadFenString("8/8/8/1n1R4/8/3p4/8/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/1n1R4/8/3p4/8/8 w - - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         LineMoveGenerator.generateStraightMoves(moves, 3, 3, board, Constants.Side.WHITE);
@@ -154,7 +154,7 @@ public class LineMoveGeneratorTest {
 
     @Test
     void testPosition3Part() {
-        GameStateFenParser.loadFenString("8/2p5/3p4/KP5r/2R2p1k/8/4P1P1/8 w - - 0 1");
+        FenParser.loadFenString("8/2p5/3p4/KP5r/2R2p1k/8/4P1P1/8 w - - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         LineMoveGenerator.generateStraightMoves(moves, 7, 3, board, Constants.Side.BLACK);

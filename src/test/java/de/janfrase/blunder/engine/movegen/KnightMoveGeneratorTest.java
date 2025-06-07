@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.state.game.FenParser;
 import de.janfrase.blunder.engine.state.game.GameState;
-import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
@@ -62,7 +62,7 @@ public class KnightMoveGeneratorTest {
 
     @Test
     void testKnightCapturingEnemyPieces() {
-        GameStateFenParser.loadFenString("8/8/1p6/3N4/5r2/8/8/8 w - - 0 1");
+        FenParser.loadFenString("8/8/1p6/3N4/5r2/8/8/8 w - - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KnightMoveGenerator.generateKnightMoves(moves, 3, 3, board, Constants.Side.WHITE);

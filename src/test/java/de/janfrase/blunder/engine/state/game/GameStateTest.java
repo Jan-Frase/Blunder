@@ -190,7 +190,7 @@ public class GameStateTest {
 
     @Test
     void testEnPassantBlackTakes() {
-        GameStateFenParser.loadFenString("8/8/8/8/1p6/8/P7/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/8/1p6/8/P7/8 w - - 0 1");
 
         Move whiteDoublePawnPush = new Move(0, 6, 0, 4, Move.MoveType.DOUBLE_PAWN_PUSH);
         gameState.makeMove(whiteDoublePawnPush);
@@ -235,7 +235,7 @@ public class GameStateTest {
 
     @Test
     void testEnPassantWhiteTakes() {
-        GameStateFenParser.loadFenString("8/p7/8/1P6/8/8/8/8 b - - 0 1");
+        FenParser.loadFenString("8/p7/8/1P6/8/8/8/8 b - - 0 1");
 
         Move blackDoublePawnPush = new Move(0, 1, 0, 3, Move.MoveType.DOUBLE_PAWN_PUSH);
         gameState.makeMove(blackDoublePawnPush);
@@ -666,7 +666,7 @@ public class GameStateTest {
 
     @Test
     void testCastlingLossOnRightRookCapture() {
-        GameStateFenParser.loadFenString(
+        FenParser.loadFenString(
                 "r3k2r/p1ppqNb1/1n2pnp1/1b1P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 1 2");
 
         Move captureMove = new Move(5, 1, 7, 0, Constants.PieceType.ROOK);
@@ -678,7 +678,7 @@ public class GameStateTest {
 
     @Test
     void testCastlingLossOnLeftRookCapture() {
-        GameStateFenParser.loadFenString(
+        FenParser.loadFenString(
                 "r3k2r/p1p1qpb1/bN1ppnp1/1B1P4/1p2P3/2N2Q1p/PPPB1PPP/1R3K1R w KAkq - 0 1");
 
         Move captureMove = new Move(1, 2, 0, 0, Constants.PieceType.ROOK);

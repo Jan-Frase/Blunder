@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.movegen.move.UciMoveParser;
+import de.janfrase.blunder.engine.state.game.FenParser;
 import de.janfrase.blunder.engine.state.game.GameState;
-import de.janfrase.blunder.engine.state.game.GameStateFenParser;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 import java.util.OptionalInt;
@@ -26,7 +26,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testBasicPawnMoves() {
-        GameStateFenParser.loadFenString("8/8/8/8/8/8/4P3/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/8/8/8/4P3/8 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 4,
@@ -41,7 +41,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testPawnCaptures() {
-        GameStateFenParser.loadFenString("8/8/8/3p1n2/4P3/8/8/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/3p1n2/4P3/8/8/8 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 4,
@@ -61,7 +61,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testEnPassantCapture() {
-        GameStateFenParser.loadFenString("1k6/8/8/4Pp2/8/8/8/1K6 w - f6 0 1");
+        FenParser.loadFenString("1k6/8/8/4Pp2/8/8/8/1K6 w - f6 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 4,
@@ -76,7 +76,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testWrongEnPassantCapture() {
-        GameStateFenParser.loadFenString("1k6/8/8/5p2/8/4P3/8/1K6 w - - 0 1");
+        FenParser.loadFenString("1k6/8/8/5p2/8/4P3/8/1K6 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 4,
@@ -91,7 +91,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testPawnPromotion() {
-        GameStateFenParser.loadFenString("1k6/4P3/8/8/8/8/8/1K6 w - - 0 1");
+        FenParser.loadFenString("1k6/4P3/8/8/8/8/8/1K6 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 4,
@@ -108,7 +108,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testCapturePromotion() {
-        GameStateFenParser.loadFenString("1k1n4/4P3/8/8/8/8/8/1K6 w - - 0 1");
+        FenParser.loadFenString("1k1n4/4P3/8/8/8/8/8/1K6 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 4,
@@ -136,7 +136,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testPawnOnLeftEdge() {
-        GameStateFenParser.loadFenString("8/8/8/8/P7/8/8/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/8/P7/8/8/8 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 0,
@@ -150,7 +150,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testEnPassantDiscoveredCheck() {
-        GameStateFenParser.loadFenString("8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b e3 - 0 1");
+        FenParser.loadFenString("8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b e3 - 0 1");
         PawnMoveGenerator.generatePawnMove(
                 moves,
                 5,
@@ -236,7 +236,7 @@ public class PawnMoveGeneratorTest {
         * */
     @Test
     void testMakingUnmakingEnPassant() {
-        GameStateFenParser.loadFenString("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
+        FenParser.loadFenString("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
 
         Move doublePawnPushMove = UciMoveParser.parseUciMove("e2e4");
         gameState.makeMove(doublePawnPushMove);
@@ -258,7 +258,7 @@ public class PawnMoveGeneratorTest {
                 moves.stream()
                         .filter(m -> m.moveType() == Move.MoveType.EP_CAPTURE)
                         .findFirst()
-                        .get();
+                        .orElseThrow();
 
         gameState.makeMove(enPassantCaptureMove);
 
@@ -276,8 +276,7 @@ public class PawnMoveGeneratorTest {
 
     @Test
     void testMakingUnmakingEnPassantCapture2() {
-        GameStateFenParser.loadFenString(
-                "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1R1K b kq - 0 1");
+        FenParser.loadFenString("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1R1K b kq - 0 1");
 
         PawnMoveGenerator.generatePawnMove(
                 moves,

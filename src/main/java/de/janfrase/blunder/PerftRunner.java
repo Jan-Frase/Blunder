@@ -4,9 +4,9 @@ package de.janfrase.blunder;
 import de.janfrase.blunder.engine.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.movegen.move.UciMoveParser;
+import de.janfrase.blunder.engine.state.game.FenParser;
 import de.janfrase.blunder.engine.state.game.GameState;
-import de.janfrase.blunder.engine.state.game.GameStateFenParser;
-import de.janfrase.blunder.engine.state.game.GameStatePrinter;
+import de.janfrase.blunder.engine.state.game.StatePrinter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -53,7 +53,7 @@ public class PerftRunner {
                         .toArray(new Move[0]);
 
         // Load the starting position
-        GameStateFenParser.loadFenString(fenString);
+        FenParser.loadFenString(fenString);
 
         // Make all moves that have to be applied before perft can begin.
         for (Move move : moves) {
@@ -90,7 +90,7 @@ public class PerftRunner {
             // TODO: Remove hashing logic.
             int preHash = gameState.hashCode();
             gameState.makeMove(move);
-            logger.info(GameStatePrinter.print());
+            logger.info(StatePrinter.stateToString());
 
             long current_nodes = perft(depths - 1);
             total_nodes += current_nodes;

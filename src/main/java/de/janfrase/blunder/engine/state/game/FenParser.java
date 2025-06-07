@@ -13,7 +13,7 @@ import org.apache.logging.log4j.Logger;
 /**
  * See: <a href="https://www.chessprogramming.org/Forsyth-Edwards_Notation">Chess programming wiki.</a>
  */
-public class GameStateFenParser {
+public class FenParser {
     private static final Logger logger = LogManager.getLogger();
     private static final String STARTING_FEN =
             "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -56,7 +56,7 @@ public class GameStateFenParser {
 
         parseFullMoveCounter(fenSegments[FenSegments.FULL_MOVE_COUNTER.getIndex()]);
 
-        logger.trace("Finished fen parsing : {}", GameStatePrinter.print());
+        logger.trace("Finished fen parsing : {}", StatePrinter.stateToString());
     }
 
     private static void parsePiecePlacement(String piecePlacement) {

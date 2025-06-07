@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.state.game.FenParser;
 import de.janfrase.blunder.engine.state.game.GameState;
-import de.janfrase.blunder.engine.state.game.GameStateFenParser;
-import de.janfrase.blunder.engine.state.game.GameStatePrinter;
+import de.janfrase.blunder.engine.state.game.StatePrinter;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +27,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     public void testGenerateMoves_OnlyWhiteKing() {
-        GameStateFenParser.loadFenString("8/8/8/8/4K3/8/8/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/8/4K3/8/8/8 w - - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KingMoveGenerator.generateKingMoves(
@@ -47,7 +47,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     public void testGenerateMoves_WhiteKingPartiallyBlocked() {
-        GameStateFenParser.loadFenString("8/8/8/8/3PK3/8/8/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/8/3PK3/8/8/8 w - - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KingMoveGenerator.generateKingMoves(
@@ -67,7 +67,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     public void testGenerateMoves_WhiteKingCapturingEnemyPawn() {
-        GameStateFenParser.loadFenString("8/8/8/8/4K3/5p2/8/8 w - - 0 1");
+        FenParser.loadFenString("8/8/8/8/4K3/5p2/8/8 w - - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KingMoveGenerator.generateKingMoves(
@@ -91,7 +91,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     public void testGenerateMoves_WhiteCastleRights() {
-        GameStateFenParser.loadFenString("8/8/8/8/8/8/8/R3K2R w KQ - 0 1");
+        FenParser.loadFenString("8/8/8/8/8/8/8/R3K2R w KQ - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KingMoveGenerator.generateKingMoves(
@@ -116,7 +116,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     public void testGenerateMoves_BlockingCastlePath() {
-        GameStateFenParser.loadFenString("8/8/8/8/8/8/8/R3KQ1R w KQ - 0 1");
+        FenParser.loadFenString("8/8/8/8/8/8/8/R3KQ1R w KQ - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KingMoveGenerator.generateKingMoves(
@@ -136,7 +136,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     public void testGeneratesMoves_ExecuteLongCastle() {
-        GameStateFenParser.loadFenString("8/8/8/8/8/8/3PPP2/R3KP1R w KQ - 0 1");
+        FenParser.loadFenString("8/8/8/8/8/8/3PPP2/R3KP1R w KQ - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KingMoveGenerator.generateKingMoves(
@@ -160,7 +160,7 @@ public class KingMoveGeneratorTest {
                         .orElseThrow();
         gameState.makeMove(longCastleMove);
 
-        GameStatePrinter.print();
+        StatePrinter.stateToString();
 
         // Verify king's new position
         assertEquals(
@@ -195,7 +195,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     public void testGeneratesMoves_ExecuteShortCastle() {
-        GameStateFenParser.loadFenString("8/8/8/8/8/8/3PPP2/R2PK2R w KQ - 0 1");
+        FenParser.loadFenString("8/8/8/8/8/8/3PPP2/R2PK2R w KQ - 0 1");
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         KingMoveGenerator.generateKingMoves(
@@ -219,7 +219,7 @@ public class KingMoveGeneratorTest {
                         .orElseThrow();
         gameState.makeMove(longCastleMove);
 
-        GameStatePrinter.print();
+        StatePrinter.stateToString();
 
         // Verify king's new position
         assertEquals(
@@ -254,7 +254,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     void testLongCastleAttackedByKnight() {
-        GameStateFenParser.loadFenString(
+        FenParser.loadFenString(
                 "r3k2r/p1ppqpb1/bnN1pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
 
         KingMoveGenerator.generateKingMoves(
@@ -281,7 +281,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     void testLongCastleAttackedByKnight2() {
-        GameStateFenParser.loadFenString(
+        FenParser.loadFenString(
                 "r3k2r/p1pNqpb1/bn2pnp1/3P4/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
 
         KingMoveGenerator.generateKingMoves(
@@ -306,7 +306,7 @@ public class KingMoveGeneratorTest {
 
     @Test
     void testShortCastleAttackedByBishop() {
-        GameStateFenParser.loadFenString(
+        FenParser.loadFenString(
                 "r3k2r/Pppp1ppp/1b3nb1/nPB2N2/B1P1P3/5N2/qp1P2PP/R2Q1RK1 b kq - 1 2");
 
         KingMoveGenerator.generateKingMoves(

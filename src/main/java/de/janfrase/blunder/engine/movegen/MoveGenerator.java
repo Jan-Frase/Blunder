@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * The MoveGenerator class is responsible for generating both pseudo-legal
+ * and legal moves for the active player in the current game state.
+ */
 public class MoveGenerator {
 
     private static final Logger logger = LogManager.getLogger();

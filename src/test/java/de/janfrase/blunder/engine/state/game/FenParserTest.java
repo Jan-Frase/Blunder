@@ -8,7 +8,7 @@ import de.janfrase.blunder.utility.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-public class GameStateFenParserTest {
+public class FenParserTest {
 
     final GameState gameState = GameState.getInstance();
 
@@ -24,7 +24,7 @@ public class GameStateFenParserTest {
      */
     @Test
     void testLoadStartingPosition() {
-        GameStateFenParser.loadStartingPosition();
+        FenParser.loadStartingPosition();
 
         BoardRepresentation board = this.gameState.boardRepresentation;
 
@@ -81,7 +81,7 @@ public class GameStateFenParserTest {
     void testLoadCustomFenString() {
         String customFen = "N4k2/8/8/1Pp5/5q2/4Q3/1K6/8 b - c6 36 45";
 
-        GameStateFenParser.loadFenString(customFen);
+        FenParser.loadFenString(customFen);
 
         BoardRepresentation board = gameState.boardRepresentation;
 
@@ -132,7 +132,7 @@ public class GameStateFenParserTest {
     void testLoadEmptyFenString() {
         String emptyFen = "8/8/8/8/8/8/8/8 w - - 0 1";
 
-        GameStateFenParser.loadFenString(emptyFen);
+        FenParser.loadFenString(emptyFen);
 
         BoardRepresentation board = gameState.boardRepresentation;
 

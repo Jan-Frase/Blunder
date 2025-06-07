@@ -163,7 +163,7 @@ public class GameState {
         irreversibleDataBuilder.castlingRights(castlingRightsBuilder.build());
         this.irreversibleDataStack.push(irreversibleDataBuilder.build());
 
-        logger.debug("Finished making move: {}", GameStatePrinter.print());
+        logger.debug("Finished making move: {}", StatePrinter.stateToString());
     }
 
     private void halfMoveRelatedMakeMove(
@@ -342,7 +342,7 @@ public class GameState {
         // the other player can now make his turn
         this.isWhitesTurn = !this.isWhitesTurn;
 
-        logger.debug("Finished unmaking move: {}", GameStatePrinter.print());
+        logger.debug("Finished unmaking move: {}", StatePrinter.stateToString());
     }
 
     private void enPassantRelatedUnmakeMove(Move move, Constants.Side fromSide) {
