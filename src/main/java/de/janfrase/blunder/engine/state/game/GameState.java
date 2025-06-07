@@ -68,6 +68,8 @@ public class GameState {
      * @return the singleton instance of {@code GameState}
      */
     public static GameState getInstance() {
+        // TODO: At some point i should upgrade to multithreading to explore multiple lines at the
+        // same time. I then need to get rid of the singleton pattern.
         return instance;
     }
 

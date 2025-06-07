@@ -61,7 +61,7 @@ public class PerftRunner {
         }
 
         // Let's go :)
-        perftWithPrint(depths);
+        perftreeCompatiblePerft(depths);
     }
 
     /**
@@ -79,7 +79,7 @@ public class PerftRunner {
      *
      * @param depths How deep we should search. Scales exponentially.
      */
-    private static void perftWithPrint(int depths) {
+    private static void perftreeCompatiblePerft(int depths) {
         long total_nodes = 0;
         ArrayList<Move> legalMoves = MoveGenerator.generateLegalMoves();
 
@@ -118,12 +118,12 @@ public class PerftRunner {
         if (depths == 0) {
             return 1;
         }
-        // TODO: If the depths == 1 we can simply return the length of this list. -> Easy
-        // performance gains.
+
         ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
 
         for (Move move : moves) {
             gameState.makeMove(move);
+            // TODO: Benchmark if attack decider is quicker instead.
             if (MoveGenerator.canCaptureKing()) {
                 gameState.unmakeMove(move);
                 continue;
