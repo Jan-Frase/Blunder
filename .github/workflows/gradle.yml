@@ -39,6 +39,8 @@ jobs:
     - name: Run tests
       run: ./gradlew test
 
+    - name: Run expensive tests
+      run: ./gradlew testDeepPerft
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
     #
