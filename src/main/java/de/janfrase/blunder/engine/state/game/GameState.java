@@ -6,6 +6,7 @@ import de.janfrase.blunder.engine.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.engine.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
+import java.util.Objects;
 import java.util.OptionalInt;
 import java.util.Stack;
 import org.apache.logging.log4j.LogManager;
@@ -92,6 +93,24 @@ public class GameState {
         this.fullMoveCounter = 1;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof GameState gameState)) return false;
+        return isWhitesTurn == gameState.isWhitesTurn
+                && fullMoveCounter == gameState.fullMoveCounter
+                && Objects.equals(boardRepresentation, gameState.boardRepresentation)
+                && Objects.equals(irreversibleDataStack, gameState.irreversibleDataStack);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                boardRepresentation.hashCode(),
+                irreversibleDataStack.hashCode(),
+                isWhitesTurn,
+                fullMoveCounter);
+    }
+
     // ------------------------------
     // Make Section
     // ------------------------------
@@ -144,7 +163,7 @@ public class GameState {
         irreversibleDataBuilder.castlingRights(castlingRightsBuilder.build());
         this.irreversibleDataStack.push(irreversibleDataBuilder.build());
 
-        logger.trace("Finished making move: {}", GameStatePrinter.print());
+        logger.debug("Finished making move: {}", GameStatePrinter.print());
     }
 
     private void halfMoveRelatedMakeMove(
@@ -234,6 +253,8 @@ public class GameState {
             // disable the long castling rights if the left rook was moved from its starting square
             castlingRightsBuilder.disableSpecifiedCastle(isWhitesTurn, false);
         }
+
+        // castle right loss on rook capture
     }
 
     private void promotionRelatedMakeMove(Move move, Constants.Side fromSide) {
@@ -308,7 +329,7 @@ public class GameState {
         // the other player can now make his turn
         this.isWhitesTurn = !this.isWhitesTurn;
 
-        logger.trace("Finished unmaking move: {}", GameStatePrinter.print());
+        logger.debug("Finished unmaking move: {}", GameStatePrinter.print());
     }
 
     private void enPassantRelatedUnmakeMove(Move move, Constants.Side fromSide) {

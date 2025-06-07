@@ -4,6 +4,8 @@ package de.janfrase.blunder.engine.state.board;
 import de.janfrase.blunder.utility.Constants;
 import de.janfrase.blunder.utility.Constants.PieceType;
 import de.janfrase.blunder.utility.Constants.Side;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Represents an 8x8 chessboard containing tiles with pieces and their corresponding colors.
@@ -22,6 +24,18 @@ public class Board8x8 {
             this.pieceTypes[i] = PieceType.EMPTY;
             this.side[i] = Side.EMPTY;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Board8x8 board8x8)) return false;
+        return Objects.deepEquals(pieceTypes, board8x8.pieceTypes)
+                && Objects.deepEquals(side, board8x8.side);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(pieceTypes), Arrays.hashCode(side));
     }
 
     /**

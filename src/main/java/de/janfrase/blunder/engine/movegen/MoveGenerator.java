@@ -24,7 +24,7 @@ public class MoveGenerator {
      * @return a list of {@code Move} objects representing all legal moves
      *         for the active player in the current game state.
      */
-    protected static ArrayList<Move> generatePseudoLegalMoves() {
+    public static ArrayList<Move> generatePseudoLegalMoves() {
         logger.trace("Starting move generation");
         ArrayList<Move> moves = new ArrayList<>();
 
@@ -86,7 +86,7 @@ public class MoveGenerator {
      * @return a list of {@code Move} objects representing all legal moves
      *         for the active player in the current game state.
      */
-    protected static ArrayList<Move> generateLegalMoves() {
+    public static ArrayList<Move> generateLegalMoves() {
         ArrayList<Move> pseudoLegalMoves = MoveGenerator.generatePseudoLegalMoves();
         ArrayList<Move> legalMoves = new ArrayList<>();
 
@@ -100,7 +100,7 @@ public class MoveGenerator {
         return legalMoves;
     }
 
-    protected static boolean canCaptureKing() {
+    public static boolean canCaptureKing() {
         ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
         // if the opponent can capture our king -> we are in check
         return moves.stream()

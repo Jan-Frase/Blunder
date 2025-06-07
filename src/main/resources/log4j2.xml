@@ -31,8 +31,8 @@
      <Loggers>
          <!-- Application Specific Logger -->
         <Logger name="de.janfrase" level="trace" additivity="false">
-            <AppenderRef ref="ConsoleAppender" level="trace"/>
-            <AppenderRef ref="RollingFileAppender" level="trace"/>
+            <AppenderRef ref="ConsoleAppender" level="warn"/>
+            <AppenderRef ref="RollingFileAppender" level="info"/>
         </Logger>
 
         <!-- Root Logger Configuration -->

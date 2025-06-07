@@ -2,6 +2,7 @@
 package de.janfrase.blunder.engine.state.board;
 
 import de.janfrase.blunder.utility.Constants;
+import java.util.Objects;
 import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +21,17 @@ public class BoardRepresentation {
     public BoardRepresentation() {
         logger.debug("Creating new BoardRepresentation.");
         this.squareBoard = new Board8x8();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof BoardRepresentation that)) return false;
+        return Objects.equals(squareBoard, that.squareBoard);
+    }
+
+    @Override
+    public int hashCode() {
+        return squareBoard.hashCode();
     }
 
     /**

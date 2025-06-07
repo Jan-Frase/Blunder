@@ -5,13 +5,15 @@ import de.janfrase.blunder.engine.movegen.move.Move;
 import de.janfrase.blunder.engine.movegen.move.UciMoveParser;
 import de.janfrase.blunder.engine.state.game.GameState;
 import de.janfrase.blunder.engine.state.game.GameStateFenParser;
+import de.janfrase.blunder.engine.state.game.GameStatePrinter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import org.apache.logging.log4j.Level;
+import java.util.Comparator;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.Logger;
 
 public class PerftRunner {
+    private static final Logger logger = LogManager.getLogger();
     private static final GameState gameState = GameState.getInstance();
 
     public static void main(String[] args) {
@@ -40,14 +42,20 @@ public class PerftRunner {
         int nodes = 0;
 
         ArrayList<Move> legalMoves = MoveGenerator.generateLegalMoves();
+        legalMoves.sort(Comparator.comparing(Move::toString));
         for (Move move : legalMoves) {
+            int preHash = gameState.hashCode();
             gameState.makeMove(move);
+            logger.info(GameStatePrinter.print());
 
             int current_nodes = perft(depths - 1);
             nodes += current_nodes;
             System.out.println(move.toString() + " " + current_nodes);
 
             gameState.unmakeMove(move);
+            int postHash = gameState.hashCode();
+
+            assert preHash == postHash : "Hashcode of game state changed after move!";
         }
 
         System.out.println();
@@ -56,7 +64,7 @@ public class PerftRunner {
     }
 
     public static int perft(int depths) {
-        Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ERROR);
+        // Configurator.setAllLevels(LogManager.getRootLogger().getName(), Level.ERROR);
 
         int nodes = 0;
 
