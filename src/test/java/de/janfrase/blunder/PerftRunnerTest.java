@@ -3,8 +3,8 @@ package de.janfrase.blunder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import de.janfrase.blunder.engine.state.game.FenParser;
-import de.janfrase.blunder.engine.state.game.GameState;
+import de.janfrase.blunder.engine.backend.state.game.FenParser;
+import de.janfrase.blunder.engine.backend.state.game.GameState;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 

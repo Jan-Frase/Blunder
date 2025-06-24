@@ -1,12 +1,12 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder;
 
-import de.janfrase.blunder.engine.movegen.MoveGenerator;
-import de.janfrase.blunder.engine.movegen.move.Move;
-import de.janfrase.blunder.engine.movegen.move.UciMoveParser;
-import de.janfrase.blunder.engine.state.game.FenParser;
-import de.janfrase.blunder.engine.state.game.GameState;
-import de.janfrase.blunder.engine.state.game.StatePrinter;
+import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
+import de.janfrase.blunder.engine.backend.movegen.move.Move;
+import de.janfrase.blunder.engine.backend.movegen.move.UciMoveParser;
+import de.janfrase.blunder.engine.backend.state.game.FenParser;
+import de.janfrase.blunder.engine.backend.state.game.GameState;
+import de.janfrase.blunder.engine.backend.state.game.StatePrinter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
