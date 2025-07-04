@@ -30,13 +30,13 @@
 
      <Loggers>
          <!-- Application Specific Logger -->
-        <Logger name="de.janfrase" level="trace" additivity="false">
-            <AppenderRef ref="ConsoleAppender" level="warn"/>
+        <Logger name="de.janfrase" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender" level="info"/>
             <AppenderRef ref="RollingFileAppender" level="info"/>
         </Logger>
 
         <!-- Root Logger Configuration -->
-        <Root level="warn">
+        <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
         </Root>
     </Loggers>

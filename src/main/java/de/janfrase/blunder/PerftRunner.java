@@ -130,8 +130,23 @@ public class PerftRunner {
         return nodes;
     }
 
-    public static long benchmarkPerft(int depths) {
+    public static long perftWithTime(int depths) {
+        long startTime = System.nanoTime();
+
         long nodes = perft(depths);
+
+        long endTime = System.nanoTime();
+        long timeElapsed = endTime - startTime;
+        long timeElapsedMillis = timeElapsed / 1000000;
+        long timeElapsedSeconds = timeElapsedMillis / 1000;
+
+        if (timeElapsedSeconds == 0) {
+            timeElapsedSeconds = 1;
+        }
+
+        long nodesPerSecond = (nodes / (timeElapsedSeconds));
+
+        logger.info("Nodes per second: {}", nodesPerSecond);
 
         return nodes;
     }
