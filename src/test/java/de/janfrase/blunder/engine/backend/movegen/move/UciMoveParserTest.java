@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import de.janfrase.blunder.engine.backend.state.game.GameState;
+import de.janfrase.blunder.uci.UciMoveParser;
 import de.janfrase.blunder.utility.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

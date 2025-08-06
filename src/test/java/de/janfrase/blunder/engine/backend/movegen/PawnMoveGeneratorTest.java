@@ -4,9 +4,9 @@ package de.janfrase.blunder.engine.backend.movegen;
 import static org.junit.jupiter.api.Assertions.*;
 
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
-import de.janfrase.blunder.engine.backend.movegen.move.UciMoveParser;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
+import de.janfrase.blunder.uci.UciMoveParser;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 import java.util.OptionalInt;

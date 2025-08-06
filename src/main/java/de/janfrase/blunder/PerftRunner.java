@@ -3,10 +3,10 @@ package de.janfrase.blunder;
 
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
-import de.janfrase.blunder.engine.backend.movegen.move.UciMoveParser;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.backend.state.game.StatePrinter;
+import de.janfrase.blunder.uci.UciMoveParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;

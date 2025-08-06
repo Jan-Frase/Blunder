@@ -1,6 +1,7 @@
 /* Made by Jan Frase :) */
-package de.janfrase.blunder.engine.backend.movegen.move;
+package de.janfrase.blunder.uci;
 
+import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
 
