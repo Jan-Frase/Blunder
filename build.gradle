@@ -1,3 +1,6 @@
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 plugins {
 	id 'application'
 	id 'java'
@@ -5,7 +8,14 @@ plugins {
 }
 
 group = 'de.janfrase'
-version = '1.0-SNAPSHOT'
+// Get the current date and time
+LocalDateTime now = LocalDateTime.now()
+
+// Define the format
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm")
+
+// Format the current date and time
+version = now.format(formatter)
 
 apply plugin : "java"
 ext {
