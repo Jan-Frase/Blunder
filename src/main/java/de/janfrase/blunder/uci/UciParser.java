@@ -6,12 +6,11 @@ import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UciParser {
 
