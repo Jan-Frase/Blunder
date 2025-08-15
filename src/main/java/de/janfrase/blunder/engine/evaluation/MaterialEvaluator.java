@@ -5,10 +5,9 @@ import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
 
-public class MaterialEvaluator implements Evaluator {
+public class MaterialEvaluator {
 
-    @Override
-    public float calculateEvaluation(GameState gameState) {
+    public static float calculateEvaluation(GameState gameState) {
         int friendlyMaterial = 0;
         int enemyMaterial = 0;
 
@@ -32,13 +31,14 @@ public class MaterialEvaluator implements Evaluator {
         return friendlyMaterial - enemyMaterial;
     }
 
-    private int getMaterialValue(Constants.PieceType pieceType) {
+    private static int getMaterialValue(Constants.PieceType pieceType) {
         return switch (pieceType) {
+            case KING -> 100;
             case QUEEN -> 9;
             case ROOK -> 5;
             case BISHOP, KNIGHT -> 3;
             case PAWN -> 1;
-            case EMPTY, KING -> 0;
+            case EMPTY -> 0;
         };
     }
 }

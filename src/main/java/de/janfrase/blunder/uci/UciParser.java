@@ -1,16 +1,15 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.uci;
 
-import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
-import de.janfrase.blunder.utility.Constants;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import de.janfrase.blunder.engine.search.NegaMax;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.Scanner;
 
 public class UciParser {
 
@@ -55,7 +54,8 @@ public class UciParser {
 
         while (!quit) {
             // blocks until next line is found!
-            scanner.hasNextLine();
+            while (!scanner.hasNextLine()) {
+            }
             String input = scanner.nextLine();
 
             LOGGER.info(IN + input);
@@ -145,14 +145,8 @@ public class UciParser {
     }
 
     private void stop() {
-        List<Move> moves = MoveGenerator.generateLegalMoves();
-        List<Move> captureMoves =
-                moves.stream()
-                        .filter(move -> move.capturedPieceType() != Constants.PieceType.EMPTY)
-                        .toList();
-        Move randomMove = moves.getFirst();
+        Move move = NegaMax.search(2);
 
-        Move playedMove = !captureMoves.isEmpty() ? captureMoves.getFirst() : randomMove;
-        sendReply(BEST_MOVE + " " + playedMove.toString());
+        sendReply(BEST_MOVE + " " + move.toString());
     }
 }

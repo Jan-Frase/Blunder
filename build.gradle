@@ -1,6 +1,3 @@
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-
 plugins {
 	id 'application'
 	id 'java'
@@ -8,26 +5,23 @@ plugins {
 }
 
 group = 'de.janfrase'
-// Get the current date and time
-LocalDateTime now = LocalDateTime.now()
 
-// Define the format
-DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm")
-
-// Format the current date and time
-version = now.format(formatter)
-
-apply plugin : "java"
-ext {
-	javaMainClass = "de.janfrase.blunder.Main"
-}
+version = new Date().format('yyyy-MM-dd_HH-mm')
 
 application {
-	mainClassName = javaMainClass
+	mainClassName = "de.janfrase.blunder.Main"
+}
+
+run {
+	standardInput = System.in
 }
 
 repositories {
 	mavenCentral()
+}
+
+run {
+	standardInput = System.in
 }
 
 dependencies {
