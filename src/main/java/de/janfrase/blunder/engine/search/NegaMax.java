@@ -5,7 +5,6 @@ import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.evaluation.MaterialEvaluator;
-
 import java.util.List;
 
 /**
@@ -22,7 +21,7 @@ public class NegaMax {
         for (Move move : moves) {
             GameState.getInstance().makeMove(move);
 
-            float eval = recursiveSearch(depth - 1);
+            float eval = -recursiveSearch(depth - 1);
 
             if (eval > bestEval) {
                 bestMove = move;

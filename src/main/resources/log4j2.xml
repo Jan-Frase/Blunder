@@ -31,7 +31,7 @@
      <Loggers>
          <!-- Application Specific Logger -->
         <Logger name="de.janfrase" level="info" additivity="false">
-            <AppenderRef ref="ConsoleAppender" level="info"/>
+            <AppenderRef ref="ConsoleAppender" level="error"/>
             <AppenderRef ref="RollingFileAppender" level="info"/>
         </Logger>
 

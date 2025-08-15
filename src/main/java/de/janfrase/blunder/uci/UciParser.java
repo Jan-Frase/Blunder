@@ -5,11 +5,10 @@ import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.search.NegaMax;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.Arrays;
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UciParser {
 
@@ -54,8 +53,7 @@ public class UciParser {
 
         while (!quit) {
             // blocks until next line is found!
-            while (!scanner.hasNextLine()) {
-            }
+            while (!scanner.hasNextLine()) {}
             String input = scanner.nextLine();
 
             LOGGER.info(IN + input);
@@ -145,7 +143,7 @@ public class UciParser {
     }
 
     private void stop() {
-        Move move = NegaMax.search(2);
+        Move move = NegaMax.search(4);
 
         sendReply(BEST_MOVE + " " + move.toString());
     }
