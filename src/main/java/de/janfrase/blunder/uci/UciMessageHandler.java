@@ -1,43 +1,56 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.uci;
 
+import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
-import de.janfrase.blunder.engine.search.NegaMax;
+import de.janfrase.blunder.engine.search.algos.NegaMax;
 import java.util.Arrays;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class UciParser {
+public class UciMessageHandler {
 
     // singleton pattern
-    private static final UciParser INSTANCE = new UciParser();
+    private static final UciMessageHandler INSTANCE = new UciMessageHandler();
 
     // logging
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String IN = "In: ";
     private static final String OUT = "Out: ";
 
-    // incoming commands
-    private static final String UCI = "uci";
-    private static final String QUIT = "quit";
-    private static final String UCI_NEW_GAME = "ucinewgame";
-    private static final String POSITION = "position";
-    private static final String GO = "go";
-    private static final String STOP = "stop";
-    private static final String IS_READY = "isready";
+    private static class IncomingMessage {
+        // incoming commands
+        private static final String UCI = "uci";
+        private static final String DEBUG = "debug";
+        private static final String IS_READY = "isready";
+        private static final String SET_OPTION = "setoption";
+        private static final String REGISTER = "register";
+        private static final String UCI_NEW_GAME = "ucinewgame";
+        private static final String POSITION = "position";
+        private static final String GO = "go";
+        private static final String STOP = "stop";
+        private static final String PONDERHIT = "ponderhit";
+        private static final String QUIT = "quit";
+    }
 
-    // outgoing messages
-    private static final String ID = "id Blunder";
-    private static final String UCI_OK = "uciok";
-    private static final String READY_OK = "readyok";
-    private static final String BEST_MOVE = "bestmove";
+    private static class OutgoingMessage {
+        // outgoing messages
+        private static final String ID = "id Blunder";
+        private static final String UCI_OK = "uciok";
+        private static final String READY_OK = "readyok";
+        private static final String BEST_MOVE = "bestmove";
+        private static final String COPYPROTECTION = "copyprotection";
+        private static final String REGISTRATION = "registration";
+        private static final String INFO = "info";
+        private static final String OPTION = "option";
+    }
 
-    private UciParser() {}
+    private UciMessageHandler() {}
 
-    public static UciParser getInstance() {
+    public static UciMessageHandler getInstance() {
         return INSTANCE;
     }
 
@@ -52,7 +65,7 @@ public class UciParser {
         boolean quit = false;
 
         while (!quit) {
-            // blocks until next line is found!
+            // blocks until next line is found
             while (!scanner.hasNextLine()) {}
             String input = scanner.nextLine();
 
@@ -64,19 +77,19 @@ public class UciParser {
             String[] arguments = Arrays.copyOfRange(tokens, 1, tokens.length);
 
             switch (commandName) {
-                case UCI -> uci();
-                case QUIT -> quit = true;
-                case UCI_NEW_GAME -> uciNewGame();
-                case POSITION -> position(arguments);
-                case GO -> go(arguments);
-                case STOP -> stop();
-                case IS_READY -> isReady();
+                case IncomingMessage.UCI -> uci();
+                case IncomingMessage.QUIT -> quit = true;
+                case IncomingMessage.UCI_NEW_GAME -> uciNewGame();
+                case IncomingMessage.POSITION -> position(arguments);
+                case IncomingMessage.GO -> go(arguments);
+                case IncomingMessage.STOP -> stop();
+                case IncomingMessage.IS_READY -> isReady();
             }
         }
     }
 
     private void isReady() {
-        sendReply(READY_OK);
+        sendReply(OutgoingMessage.READY_OK);
     }
 
     private void sendReply(String message) {
@@ -85,13 +98,13 @@ public class UciParser {
     }
 
     private void uci() {
-        sendReply(ID);
-        sendReply(UCI_OK);
+        sendReply(OutgoingMessage.ID);
+        sendReply(OutgoingMessage.UCI_OK);
     }
 
     private void uciNewGame() {
         GameState.resetGameState();
-        sendReply(READY_OK);
+        sendReply(OutgoingMessage.READY_OK);
     }
 
     private void position(String[] arguments) {
@@ -140,11 +153,14 @@ public class UciParser {
                 }
             }
         }
+
+        // TODO: This needs to run on a separate thread!
+        Move move = NegaMax.startSearching(6);
+        sendReply(OutgoingMessage.BEST_MOVE + " " + move.toString());
     }
 
     private void stop() {
-        Move move = NegaMax.search(4);
-
-        sendReply(BEST_MOVE + " " + move.toString());
+        Move move = MoveGenerator.generateLegalMoves().getFirst();
+        sendReply(OutgoingMessage.BEST_MOVE + " " + move.toString());
     }
 }

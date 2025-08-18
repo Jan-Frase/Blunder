@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
+import de.janfrase.blunder.engine.search.algos.NegaMax;
 import org.junit.jupiter.api.Test;
 
 class NegaMaxTest {
@@ -13,7 +14,7 @@ class NegaMaxTest {
     void testSimpleCase() {
         FenParser.loadFenString("qR6/8/8/8/8/8/8/k6K w - - 0 1");
 
-        Move move = NegaMax.search(4);
+        Move move = NegaMax.startSearching(4);
         String moveString = move.toString();
 
         assertEquals("b8a8", moveString);
@@ -23,7 +24,7 @@ class NegaMaxTest {
     void testSimpleCase2() {
         FenParser.loadFenString("qR6/k7/8/8/8/8/8/7K w - - 0 1");
 
-        Move move = NegaMax.search(4);
+        Move move = NegaMax.startSearching(4);
         String moveString = move.toString();
 
         assertEquals("b8a8", moveString);

@@ -1,5 +1,5 @@
 /* Made by Jan Frase :) */
-package de.janfrase.blunder.engine.search;
+package de.janfrase.blunder.engine.search.algos;
 
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class NegaMax {
 
-    public static Move search(int depth) {
+    public static Move startSearching(int depth) {
         List<Move> moves = MoveGenerator.generateLegalMoves();
 
         Move bestMove = null;

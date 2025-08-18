@@ -1,10 +1,10 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder;
 
-import de.janfrase.blunder.uci.UciParser;
+import de.janfrase.blunder.uci.UciMessageHandler;
 
 public class Main {
     public static void main(String[] args) {
-        UciParser.getInstance().startParsing();
+        UciMessageHandler.getInstance().startParsing();
     }
 }
