@@ -2,7 +2,6 @@
 package de.janfrase.blunder.engine.backend.movegen;
 
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
-import de.janfrase.blunder.engine.backend.state.board.AttackDecider;
 import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.backend.state.game.irreversibles.IrreversibleData;
@@ -17,6 +16,13 @@ import org.apache.logging.log4j.Logger;
  * and legal moves for the active player in the current game state.
  */
 public class MoveGenerator {
+
+    // PERFORMANCE:
+    /*
+     * 1. One could implement multi-threading.
+     * 2. When using something like alpha-beta pruning, it might happen that we generate all the moves for a given position and then notice after the first one that we don't even need to consider the others.
+     *       In that case it could be useful to only generate the moves lazily when needed. However, this might conflict with move ordering etc.
+     */
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -115,7 +121,9 @@ public class MoveGenerator {
             return false;
         }
 
-        return AttackDecider.isKingUnderAttack(
+        // TODO: Refactor this so that the KingInCheckDecier finds the king position instead of
+        // doing it here.
+        return KingInCheckDecider.isKingUnderAttack(
                 kingPos.get()[0], kingPos.get()[1], GameState.getInstance().getEnemySide());
     }
 }

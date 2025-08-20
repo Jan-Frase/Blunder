@@ -2,7 +2,6 @@
 package de.janfrase.blunder.engine.backend.movegen;
 
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
-import de.janfrase.blunder.engine.backend.state.board.AttackDecider;
 import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.utility.Constants;
@@ -87,7 +86,7 @@ public class KingMoveGenerator {
         }
 
         // if the king is under attack, we can't castle -> return
-        if (AttackDecider.isKingUnderAttack(x, y, activeSide)) return;
+        if (KingInCheckDecider.isKingUnderAttack(x, y, activeSide)) return;
 
         generateShortCastles(moves, x, y, board, activeSide, canShortCastle);
 
@@ -110,8 +109,8 @@ public class KingMoveGenerator {
         if (sideOneRight != Constants.Side.EMPTY || sideTwoRight != Constants.Side.EMPTY) return;
 
         // if one of the squares the king is passing through -> return
-        if (AttackDecider.isKingUnderAttack(x + 1, y, activeSide)
-                || AttackDecider.isKingUnderAttack(x + 2, y, activeSide)) return;
+        if (KingInCheckDecider.isKingUnderAttack(x + 1, y, activeSide)
+                || KingInCheckDecider.isKingUnderAttack(x + 2, y, activeSide)) return;
 
         Move castleMove = new Move(x, y, x + SHORT_CASTLE_X_OFFSET, y, Move.MoveType.SHORT_CASTLE);
         moves.add(castleMove);
@@ -135,8 +134,8 @@ public class KingMoveGenerator {
                 || sideTwoRight != Constants.Side.EMPTY
                 || sideThreeRight != Constants.Side.EMPTY) return;
 
-        if (AttackDecider.isKingUnderAttack(x - 1, y, activeSide)
-                || AttackDecider.isKingUnderAttack(x - 2, y, activeSide)) return;
+        if (KingInCheckDecider.isKingUnderAttack(x - 1, y, activeSide)
+                || KingInCheckDecider.isKingUnderAttack(x - 2, y, activeSide)) return;
 
         Move castleMove = new Move(x, y, x + LONG_CASTLE_X_OFFSET, y, Move.MoveType.LONG_CASTLE);
         moves.add(castleMove);

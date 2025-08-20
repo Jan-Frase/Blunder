@@ -24,6 +24,10 @@ public record Move(
         int toY,
         MoveType moveType,
         Constants.PieceType capturedPieceType) {
+    // PERFORMANCE: This could be squeezed into a single 16 bit type:
+    // to and from: 2^6=64 -> 6bits each -> 12 bits
+    // promotion piece: 2^2=4 -> 2bits for the 4 different pieces
+    // leaves 2 bits for various data: en passant, check, capture ... whatever seems useful
 
     /**
      * Initializes a new move with the specified starting and ending positions, defaulting

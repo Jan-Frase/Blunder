@@ -1,11 +1,12 @@
 /* Made by Jan Frase :) */
-package de.janfrase.blunder.engine.backend.state.board;
+package de.janfrase.blunder.engine.backend.movegen;
 
+import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
 import java.util.Optional;
 
-public class AttackDecider {
+public class KingInCheckDecider {
 
     /**
      * Determines whether a king at the specified position is under attack.

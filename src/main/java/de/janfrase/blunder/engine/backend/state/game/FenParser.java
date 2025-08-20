@@ -56,6 +56,9 @@ public class FenParser {
 
         parseFullMoveCounter(fenSegments[FenSegments.FULL_MOVE_COUNTER.getIndex()]);
 
+        GameState gameState = GameState.getInstance();
+        gameState.zobristHasher.initZobristHash(gameState);
+
         logger.trace("Finished fen parsing : {}", StatePrinter.stateToString());
     }
 

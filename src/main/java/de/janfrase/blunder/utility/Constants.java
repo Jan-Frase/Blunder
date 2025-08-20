@@ -5,6 +5,11 @@ public class Constants {
     public static final int BOARD_SIDE_LENGTH = 8;
 
     public static final int BOARD_TOTAL_SIZE = BOARD_SIDE_LENGTH * BOARD_SIDE_LENGTH;
+
+    public static boolean isOffBoard(int x, int y) {
+        return x < 0 || x >= BOARD_SIDE_LENGTH || y < 0 || y >= BOARD_SIDE_LENGTH;
+    }
+
     // Diagonal directions: bot-right, bot-left, top-right, top-left
     public static final int[][] DIAGONAL_DIRECTIONS = {{1, 1}, {-1, 1}, {1, -1}, {-1, -1}};
     public static final int[][] STRAIGHT_DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -12,10 +17,7 @@ public class Constants {
         {1, 2}, {-1, 2}, {1, -2}, {-1, -2}, {2, 1}, {-2, 1}, {2, -1}, {-2, -1}
     };
 
-    public static boolean isOffBoard(int x, int y) {
-        return x < 0 || x >= BOARD_SIDE_LENGTH || y < 0 || y >= BOARD_SIDE_LENGTH;
-    }
-
+    // TODO:
     public enum PieceType {
         KING,
         QUEEN,

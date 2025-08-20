@@ -59,10 +59,13 @@ public class GameState {
         return isWhitesTurn ? Constants.Side.BLACK : Constants.Side.WHITE;
     }
 
+    // State variables
     BoardRepresentation boardRepresentation;
     Stack<IrreversibleData> irreversibleDataStack;
     boolean isWhitesTurn;
     int fullMoveCounter;
+
+    ZobristHasher zobristHasher;
 
     private GameState() {
         init();
@@ -101,6 +104,11 @@ public class GameState {
 
         this.isWhitesTurn = true;
         this.fullMoveCounter = 1;
+
+        // init the zobristHash
+        // also gets called when the FenParser did its thing
+        this.zobristHasher = new ZobristHasher();
+        this.zobristHasher.initZobristHash(this);
     }
 
     // ------------------------------
@@ -123,6 +131,7 @@ public class GameState {
     public void makeMove(Move move) {
         logger.trace("Making move {}.", move);
         // set the square we are moving to, to have the piece we moved
+        // TODO: Rename this to friendlyPieceType or movedPieceType
         Constants.PieceType fromPieceType =
                 this.boardRepresentation.getPieceAt(move.fromX(), move.fromY());
         Constants.Side fromSide = this.boardRepresentation.getSideAt(move.fromX(), move.fromY());
@@ -149,11 +158,21 @@ public class GameState {
         // if this was blacks turn -> increment full move counter
         if (!this.isWhitesTurn) fullMoveCounter++;
 
-        // the other player can now make his turn
+        // the other player can now take his turn
         this.isWhitesTurn = !this.isWhitesTurn;
 
+        // store the old castling rights, we need them to update the zobrist hash in a moment
+        IrreversibleData oldIrreversibleData = irreversibleDataStack.peek();
+
+        // add the new castling rights to the irreversible data builder
         irreversibleDataBuilder.castlingRights(castlingRightsBuilder.build());
-        this.irreversibleDataStack.push(irreversibleDataBuilder.build());
+        IrreversibleData newIrreversibleData = irreversibleDataBuilder.build();
+        // and push it onto the stack
+        this.irreversibleDataStack.push(newIrreversibleData);
+
+        // and update the zobrist hash
+        this.zobristHasher.updateZobristHashAfterMove(
+                move, fromPieceType, fromSide, oldIrreversibleData, newIrreversibleData);
 
         logger.debug("Finished making move: {}", StatePrinter.stateToString());
     }
@@ -178,9 +197,7 @@ public class GameState {
             Move move, Constants.Side fromSide, IrreversibleData.Builder irreversibleDataBuilder) {
         // en passant capture handling
         if (move.moveType().equals(Move.MoveType.EP_CAPTURE)) {
-            // off set the move.toY value depending on who took the piece
-            // if black took, we need to raise the value and vice versa
-            int yOffset = (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
+            int yOffset = getYOffsetOnEnPassantCapture(fromSide);
 
             // remove the captured pawn from the board
             this.boardRepresentation.clearSquare(move.toX(), move.toY() + yOffset);
@@ -191,6 +208,12 @@ public class GameState {
             // set the en passant square
             irreversibleDataBuilder.enPassantX(OptionalInt.of(move.fromX()));
         }
+    }
+
+    protected static int getYOffsetOnEnPassantCapture(Constants.Side fromSide) {
+        // off set the move.toY value depending on who took the piece
+        // if black took, we need to raise the value and vice versa
+        return (fromSide.equals(Constants.Side.BLACK)) ? UP : DOWN;
     }
 
     private void castlingRelatedMakeMove(
@@ -319,8 +342,14 @@ public class GameState {
                     move.capturedPieceType(),
                     isWhitesTurn ? Constants.Side.WHITE : Constants.Side.BLACK);
 
+        // store the old irreversible data
+        IrreversibleData oldIrreversibleData = irreversibleDataStack.peek();
+
         // go back to the previous stack frame of irreversible data
         this.irreversibleDataStack.pop();
+
+        // get the new irreversibel data
+        IrreversibleData newIrreversibleData = irreversibleDataStack.peek();
 
         this.enPassantRelatedUnmakeMove(move, fromSide);
 
@@ -333,6 +362,10 @@ public class GameState {
 
         // the other player can now make his turn
         this.isWhitesTurn = !this.isWhitesTurn;
+
+        // and update the zobrist hash
+        this.zobristHasher.updateZobristHashAfterMove(
+                move, fromPieceType, fromSide, oldIrreversibleData, newIrreversibleData);
 
         logger.debug("Finished unmaking move: {}", StatePrinter.stateToString());
     }
