@@ -5,7 +5,7 @@ import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
-import de.janfrase.blunder.engine.search.algos.NegaMax;
+import de.janfrase.blunder.engine.search.SearchManager;
 import java.util.Arrays;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
@@ -154,9 +154,11 @@ public class UciMessageHandler {
             }
         }
 
-        // TODO: This needs to run on a separate thread!
-        Move move = NegaMax.startSearching(3);
-        sendReply(OutgoingMessage.BEST_MOVE + " " + move.toString());
+        SearchManager.getInstance().go();
+    }
+
+    public void searchIsFinished(String move) {
+        sendReply(OutgoingMessage.BEST_MOVE + " " + move);
     }
 
     private void stop() {
