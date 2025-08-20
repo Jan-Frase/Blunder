@@ -10,6 +10,9 @@ import java.util.OptionalInt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+// REFACTOR: I would love to put this into its own little package along with StatePrinter.
+// This package could be called util. However since it relies on having access to package private
+// variables in gamestate, this does not work.
 /**
  * See: <a href="https://www.chessprogramming.org/Forsyth-Edwards_Notation">Chess programming wiki.</a>
  */

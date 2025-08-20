@@ -18,17 +18,26 @@ public class NegaMax {
         Move bestMove = null;
         float bestEval = Float.NEGATIVE_INFINITY;
 
-        for (Move move : moves) {
-            GameState.getInstance().makeMove(move);
+        GameState gameState = GameState.getInstance();
 
-            float eval = -recursiveSearch(depth - 1);
+        for (Move move : moves) {
+            gameState.makeMove(move);
+
+            float eval = 0;
+            if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
+                // if either of these are true we will consider the position a draw
+                // for now we will just never draw
+                eval = Float.NEGATIVE_INFINITY;
+            } else {
+                eval = -recursiveSearch(depth - 1);
+            }
 
             if (eval > bestEval) {
                 bestMove = move;
                 bestEval = eval;
             }
 
-            GameState.getInstance().unmakeMove(move);
+            gameState.unmakeMove(move);
         }
         return bestMove;
     }
@@ -40,11 +49,22 @@ public class NegaMax {
 
         float max = Float.NEGATIVE_INFINITY;
 
+        GameState gameState = GameState.getInstance();
+
         List<Move> moves = MoveGenerator.generateLegalMoves();
         for (Move move : moves) {
             GameState.getInstance().makeMove(move);
-            // negate this because we switch perspective between players
-            float eval = -recursiveSearch(depth - 1);
+
+            float eval = 0;
+
+            if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
+                // if either of these are true we will consider the position a draw
+                // for now we will just never draw
+                eval = Float.NEGATIVE_INFINITY;
+            } else {
+                // negate this because we switch perspective between players
+                eval = -recursiveSearch(depth - 1);
+            }
 
             if (eval > max) {
                 max = eval;

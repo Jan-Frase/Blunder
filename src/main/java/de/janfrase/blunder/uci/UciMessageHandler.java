@@ -155,7 +155,7 @@ public class UciMessageHandler {
         }
 
         // TODO: This needs to run on a separate thread!
-        Move move = NegaMax.startSearching(6);
+        Move move = NegaMax.startSearching(3);
         sendReply(OutgoingMessage.BEST_MOVE + " " + move.toString());
     }
 

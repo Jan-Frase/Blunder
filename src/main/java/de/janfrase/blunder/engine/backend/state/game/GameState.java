@@ -18,7 +18,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class GameState {
 
-    // TODO: Add things like repetition draws and the 50 move rule. Maybe add this to the evaluator?
     private static final Logger logger = LogManager.getLogger();
 
     public static final int UP = -1;
@@ -51,12 +50,20 @@ public class GameState {
         return isWhitesTurn;
     }
 
+    public boolean isHalfMoveClockAt50() {
+        return this.irreversibleDataStack.peek().halfMoveClock() == 50;
+    }
+
     public Constants.Side getFriendlySide() {
         return isWhitesTurn ? Constants.Side.WHITE : Constants.Side.BLACK;
     }
 
     public Constants.Side getEnemySide() {
         return isWhitesTurn ? Constants.Side.BLACK : Constants.Side.WHITE;
+    }
+
+    public boolean isRepeatedPosition() {
+        return this.repeatTable.isRepeat();
     }
 
     // State variables
@@ -66,6 +73,7 @@ public class GameState {
     int fullMoveCounter;
 
     ZobristHasher zobristHasher;
+    RepeatTable repeatTable;
 
     private GameState() {
         init();
@@ -109,6 +117,10 @@ public class GameState {
         // also gets called when the FenParser did its thing
         this.zobristHasher = new ZobristHasher();
         this.zobristHasher.initZobristHash(this);
+
+        // init the repeat table
+        this.repeatTable = new RepeatTable();
+        this.repeatTable.addHash(this.zobristHasher.getZobristHash());
     }
 
     // ------------------------------
@@ -173,6 +185,9 @@ public class GameState {
         // and update the zobrist hash
         this.zobristHasher.updateZobristHashAfterMove(
                 move, fromPieceType, fromSide, oldIrreversibleData, newIrreversibleData);
+
+        // update the repeat table
+        this.repeatTable.addHash(this.zobristHasher.getZobristHash());
 
         logger.debug("Finished making move: {}", StatePrinter.stateToString());
     }
@@ -366,6 +381,9 @@ public class GameState {
         // and update the zobrist hash
         this.zobristHasher.updateZobristHashAfterMove(
                 move, fromPieceType, fromSide, oldIrreversibleData, newIrreversibleData);
+
+        // update the repeat table
+        this.repeatTable.removeLastHash();
 
         logger.debug("Finished unmaking move: {}", StatePrinter.stateToString());
     }
