@@ -118,15 +118,13 @@ public class UciMessageHandler {
             }
         }
 
-        StringBuilder fenStringBuilder = new StringBuilder();
-        for (int i = 0; i < indexOfMovesKeyword; i++) {
-            fenStringBuilder.append(arguments[i]).append(" ");
-        }
-        String fenString = fenStringBuilder.toString().strip();
-
-        if (fenString.equals("startpos")) {
-            FenParser.loadStartingPosition();
-        } else {
+        if (Arrays.asList(arguments).contains("startpos")) FenParser.loadStartingPosition();
+        else {
+            StringBuilder fenStringBuilder = new StringBuilder();
+            for (int i = 1; i < indexOfMovesKeyword; i++) {
+                fenStringBuilder.append(arguments[i]).append(" ");
+            }
+            String fenString = fenStringBuilder.toString().strip();
             FenParser.loadFenString(fenString);
         }
 

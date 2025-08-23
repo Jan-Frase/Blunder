@@ -165,4 +165,10 @@ public class FenParserTest {
                 "Half move clock should be 0");
         assertEquals(1, gameState.fullMoveCounter, "Full move counter should be 1");
     }
+
+    @Test
+    void testCrashCase() {
+        FenParser.loadFenString(
+                "rnbqk2r/ppp1bppp/3p1n2/4p3/1P6/4PN2/PBPP1PPP/RN1QKB1R w KQkq - 3 5");
+    }
 }

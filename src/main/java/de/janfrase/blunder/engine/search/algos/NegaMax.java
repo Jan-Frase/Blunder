@@ -4,7 +4,7 @@ package de.janfrase.blunder.engine.search.algos;
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
-import de.janfrase.blunder.engine.evaluation.MaterialEvaluator;
+import de.janfrase.blunder.engine.evaluation.Evaluator;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ public class NegaMax {
     public static Move startSearching(int depth) {
         List<Move> moves = MoveGenerator.generateLegalMoves();
 
-        Move bestMove = null;
+        Move bestMove = moves.getFirst();
         float bestEval = Float.NEGATIVE_INFINITY;
 
         GameState gameState = GameState.getInstance();
@@ -44,7 +44,7 @@ public class NegaMax {
 
     private static float recursiveSearch(int depth) {
         if (depth == 0) {
-            return MaterialEvaluator.calculateEvaluation(GameState.getInstance());
+            return Evaluator.calculateEvaluation(GameState.getInstance());
         }
 
         float max = Float.NEGATIVE_INFINITY;
