@@ -5,6 +5,7 @@ import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.evaluation.Evaluator;
+import de.janfrase.blunder.uci.UciMessageHandler;
 import java.util.List;
 
 /**
@@ -12,7 +13,9 @@ import java.util.List;
  */
 public class NegaMax {
 
-    public static Move startSearching(int depth) {
+    private int nodesSearched = 0;
+
+    public Move startSearching(int depth) {
         List<Move> moves = MoveGenerator.generateLegalMoves();
 
         Move bestMove = moves.getFirst();
@@ -22,6 +25,7 @@ public class NegaMax {
 
         for (Move move : moves) {
             gameState.makeMove(move);
+            nodesSearched++;
 
             float eval = 0;
             if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
@@ -38,11 +42,12 @@ public class NegaMax {
             }
 
             gameState.unmakeMove(move);
+            UciMessageHandler.getInstance().sendInfo(nodesSearched);
         }
         return bestMove;
     }
 
-    private static float recursiveSearch(int depth) {
+    private float recursiveSearch(int depth) {
         if (depth == 0) {
             return Evaluator.calculateEvaluation(GameState.getInstance());
         }
@@ -54,6 +59,7 @@ public class NegaMax {
         List<Move> moves = MoveGenerator.generateLegalMoves();
         for (Move move : moves) {
             GameState.getInstance().makeMove(move);
+            nodesSearched++;
 
             float eval = 0;
 

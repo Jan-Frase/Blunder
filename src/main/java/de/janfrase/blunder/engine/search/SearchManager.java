@@ -22,11 +22,16 @@ public class SearchManager {
     }
 
     public void go() {
-        Thread.startVirtualThread(
-                () -> {
-                    // TODO: Implement iterative deepening.
-                    Move move = NegaMax.startSearching(4);
-                    UciMessageHandler.getInstance().searchIsFinished(move.toString());
-                });
+
+        NegaMax negaMax = new NegaMax();
+
+        Thread.ofVirtual()
+                .name("Search Thread")
+                .start(
+                        () -> {
+                            // TODO: Implement iterative deepening.
+                            Move move = negaMax.startSearching(4);
+                            UciMessageHandler.getInstance().searchIsFinished(move.toString());
+                        });
     }
 }

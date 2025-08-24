@@ -48,14 +48,16 @@ public class UciMessageHandler {
         private static final String OPTION = "option";
     }
 
-    private UciMessageHandler() {}
+    private UciMessageHandler() {
+        Thread uciParserThread = Thread.currentThread();
+        uciParserThread.setName("UCI Parser Thread");
+    }
 
     public static UciMessageHandler getInstance() {
         return INSTANCE;
     }
 
     public void startParsing() {
-        Thread.currentThread().setName("UCI Parser Thread");
         parse();
     }
 
@@ -155,12 +157,24 @@ public class UciMessageHandler {
         SearchManager.getInstance().go();
     }
 
-    public void searchIsFinished(String move) {
-        sendReply(OutgoingMessage.BEST_MOVE + " " + move);
-    }
-
     private void stop() {
         Move move = MoveGenerator.generateLegalMoves().getFirst();
         sendReply(OutgoingMessage.BEST_MOVE + " " + move.toString());
+    }
+
+    /*
+     * The methods below will be called from the search thread and thus need to explicitly be moved to the uci thread.
+     */
+
+    public void searchIsFinished(String move) {
+        Thread.ofVirtual()
+                .name("UCI Send Thread")
+                .start(() -> sendReply(OutgoingMessage.BEST_MOVE + " " + move));
+    }
+
+    public void sendInfo(int nodesSearched) {
+        Thread.ofVirtual()
+                .name("UCI Send Thread")
+                .start(() -> sendReply(OutgoingMessage.INFO + " nodes " + nodesSearched));
     }
 }
