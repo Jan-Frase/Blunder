@@ -24,7 +24,7 @@ public class MoveGenerator {
      *       In that case it could be useful to only generate the moves lazily when needed. However, this might conflict with move ordering etc.
      */
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(MoveGenerator.class);
 
     /**
      * Generates a list of all possible PSEUDO-legal moves for the active side

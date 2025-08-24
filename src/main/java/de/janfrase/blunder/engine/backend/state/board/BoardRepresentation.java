@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
  * representation of the board.
  */
 public class BoardRepresentation {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(BoardRepresentation.class);
 
     private final Board8x8 squareBoard;
 

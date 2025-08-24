@@ -18,7 +18,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class GameState {
 
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(GameState.class);
 
     public static final int UP = -1;
     public static final int DOWN = 1;

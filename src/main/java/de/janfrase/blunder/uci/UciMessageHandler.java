@@ -17,7 +17,7 @@ public class UciMessageHandler {
     private static final UciMessageHandler INSTANCE = new UciMessageHandler();
 
     // logging
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(UciMessageHandler.class);
     private static final String IN = "In: ";
     private static final String OUT = "Out: ";
 

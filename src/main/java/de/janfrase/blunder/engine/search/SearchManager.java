@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 public class SearchManager {
 
     // logging
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(SearchManager.class);
 
     // singleton pattern
     private static final SearchManager INSTANCE = new SearchManager();

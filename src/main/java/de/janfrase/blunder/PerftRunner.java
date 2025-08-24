@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.config.Configurator;
 
 public class PerftRunner {
-    private static final Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger(PerftRunner.class);
     private static final GameState gameState = GameState.getInstance();
 
     /**

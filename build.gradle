@@ -1,15 +1,37 @@
+import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
+
 plugins {
 	id 'application'
 	id 'java'
-	id("com.diffplug.spotless") version "7.0.3"
+	id 'com.diffplug.spotless' version "7.2.1"
+	id 'org.graalvm.buildtools.native' version '0.11.0'
 }
 
 group = 'de.janfrase'
-
 version = new Date().format('yyyy-MM-dd_HH-mm')
 
 application {
-	mainClassName = "de.janfrase.blunder.Main"
+	mainClass = "de.janfrase.blunder.Main"
+}
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(24)
+		vendor = JvmVendorSpec.matching("GraalVM Community")
+	}
+}
+
+graalvmNative {
+	toolchainDetection = true
+
+	binaries {
+		main {
+			// Main native binary configuration
+			imageName = 'Blunder' // Output binary name
+			buildArgs.add('--verbose')
+			useFatJar = true
+		}
+	}
 }
 
 run {
@@ -20,29 +42,34 @@ repositories {
 	mavenCentral()
 }
 
-run {
-	standardInput = System.in
-}
-
 dependencies {
-	implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
-	implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.25.1'
+	implementation 'org.apache.logging.log4j:log4j-api:2.25.1'
 
-	testImplementation platform('org.junit:junit-bom:5.10.0')
+	testImplementation platform('org.junit:junit-bom:5.10.2')
 	testImplementation 'org.junit.jupiter:junit-jupiter'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
-	useJUnitPlatform()
-	// exclude the quite long running deep perft test
-	exclude '**/DeepPerftRunnerTest.class'
+	useJUnitPlatform {
+		// exclude the quite long running deep perft test
+		excludeTags 'Slow'
+	}
+	systemProperty 'junit.platform.launcher', 'org.junit.platform.launcher.core.DefaultLauncher'
 }
 
 // only runs the long perf test
 tasks.register('testDeepPerft', Test) {
 	group = "verification"
-	useJUnitPlatform()
-	include '**/DeepPerftRunnerTest.class'
+	useJUnitPlatform {
+		includeTags 'Slow'
+	}
+
+	testClassesDirs = sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+
+	systemProperty 'junit.platform.launcher', 'org.junit.platform.launcher.core.DefaultLauncher'
 }
 
 // register the perf test task for the perf tree script
@@ -54,7 +81,7 @@ tasks.register('runPerftTest', JavaExec) {
 			'-Dfile.encoding=UTF-8'
 	]
 
-	classpath = sourceSets.main.runtimeClasspath
+	classpath = sourceSets.test.runtimeClasspath
 
 	mainClass = 'de.janfrase.blunder.PerftRunner'
 }
