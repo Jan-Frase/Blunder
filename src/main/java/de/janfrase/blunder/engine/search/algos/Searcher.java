@@ -13,53 +13,39 @@ import java.util.List;
  */
 public class Searcher {
 
-    private static final float WE_GOT_CHECKMATED_EVAL = -100000f;
+    private static final float WE_GOT_CHECKMATED_EVAL = 100000f;
 
     private int nodesSearched = 0;
 
+    private Move bestMove = null;
+
+    private final GameState gameState = GameState.getInstance();
+
     public Move startSearching(int depth) {
-        List<Move> moves = MoveGenerator.generateLegalMoves();
-
-        Move bestMove = moves.getFirst();
-        float bestEval = Float.NEGATIVE_INFINITY;
-
-        GameState gameState = GameState.getInstance();
-
-        for (Move move : moves) {
-            gameState.makeMove(move);
-            nodesSearched++;
-
-            float eval = 0;
-            if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
-                // if either of these are true we will consider the position a draw
-                // for now we will just never draw
-                eval = Float.NEGATIVE_INFINITY;
-            } else {
-                eval = -recursiveSearch(depth - 1);
-            }
-
-            if (eval > bestEval) {
-                bestMove = move;
-                bestEval = eval;
-            }
-
-            gameState.unmakeMove(move);
-            UciMessageHandler.getInstance().sendInfo(nodesSearched);
-        }
+        recursiveSearch(depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, true, true);
         return bestMove;
     }
 
-    private float recursiveSearch(int depth) {
+    private float recursiveSearch(
+            int depth, float alpha, float beta, boolean isMaximizingPlayer, boolean isRoot) {
         if (depth == 0) {
             return Evaluator.calculateEvaluation(GameState.getInstance());
         }
 
-        // if we can't find any move to play, we just got checkmated or the game is stalemated
-        float max = WE_GOT_CHECKMATED_EVAL * depth;
-
-        GameState gameState = GameState.getInstance();
+        if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
+            // if either of these are true we will consider the position a draw
+            // for now we will just never draw
+            return -WE_GOT_CHECKMATED_EVAL;
+        }
 
         List<Move> moves = MoveGenerator.generatePseudoLegalMoves();
+
+        float mostExtremeEval;
+
+        if (isMaximizingPlayer) mostExtremeEval = -WE_GOT_CHECKMATED_EVAL * depth;
+        else mostExtremeEval = WE_GOT_CHECKMATED_EVAL * depth;
+
+        // if we can't find any move to play, we just got checkmated or the game is stalemated
         for (Move move : moves) {
             gameState.makeMove(move);
 
@@ -72,23 +58,27 @@ public class Searcher {
 
             nodesSearched++;
 
-            float eval = 0;
+            float eval = recursiveSearch(depth - 1, alpha, beta, !isMaximizingPlayer, false);
 
-            if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
-                // if either of these are true we will consider the position a draw
-                // for now we will just never draw
-                eval = Float.NEGATIVE_INFINITY;
+            if (isMaximizingPlayer) {
+                alpha = Math.max(alpha, eval);
+
+                if (isRoot && eval > mostExtremeEval) {
+                    bestMove = move;
+                }
+
+                mostExtremeEval = Math.max(mostExtremeEval, eval);
             } else {
-                // negate this because we switch perspective between players
-                eval = -recursiveSearch(depth - 1);
-            }
+                beta = Math.min(beta, eval);
 
-            if (eval > max) {
-                max = eval;
+                if (eval < mostExtremeEval) mostExtremeEval = eval;
             }
 
             gameState.unmakeMove(move);
+            if (isRoot) UciMessageHandler.getInstance().sendInfo(nodesSearched);
+
+            if (beta <= alpha) return mostExtremeEval;
         }
-        return max;
+        return mostExtremeEval;
     }
 }
