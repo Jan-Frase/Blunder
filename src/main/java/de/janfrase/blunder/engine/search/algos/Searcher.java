@@ -11,7 +11,9 @@ import java.util.List;
 /**
  * <a href="https://www.chessprogramming.org/Negamax">Negamax</a>
  */
-public class NegaMax {
+public class Searcher {
+
+    private static final float WE_GOT_CHECKMATED_EVAL = -100000f;
 
     private int nodesSearched = 0;
 
@@ -52,13 +54,22 @@ public class NegaMax {
             return Evaluator.calculateEvaluation(GameState.getInstance());
         }
 
-        float max = Float.NEGATIVE_INFINITY;
+        // if we can't find any move to play, we just got checkmated or the game is stalemated
+        float max = WE_GOT_CHECKMATED_EVAL * depth;
 
         GameState gameState = GameState.getInstance();
 
-        List<Move> moves = MoveGenerator.generateLegalMoves();
+        List<Move> moves = MoveGenerator.generatePseudoLegalMoves();
         for (Move move : moves) {
-            GameState.getInstance().makeMove(move);
+            gameState.makeMove(move);
+
+            // If this move results in our king being captured, it's not a legal move and should be
+            // skipped.
+            if (MoveGenerator.canCaptureKing()) {
+                gameState.unmakeMove(move);
+                continue;
+            }
+
             nodesSearched++;
 
             float eval = 0;
@@ -76,7 +87,7 @@ public class NegaMax {
                 max = eval;
             }
 
-            GameState.getInstance().unmakeMove(move);
+            gameState.unmakeMove(move);
         }
         return max;
     }

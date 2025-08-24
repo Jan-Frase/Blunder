@@ -5,18 +5,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
-import de.janfrase.blunder.engine.search.algos.NegaMax;
+import de.janfrase.blunder.engine.search.algos.Searcher;
 import org.junit.jupiter.api.Test;
 
-class NegaMaxTest {
+class SearcherTest {
 
     @Test
     void testSimpleCase() {
         FenParser.loadFenString("qR6/8/8/8/8/8/8/k6K w - - 0 1");
 
-        NegaMax negaMax = new NegaMax();
+        Searcher searcher = new Searcher();
 
-        Move move = negaMax.startSearching(4);
+        Move move = searcher.startSearching(4);
         String moveString = move.toString();
 
         assertEquals("b8a8", moveString);
@@ -26,11 +26,23 @@ class NegaMaxTest {
     void testSimpleCase2() {
         FenParser.loadFenString("qR6/k7/8/8/8/8/8/7K w - - 0 1");
 
-        NegaMax negaMax = new NegaMax();
+        Searcher searcher = new Searcher();
 
-        Move move = negaMax.startSearching(4);
+        Move move = searcher.startSearching(4);
         String moveString = move.toString();
 
         assertEquals("b8a8", moveString);
+    }
+
+    @Test
+    void testMate() {
+        FenParser.loadFenString("6k1/8/8/8/3K4/8/2r1r3/1r6 b - - 0 1");
+
+        Searcher searcher = new Searcher();
+
+        Move move = searcher.startSearching(4);
+        String moveString = move.toString();
+
+        assertEquals("b1d1", moveString);
     }
 }

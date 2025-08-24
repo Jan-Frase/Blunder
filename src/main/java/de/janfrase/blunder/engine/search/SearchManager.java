@@ -2,7 +2,7 @@
 package de.janfrase.blunder.engine.search;
 
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
-import de.janfrase.blunder.engine.search.algos.NegaMax;
+import de.janfrase.blunder.engine.search.algos.Searcher;
 import de.janfrase.blunder.uci.UciMessageHandler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,14 +23,14 @@ public class SearchManager {
 
     public void go() {
 
-        NegaMax negaMax = new NegaMax();
+        Searcher searcher = new Searcher();
 
         Thread.ofVirtual()
                 .name("Search Thread")
                 .start(
                         () -> {
                             // TODO: Implement iterative deepening.
-                            Move move = negaMax.startSearching(4);
+                            Move move = searcher.startSearching(4);
                             UciMessageHandler.getInstance().searchIsFinished(move.toString());
                         });
     }
