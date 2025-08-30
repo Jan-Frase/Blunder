@@ -16,19 +16,42 @@ public class KingInCheckDecider {
      * Furthermore, the king does not have to actually stand on the specified location.
      * This is needed to check if the king moves through check during castling.
      *
-     * @param x The x-coordinate of the king's position.
-     * @param y The y-coordinate of the king's position.
-     * @param friendlySide The side of the player (WHITE or BLACK) whose king's safety is being checked.
      * @return true if the king is under attack by any opponent piece; false otherwise.
      */
-    public static boolean isKingUnderAttack(int x, int y, Constants.Side friendlySide) {
-        boolean isAttackByKnight = isAttackedByKnight(x, y, friendlySide);
+    public static boolean isKingUnderAttack(Constants.Side sideOfKingToCheck) {
+        Optional<int[]> kingPos =
+                GameState.getInstance()
+                        .getBoardRepresentation()
+                        .getPiece(Constants.PieceType.KING, sideOfKingToCheck);
+
+        if (kingPos.isEmpty()) {
+            return false;
+        }
+
+        int x = kingPos.get()[0];
+        int y = kingPos.get()[1];
+
+        return isKingUnderAttack(x, y, sideOfKingToCheck);
+    }
+
+    /**
+     * Determines whether a king at the specified position is under attack.
+     * This only works for the king because it does not look for pins!
+     * The king can be killed by pinned pieces.
+     * <p>
+     * Furthermore, the king does not have to actually stand on the specified location.
+     * This is needed to check if the king moves through check during castling.
+     *
+     * @return true if the king is under attack by any opponent piece; false otherwise.
+     */
+    public static boolean isKingUnderAttack(int x, int y, Constants.Side sideOfKingToCheck) {
+        boolean isAttackByKnight = isAttackedByKnight(x, y, sideOfKingToCheck);
 
         boolean isAttackedOnDiagonal =
-                isAttackedOnLine(x, y, Constants.DIAGONAL_DIRECTIONS, true, friendlySide);
+                isAttackedOnLine(x, y, Constants.DIAGONAL_DIRECTIONS, true, sideOfKingToCheck);
 
         boolean isAttackOnStraight =
-                isAttackedOnLine(x, y, Constants.STRAIGHT_DIRECTIONS, false, friendlySide);
+                isAttackedOnLine(x, y, Constants.STRAIGHT_DIRECTIONS, false, sideOfKingToCheck);
 
         return isAttackByKnight | isAttackedOnDiagonal | isAttackOnStraight;
     }
@@ -38,10 +61,10 @@ public class KingInCheckDecider {
      *
      * @param x The x-coordinate of the position to check.
      * @param y The y-coordinate of the position to check.
-     * @param friendlySide The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
+     * @param sideOfKingToCheck The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
      * @return true if the position is being attacked by an opponent's knight; false otherwise.
      */
-    private static boolean isAttackedByKnight(int x, int y, Constants.Side friendlySide) {
+    private static boolean isAttackedByKnight(int x, int y, Constants.Side sideOfKingToCheck) {
         BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
 
         // loop over all knight offsets
@@ -60,7 +83,7 @@ public class KingInCheckDecider {
             }
 
             // knight is friendly -> skip
-            if (friendlySide == board.getSideAt(xTarget, yTarget)) {
+            if (sideOfKingToCheck == board.getSideAt(xTarget, yTarget)) {
                 continue;
             }
 
@@ -78,11 +101,11 @@ public class KingInCheckDecider {
      * @param y           The y-coordinate (row index) of the position to check.
      * @param dirs        An array of directional vectors to search for attacking pieces.
      * @param diagonal    A boolean specifying if the search is diagonal (true) or straight (false).
-     * @param friendlySide The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
+     * @param sideOfKingToCheck The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
      * @return true if the position is being attacked along the specified directions by valid opposing pieces; false otherwise.
      */
     private static boolean isAttackedOnLine(
-            int x, int y, int[][] dirs, boolean diagonal, Constants.Side friendlySide) {
+            int x, int y, int[][] dirs, boolean diagonal, Constants.Side sideOfKingToCheck) {
         BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
 
         for (int[] dir : dirs) {
@@ -95,7 +118,7 @@ public class KingInCheckDecider {
             int[] obstacle = optional.get();
 
             // found obstacle is friendly -> skip
-            if (board.getSideAt(obstacle[0], obstacle[1]) == friendlySide) {
+            if (board.getSideAt(obstacle[0], obstacle[1]) == sideOfKingToCheck) {
                 continue;
             }
 
@@ -117,8 +140,8 @@ public class KingInCheckDecider {
                     continue;
                 }
 
-                if (friendlySide == Constants.Side.WHITE && yDiff == -1
-                        || friendlySide == Constants.Side.BLACK && yDiff == 1) {
+                if (sideOfKingToCheck == Constants.Side.WHITE && yDiff == -1
+                        || sideOfKingToCheck == Constants.Side.BLACK && yDiff == 1) {
                     return true;
                 }
             }

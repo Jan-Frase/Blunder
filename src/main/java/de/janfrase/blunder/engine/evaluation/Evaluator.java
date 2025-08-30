@@ -116,13 +116,12 @@ public class Evaluator {
                     put(Constants.PieceType.BISHOP, BISHOP_VALUE_TABLE);
                     put(Constants.PieceType.ROOK, ROOK_VALUE_TABLE);
                     put(Constants.PieceType.QUEEN, QUEEN_VALUE_TABLE);
-                    put(Constants.PieceType.KING, KING_EARLY_VALUE_TABLE);
                 }
             };
 
     public static float calculateEvaluation(GameState gameState) {
-        float friendlyMaterial = 0;
-        float enemyMaterial = 0;
+        float whiteMaterial = 0;
+        float blackMaterial = 0;
 
         BoardRepresentation board = gameState.getBoardRepresentation();
 
@@ -133,24 +132,61 @@ public class Evaluator {
 
                 if (side == Constants.Side.EMPTY) continue;
 
-                float pieceValue = getMaterialValue(piece);
+                float pieceValue = evaluateSinglePiece(x, y, piece, side, board);
 
-                if (side == Constants.Side.WHITE)
-                    pieceValue += mapPieceToValueTable.get(piece)[y][x];
-                else pieceValue += mapPieceToValueTable.get(piece)[FLIP[y][x] / 8][FLIP[y][x] % 8];
-
-                if (side == gameState.getFriendlySide()) {
-                    friendlyMaterial += pieceValue;
+                if (side == Constants.Side.WHITE) {
+                    whiteMaterial += pieceValue;
                 } else {
-                    enemyMaterial += pieceValue;
+                    blackMaterial += pieceValue;
                 }
             }
         }
 
-        return friendlyMaterial - enemyMaterial;
+        return whiteMaterial - blackMaterial;
     }
 
-    public static boolean isLateGame(GameState gameState) {
+    private static float evaluateSinglePiece(
+            int x,
+            int y,
+            Constants.PieceType piece,
+            Constants.Side side,
+            BoardRepresentation board) {
+        float pieceValue = getMaterialValue(piece);
+
+        int xIndex = getXIndex(x, y, side == Constants.Side.WHITE);
+        int yIndex = getYIndex(x, y, side == Constants.Side.WHITE);
+
+        int[][] pieceValueTable = getPieceValueTable(piece);
+        pieceValue += pieceValueTable[yIndex][xIndex];
+
+        return pieceValue;
+    }
+
+    private static int getXIndex(int x, int y, boolean isWhite) {
+        if (isWhite) return x;
+
+        return FLIP[y][x] / 8;
+    }
+
+    private static int getYIndex(int x, int y, boolean isWhite) {
+        if (isWhite) return y;
+
+        return FLIP[y][x] % 8;
+    }
+
+    private static int[][] getPieceValueTable(Constants.PieceType pieceType) {
+        if (pieceType != Constants.PieceType.KING) {
+            return mapPieceToValueTable.get(pieceType);
+        }
+
+        if (isLateGame(GameState.getInstance())) {
+            return KING_LATE_VALUE_TABLE;
+        }
+
+        return KING_EARLY_VALUE_TABLE;
+    }
+
+    private static boolean isLateGame(GameState gameState) {
         BoardRepresentation board = gameState.getBoardRepresentation();
 
         boolean whiteHasQueen =
@@ -167,7 +203,9 @@ public class Evaluator {
 
         if (whiteHasQueen && whiteHasRook) return false;
 
-        if (blackHasQueen && blackHasQueen) return false;
+        if (blackHasQueen && blackHasRook) return false;
+
+        if (whiteHasQueen && blackHasQueen) return false;
 
         // TODO: This isn't correct. We should also check that each side with a queen only has one
         // minor piece.

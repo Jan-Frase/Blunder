@@ -1,12 +1,14 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder;
 
+import de.janfrase.blunder.engine.backend.movegen.KingInCheckDecider;
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.backend.state.game.StatePrinter;
 import de.janfrase.blunder.uci.UciMoveParser;
+import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -115,10 +117,11 @@ public class PerftRunner {
         }
 
         ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
+        Constants.Side activeSide = gameState.getFriendlySide();
 
         for (Move move : moves) {
             gameState.makeMove(move);
-            if (MoveGenerator.canCaptureKing()) {
+            if (KingInCheckDecider.isKingUnderAttack(activeSide)) {
                 gameState.unmakeMove(move);
                 continue;
             }

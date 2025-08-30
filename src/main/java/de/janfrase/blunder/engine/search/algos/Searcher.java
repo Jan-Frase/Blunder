@@ -1,15 +1,17 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.search.algos;
 
+import de.janfrase.blunder.engine.backend.movegen.KingInCheckDecider;
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.evaluation.Evaluator;
 import de.janfrase.blunder.uci.UciMessageHandler;
+import de.janfrase.blunder.utility.Constants;
 import java.util.List;
 
 /**
- * <a href="https://www.chessprogramming.org/Negamax">Negamax</a>
+ * <a href="https://www.chessprogramming.org/Alpha-Beta">Alpha Beta</a>
  */
 public class Searcher {
 
@@ -22,63 +24,96 @@ public class Searcher {
     private final GameState gameState = GameState.getInstance();
 
     public Move startSearching(int depth) {
-        recursiveSearch(depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, true, true);
+        Constants.Side sideToMove = gameState.getFriendlySide();
+        boolean isMaximizingPlayer = (sideToMove == Constants.Side.WHITE);
+
+        alphaBetaSearch(
+                depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, isMaximizingPlayer, true);
         return bestMove;
     }
 
-    private float recursiveSearch(
-            int depth, float alpha, float beta, boolean isMaximizingPlayer, boolean isRoot) {
-        if (depth == 0) {
+    private float alphaBetaSearch(
+            int remainingDepth,
+            float alpha,
+            float beta,
+            boolean isMaximizingPlayer,
+            boolean isRoot) {
+        if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
+            // if either of these is true, we will consider the position a draw
+            return 0f;
+        }
+
+        // we have reached the end! return the eval
+        if (remainingDepth == 0) {
             return Evaluator.calculateEvaluation(GameState.getInstance());
         }
 
-        if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
-            // if either of these are true we will consider the position a draw
-            // for now we will just never draw
-            return -WE_GOT_CHECKMATED_EVAL;
-        }
-
-        List<Move> moves = MoveGenerator.generatePseudoLegalMoves();
-
-        float mostExtremeEval;
-
-        if (isMaximizingPlayer) mostExtremeEval = -WE_GOT_CHECKMATED_EVAL * depth;
-        else mostExtremeEval = WE_GOT_CHECKMATED_EVAL * depth;
+        // If we are the maximizing player, the score needs to be negative
+        float mostExtremeEval =
+                isMaximizingPlayer ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY;
 
         // if we can't find any move to play, we just got checkmated or the game is stalemated
+        boolean noLegalMoves = true;
+        Constants.Side activeSide = GameState.getInstance().getFriendlySide();
+
+        List<Move> moves = MoveGenerator.generatePseudoLegalMoves();
         for (Move move : moves) {
             gameState.makeMove(move);
 
             // If this move results in our king being captured, it's not a legal move and should be
             // skipped.
-            if (MoveGenerator.canCaptureKing()) {
+            if (KingInCheckDecider.isKingUnderAttack(activeSide)) {
                 gameState.unmakeMove(move);
                 continue;
             }
 
+            // making this move does not result in our king being captured, thus we found at least
+            // one legal move
+            noLegalMoves = false;
             nodesSearched++;
 
-            float eval = recursiveSearch(depth - 1, alpha, beta, !isMaximizingPlayer, false);
+            // search deeper
+            float eval =
+                    alphaBetaSearch(remainingDepth - 1, alpha, beta, !isMaximizingPlayer, false);
 
             if (isMaximizingPlayer) {
-                alpha = Math.max(alpha, eval);
-
                 if (isRoot && eval > mostExtremeEval) {
                     bestMove = move;
                 }
-
+                alpha = Math.max(alpha, eval);
                 mostExtremeEval = Math.max(mostExtremeEval, eval);
             } else {
+                if (isRoot && eval < mostExtremeEval) {
+                    bestMove = move;
+                }
                 beta = Math.min(beta, eval);
-
-                if (eval < mostExtremeEval) mostExtremeEval = eval;
+                mostExtremeEval = Math.min(mostExtremeEval, eval);
             }
 
             gameState.unmakeMove(move);
+
+            // output some info to the ui
             if (isRoot) UciMessageHandler.getInstance().sendInfo(nodesSearched);
 
+            // pruning!
             if (beta <= alpha) return mostExtremeEval;
         }
+
+        // if we can't make any move
+        if (noLegalMoves) {
+            // and we are in check
+            if (KingInCheckDecider.isKingUnderAttack(activeSide)) {
+                // its checkmate
+                return isMaximizingPlayer
+                        ? -WE_GOT_CHECKMATED_EVAL - remainingDepth
+                        : WE_GOT_CHECKMATED_EVAL + remainingDepth;
+                // else if we aren't in check
+            } else {
+                // its draw
+                return 0f;
+            }
+        }
+
         return mostExtremeEval;
     }
 }

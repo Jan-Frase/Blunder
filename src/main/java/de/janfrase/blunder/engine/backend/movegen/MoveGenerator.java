@@ -7,7 +7,6 @@ import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.backend.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
-import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -101,29 +100,15 @@ public class MoveGenerator {
         ArrayList<Move> pseudoLegalMoves = MoveGenerator.generatePseudoLegalMoves();
         ArrayList<Move> legalMoves = new ArrayList<>();
 
+        Constants.Side activeSide = GameState.getInstance().getFriendlySide();
+
         for (Move move : pseudoLegalMoves) {
             GameState.getInstance().makeMove(move);
-            if (!canCaptureKing()) {
+            if (!KingInCheckDecider.isKingUnderAttack(activeSide)) {
                 legalMoves.add(move);
             }
             GameState.getInstance().unmakeMove(move);
         }
         return legalMoves;
-    }
-
-    public static boolean canCaptureKing() {
-        Optional<int[]> kingPos =
-                GameState.getInstance()
-                        .getBoardRepresentation()
-                        .getPiece(Constants.PieceType.KING, GameState.getInstance().getEnemySide());
-
-        if (kingPos.isEmpty()) {
-            return false;
-        }
-
-        // TODO: Refactor this so that the KingInCheckDecier finds the king position instead of
-        // doing it here.
-        return KingInCheckDecider.isKingUnderAttack(
-                kingPos.get()[0], kingPos.get()[1], GameState.getInstance().getEnemySide());
     }
 }
