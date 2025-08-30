@@ -76,6 +76,8 @@ public class Searcher {
             float eval =
                     alphaBetaSearch(remainingDepth - 1, alpha, beta, !isMaximizingPlayer, false);
 
+            // update alpha beta, mostExtremeEval and bestMove depending on isMaximizingPlayer and
+            // isRoot
             if (isMaximizingPlayer) {
                 if (isRoot && eval > mostExtremeEval) {
                     bestMove = move;

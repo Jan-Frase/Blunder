@@ -163,7 +163,7 @@ public class UciMessageHandler {
     }
 
     /*
-     * The methods below will be called from the search thread and thus need to explicitly be moved to the uci thread.
+     * The methods below will be called from the search thread and thus need to explicitly be moved to a uci thread.
      */
 
     public void searchIsFinished(String move) {
