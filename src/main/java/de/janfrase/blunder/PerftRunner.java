@@ -2,8 +2,8 @@
 package de.janfrase.blunder;
 
 import de.janfrase.blunder.engine.backend.movegen.KingInCheckDecider;
+import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
-import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.backend.state.game.StatePrinter;

@@ -3,9 +3,8 @@ package de.janfrase.blunder.engine.search;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import de.janfrase.blunder.engine.backend.movegen.move.Move;
+import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
-import de.janfrase.blunder.engine.search.algos.Searcher;
 import org.junit.jupiter.api.Test;
 
 class SearcherTest {

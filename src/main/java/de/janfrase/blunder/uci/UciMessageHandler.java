@@ -1,10 +1,11 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.uci;
 
+import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
-import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
+import de.janfrase.blunder.engine.search.SearchLimitations;
 import de.janfrase.blunder.engine.search.SearchManager;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -141,20 +142,48 @@ public class UciMessageHandler {
 
     private void go(String[] arguments) {
 
-        int depth = 0;
+        int depth = -1;
+        int nodes = -1;
+        int mate = -1;
+        boolean ponder = false;
+        int moveTime = 2000;
+        boolean infinite = false;
 
-        for (int i = 1; i < arguments.length; i++) {
+        for (int i = 0; i < arguments.length; i++) {
             String string = arguments[i];
 
+            // TODO: Implement all of this someday eh.
             switch (string) {
+                case "searchmoves" -> {}
+                case "ponder" -> {}
+                case "wtime" -> {}
+                case "btime" -> {}
+                case "winc" -> {}
+                case "binc" -> {}
+                case "movestogo" -> {}
                 case "depth" -> {
                     depth = Integer.parseInt(arguments[i + 1]);
                     i++;
                 }
+                case "nodes" -> {
+                    nodes = Integer.parseInt(arguments[i + 1]);
+                    i++;
+                }
+                case "mate" -> {}
+                case "movetime" -> {
+                    moveTime = Integer.parseInt(arguments[i + 1]);
+                    i++;
+                }
+                case "infinite" -> {}
             }
         }
 
-        SearchManager.getInstance().go();
+        SearchLimitations searchLimitations =
+                new SearchLimitations(null, ponder, depth, nodes, mate, moveTime, infinite);
+
+        LOGGER.info("Starting search with {}", searchLimitations.toString());
+
+        SearchManager.getInstance().go(searchLimitations);
     }
 
     private void stop() {
@@ -172,9 +201,16 @@ public class UciMessageHandler {
                 .start(() -> sendReply(OutgoingMessage.BEST_MOVE + " " + move));
     }
 
-    public void sendInfo(int nodesSearched) {
+    public void sendInfo(String infoName, int nodesSearched) {
         Thread.ofVirtual()
                 .name("UCI Send Thread")
-                .start(() -> sendReply(OutgoingMessage.INFO + " nodes " + nodesSearched));
+                .start(
+                        () ->
+                                sendReply(
+                                        OutgoingMessage.INFO
+                                                + " "
+                                                + infoName
+                                                + " "
+                                                + nodesSearched));
     }
 }

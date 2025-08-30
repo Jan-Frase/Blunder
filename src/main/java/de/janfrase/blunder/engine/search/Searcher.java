@@ -1,14 +1,15 @@
 /* Made by Jan Frase :) */
-package de.janfrase.blunder.engine.search.algos;
+package de.janfrase.blunder.engine.search;
 
 import de.janfrase.blunder.engine.backend.movegen.KingInCheckDecider;
+import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
-import de.janfrase.blunder.engine.backend.movegen.move.Move;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.evaluation.Evaluator;
 import de.janfrase.blunder.uci.UciMessageHandler;
 import de.janfrase.blunder.utility.Constants;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * <a href="https://www.chessprogramming.org/Alpha-Beta">Alpha Beta</a>
@@ -16,12 +17,14 @@ import java.util.List;
 public class Searcher {
 
     private static final float WE_GOT_CHECKMATED_EVAL = 100000f;
+    private final GameState gameState = GameState.getInstance();
 
+    // infos for the ui
     private int nodesSearched = 0;
 
+    // important search state
     private Move bestMove = null;
-
-    private final GameState gameState = GameState.getInstance();
+    AtomicBoolean stopSearchingImmediately = new AtomicBoolean(false);
 
     public Move startSearching(int depth) {
         Constants.Side sideToMove = gameState.getFriendlySide();
@@ -58,6 +61,9 @@ public class Searcher {
 
         List<Move> moves = MoveGenerator.generatePseudoLegalMoves();
         for (Move move : moves) {
+            if (stopSearchingImmediately.get()) {
+                return mostExtremeEval;
+            }
             gameState.makeMove(move);
 
             // If this move results in our king being captured, it's not a legal move and should be
@@ -95,7 +101,7 @@ public class Searcher {
             gameState.unmakeMove(move);
 
             // output some info to the ui
-            if (isRoot) UciMessageHandler.getInstance().sendInfo(nodesSearched);
+            if (isRoot) UciMessageHandler.getInstance().sendInfo("nodes", nodesSearched);
 
             // pruning!
             if (beta <= alpha) return mostExtremeEval;

@@ -3,7 +3,7 @@ package de.janfrase.blunder.engine.backend.state.game;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import de.janfrase.blunder.engine.backend.movegen.move.Move;
+import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.utility.Constants;
 import org.junit.jupiter.api.AfterEach;

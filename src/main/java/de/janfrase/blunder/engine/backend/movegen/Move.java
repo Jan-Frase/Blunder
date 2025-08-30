@@ -1,5 +1,5 @@
 /* Made by Jan Frase :) */
-package de.janfrase.blunder.engine.backend.movegen.move;
+package de.janfrase.blunder.engine.backend.movegen;
 
 import de.janfrase.blunder.utility.Constants;
 
