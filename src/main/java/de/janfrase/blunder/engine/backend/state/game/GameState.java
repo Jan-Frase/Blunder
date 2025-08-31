@@ -8,8 +8,6 @@ import de.janfrase.blunder.engine.backend.state.game.irreversibles.IrreversibleD
 import de.janfrase.blunder.utility.Constants;
 import java.util.OptionalInt;
 import java.util.Stack;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * The {@code GameState} class is responsible for managing the current state of a chess game.
@@ -17,9 +15,6 @@ import org.apache.logging.log4j.Logger;
  * This class follows the Singleton design pattern, ensuring there is only one active instance during a game session.
  */
 public class GameState {
-
-    private static final Logger logger = LogManager.getLogger(GameState.class);
-
     public static final int UP = -1;
     public static final int DOWN = 1;
     public static final int LEFT = -1;
@@ -141,7 +136,6 @@ public class GameState {
      *             the starting position, target position, and the type of move.
      */
     public void makeMove(Move move) {
-        logger.trace("Making move {}.", move);
         // set the square we are moving to, to have the piece we moved
         // TODO: Rename this to friendlyPieceType or movedPieceType
         Constants.PieceType fromPieceType =
@@ -188,8 +182,6 @@ public class GameState {
 
         // update the repeat table
         this.repeatTable.addHash(this.zobristHasher.getZobristHash());
-
-        logger.debug("Finished making move: {}", StatePrinter.stateToString());
     }
 
     private void halfMoveRelatedMakeMove(
@@ -340,7 +332,6 @@ public class GameState {
      *             captured piece type and special move type.
      */
     public void unmakeMove(Move move) {
-        logger.trace("Unmaking move {}.", move);
         // set the square we moved from, to have the piece we moved
         Constants.PieceType fromPieceType =
                 this.boardRepresentation.getPieceAt(move.toX(), move.toY());
@@ -384,8 +375,6 @@ public class GameState {
 
         // update the repeat table
         this.repeatTable.removeLastHash();
-
-        logger.debug("Finished unmaking move: {}", StatePrinter.stateToString());
     }
 
     private void enPassantRelatedUnmakeMove(Move move, Constants.Side fromSide) {

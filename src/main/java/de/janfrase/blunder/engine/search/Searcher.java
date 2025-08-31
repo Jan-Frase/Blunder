@@ -8,6 +8,7 @@ import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.evaluation.Evaluator;
 import de.janfrase.blunder.uci.UciMessageHandler;
 import de.janfrase.blunder.utility.Constants;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -30,8 +31,16 @@ public class Searcher {
         Constants.Side sideToMove = gameState.getFriendlySide();
         boolean isMaximizingPlayer = (sideToMove == Constants.Side.WHITE);
 
-        alphaBetaSearch(
-                depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, isMaximizingPlayer, true);
+        float eval =
+                alphaBetaSearch(
+                        depth,
+                        Float.NEGATIVE_INFINITY,
+                        Float.POSITIVE_INFINITY,
+                        isMaximizingPlayer,
+                        true);
+
+        UciMessageHandler.getInstance().sendInfo("score cp", Float.toString(eval));
+
         return bestMove;
     }
 
@@ -60,6 +69,13 @@ public class Searcher {
         Constants.Side activeSide = GameState.getInstance().getFriendlySide();
 
         List<Move> moves = MoveGenerator.generatePseudoLegalMoves();
+        // TODO: Implement proper move ordering. Not sure if this improves things at all tbh.
+        Comparator<Move> comparator =
+                (m1, m2) ->
+                        Boolean.compare(
+                                m1.capturedPieceType() != Constants.PieceType.EMPTY,
+                                m2.capturedPieceType() != Constants.PieceType.EMPTY);
+        moves.sort(comparator);
         for (Move move : moves) {
             if (stopSearchingImmediately.get()) {
                 return mostExtremeEval;
@@ -101,7 +117,8 @@ public class Searcher {
             gameState.unmakeMove(move);
 
             // output some info to the ui
-            if (isRoot) UciMessageHandler.getInstance().sendInfo("nodes", nodesSearched);
+            if (isRoot)
+                UciMessageHandler.getInstance().sendInfo("nodes", Integer.toString(nodesSearched));
 
             // pruning!
             if (beta <= alpha) return mostExtremeEval;

@@ -7,6 +7,7 @@ import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.search.SearchLimitations;
 import de.janfrase.blunder.engine.search.SearchManager;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
@@ -59,11 +60,15 @@ public class UciMessageHandler {
     }
 
     public void startParsing() {
-        parse();
+        parse(System.in);
     }
 
-    private void parse() {
-        Scanner scanner = new Scanner(System.in);
+    public void startParsing(InputStream inputStream) {
+        parse(inputStream);
+    }
+
+    private void parse(InputStream inputStream) {
+        Scanner scanner = new Scanner(inputStream);
 
         boolean quit = false;
 
@@ -201,16 +206,9 @@ public class UciMessageHandler {
                 .start(() -> sendReply(OutgoingMessage.BEST_MOVE + " " + move));
     }
 
-    public void sendInfo(String infoName, int nodesSearched) {
+    public void sendInfo(String infoName, String value) {
         Thread.ofVirtual()
                 .name("UCI Send Thread")
-                .start(
-                        () ->
-                                sendReply(
-                                        OutgoingMessage.INFO
-                                                + " "
-                                                + infoName
-                                                + " "
-                                                + nodesSearched));
+                .start(() -> sendReply(OutgoingMessage.INFO + " " + infoName + " " + value));
     }
 }

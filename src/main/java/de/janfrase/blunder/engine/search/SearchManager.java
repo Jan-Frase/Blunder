@@ -34,7 +34,8 @@ public class SearchManager {
 
                                 if (!searcher.stopSearchingImmediately.get()) {
                                     move = potentiallyAbortedMove;
-                                    UciMessageHandler.getInstance().sendInfo("depth", depth);
+                                    UciMessageHandler.getInstance()
+                                            .sendInfo("depth", Integer.toString(depth - 1));
                                 }
                             } while (!searcher.stopSearchingImmediately.get());
                             UciMessageHandler.getInstance().searchIsFinished(move.toString());
