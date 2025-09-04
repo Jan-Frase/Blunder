@@ -6,6 +6,7 @@ import de.janfrase.blunder.engine.backend.state.game.irreversibles.CastlingRight
 import de.janfrase.blunder.engine.backend.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -29,7 +30,7 @@ class ZobristHasher {
      * The purpose of this is to have a random value to xor with for each side, piece and square.
      */
     private static final EnumMap<Constants.Side, EnumMap<Constants.PieceType, long[][]>>
-            pieceArrays;
+            pieceArraysMap;
 
     /**
      * One random long for each possible right (example for one right: white-long castle (yes or no)).
@@ -64,9 +65,9 @@ class ZobristHasher {
         enPassantFileArray = random.longs(8).toArray();
 
         // init pieceArrays with empty values
-        pieceArrays = new EnumMap<>(Constants.Side.class);
-        pieceArrays.put(Constants.Side.WHITE, new EnumMap<>(Constants.PieceType.class));
-        pieceArrays.put(Constants.Side.BLACK, new EnumMap<>(Constants.PieceType.class));
+        pieceArraysMap = new EnumMap<>(Constants.Side.class);
+        pieceArraysMap.put(Constants.Side.WHITE, new EnumMap<>(Constants.PieceType.class));
+        pieceArraysMap.put(Constants.Side.BLACK, new EnumMap<>(Constants.PieceType.class));
 
         // iterate over white black
         for (Constants.Side side : Constants.Side.values()) {
@@ -77,7 +78,7 @@ class ZobristHasher {
                 if (pieceType == Constants.PieceType.EMPTY) continue;
 
                 // get the relevant map
-                EnumMap<Constants.PieceType, long[][]> map = pieceArrays.get(side);
+                EnumMap<Constants.PieceType, long[][]> map = pieceArraysMap.get(side);
 
                 // create the array with a random number for each position
                 long[][] boardArray =
@@ -120,7 +121,7 @@ class ZobristHasher {
 
                 if (piece == Constants.PieceType.EMPTY) continue;
 
-                zobristHash ^= pieceArrays.get(side).get(piece)[x][y];
+                zobristHash ^= pieceArraysMap.get(side).get(piece)[x][y];
             }
         }
 
@@ -181,7 +182,8 @@ class ZobristHasher {
             IrreversibleData oldIrreversibleData,
             IrreversibleData newIrreversibleData) {
         // remove the piece
-        zobristHash ^= pieceArrays.get(movedSide).get(movedPieceType)[move.fromX()][move.fromY()];
+        Map<Constants.PieceType, long[][]> pieceToHashValueMap = pieceArraysMap.get(movedSide);
+        zobristHash ^= pieceToHashValueMap.get(movedPieceType)[move.fromX()][move.fromY()];
 
         // remove the captured piece if it exists
         Constants.Side enemySide =
@@ -190,16 +192,16 @@ class ZobristHasher {
         if (capturedPieceType != Constants.PieceType.EMPTY) {
             if (move.moveType() != Move.MoveType.EP_CAPTURE)
                 zobristHash ^=
-                        pieceArrays.get(enemySide).get(capturedPieceType)[move.toX()][move.toY()];
+                        pieceArraysMap.get(enemySide).get(capturedPieceType)[move.toX()][move.toY()];
             else {
                 int yOffset = GameState.getYOffsetOnEnPassantCapture(movedSide);
                 zobristHash ^=
-                        pieceArrays.get(enemySide)
+                        pieceArraysMap.get(enemySide)
                                 .get(capturedPieceType)[move.toX()][move.toY() + yOffset];
             }
         }
         // add the new piece
-        zobristHash ^= pieceArrays.get(movedSide).get(movedPieceType)[move.toX()][move.toY()];
+        zobristHash ^= pieceArraysMap.get(movedSide).get(movedPieceType)[move.toX()][move.toY()];
 
         // flip the side
         zobristHash ^= sideToMoveIsBlack;

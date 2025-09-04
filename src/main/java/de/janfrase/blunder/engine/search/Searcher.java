@@ -8,6 +8,8 @@ import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.evaluation.Evaluator;
 import de.janfrase.blunder.uci.UciMessageHandler;
 import de.janfrase.blunder.utility.Constants;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;

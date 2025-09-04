@@ -3,6 +3,8 @@ package de.janfrase.blunder.engine.search;
 
 import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.uci.UciMessageHandler;
+
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,24 +26,42 @@ public class SearchManager {
     public Move go(SearchLimitations searchLimitations) {
         Searcher searcher = new Searcher();
         AtomicReference<Move> move = new AtomicReference<>();
+
+        startSearchThread(searcher, move);
+
+        // TODO: Im not even starting a thread here lol!
+        // This blocks the UCI thread and needs to be changed.
+        startTimeoutThread(searcher, searchLimitations);
+
+        // TODO: This cant return the move since we cant wait for it to be computed.
+        // The only reason why we return the move is to allow for easy unit testing without having
+        // to parse the sysout stream.
+        return move.get();
+    }
+
+    private void startSearchThread(Searcher searcher, AtomicReference<Move> move) {
         Thread.ofVirtual()
                 .name("Search Thread")
-                .start(
-                        () -> {
-                            int depth = 1;
-                            do {
-                                Move potentiallyAbortedMove = searcher.startSearching(depth);
-                                depth++;
+                .start(() -> iterativeDeepening(searcher, move));
+    }
 
-                                if (!searcher.stopSearchingImmediately.get()) {
-                                    move.set(potentiallyAbortedMove);
-                                    UciMessageHandler.getInstance()
-                                            .sendInfo("depth", Integer.toString(depth - 1));
-                                }
-                            } while (!searcher.stopSearchingImmediately.get());
-                            UciMessageHandler.getInstance().searchIsFinished(move.get().toString());
-                        });
+    private void iterativeDeepening (Searcher searcher, AtomicReference<Move> move) {
+        int depth = 1;
+        ArrayList<Move> bestLineSoFar = new ArrayList<>();
+        do {
+            Move potentiallyAbortedMove = searcher.startSearching(depth);
+            depth++;
 
+            if (!searcher.stopSearchingImmediately.get()) {
+                move.set(potentiallyAbortedMove);
+                UciMessageHandler.getInstance()
+                        .sendInfo("depth", Integer.toString(depth - 1));
+            }
+        } while (!searcher.stopSearchingImmediately.get());
+        UciMessageHandler.getInstance().searchIsFinished(move.get().toString());
+    }
+
+    private void startTimeoutThread(Searcher searcher, SearchLimitations searchLimitations) {
         if (searchLimitations.moveTime() != -1) {
             try {
                 Thread.sleep(searchLimitations.moveTime());
@@ -50,9 +70,5 @@ public class SearchManager {
                 LOGGER.error("Thread sleep was interrupted", e);
             }
         }
-
-        // The only reason why we return the move is to allow for easy unit testing without having
-        // to parse the sysout stream.
-        return move.get();
     }
 }

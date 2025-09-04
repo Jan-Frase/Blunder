@@ -94,7 +94,7 @@ public class PerftRunner {
 
             long current_nodes = perft(depths - 1);
             total_nodes += current_nodes;
-            System.out.println(move.toString() + " " + current_nodes);
+            System.out.println(move + " " + current_nodes);
 
             gameState.unmakeMove(move);
         }
@@ -149,7 +149,7 @@ public class PerftRunner {
 
         long nodesPerSecond = (nodes / (timeElapsedSeconds));
 
-        logger.info("Nodes per second: {}", nodesPerSecond);
+        System.out.println("Nodes per second: " + nodesPerSecond);
 
         return nodes;
     }
