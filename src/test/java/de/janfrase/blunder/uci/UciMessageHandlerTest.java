@@ -3,14 +3,13 @@ package de.janfrase.blunder.uci;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
 import org.junit.jupiter.api.Test;
 
 class UciMessageHandlerTest {
 
     @Test
-    void startParsing() {
+    void testStartParsing() {
         UciMessageHandler uciMessageHandler = UciMessageHandler.getInstance();
 
         String testCommand =
