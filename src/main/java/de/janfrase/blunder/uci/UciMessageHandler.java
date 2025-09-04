@@ -213,4 +213,12 @@ public class UciMessageHandler {
                 .name("UCI Send Thread")
                 .start(() -> sendReply(OutgoingMessage.INFO + " " + infoName + " " + value));
     }
+
+    // TODO: Refactor this. It would probably be best to have a Search Info Manager that sends
+    // updates when relevant.
+    public void sendInfo(String string) {
+        Thread.ofVirtual()
+                .name("UCI Send Thread")
+                .start(() -> sendReply(OutgoingMessage.INFO + " " + string));
+    }
 }

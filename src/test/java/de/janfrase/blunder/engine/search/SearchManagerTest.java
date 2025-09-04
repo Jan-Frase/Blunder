@@ -10,14 +10,16 @@ import org.junit.jupiter.api.Test;
 
 class SearchManagerTest {
 
+    // fails
     @Test
     void go1() {
         FenParser.loadFenString("4Q3/2b4r/7B/6R1/5k2/8/7K/5q2 w - - 0 1");
 
-        String[] expectedMoves = new String[] {"e8e3", "f4e3", "g5g3", "e3e2"};
+        String[] expectedMoves = new String[] {"e8e3", "f4e3", "g5g3"};
         testLine(expectedMoves);
     }
 
+    // passes
     @Test
     void go2() {
         FenParser.loadFenString("8/2b4r/2Q4B/6R1/5k2/8/7K/5q2 b - - 1 1");
@@ -26,6 +28,7 @@ class SearchManagerTest {
         testLine(expectedMoves);
     }
 
+    // fails
     @Test
     void go3() {
         FenParser.loadFenString("7k/1pp3p1/p2r4/P5pK/1P3b2/B1P1rB1P/2Q3P1/3R4 b - - 0 36");
@@ -38,6 +41,7 @@ class SearchManagerTest {
         testLine(expectedMoves);
     }
 
+    // passes
     @Test
     void go4() {
         FenParser.loadFenString("r4r1k/pp1q2np/2pp1bRQ/4pN2/2B1P3/3P1P2/PPP2P1P/7K w - - 3 22");

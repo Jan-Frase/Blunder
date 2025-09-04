@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
+import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 class SearcherTest {
@@ -15,7 +16,7 @@ class SearcherTest {
 
         Searcher searcher = new Searcher();
 
-        Move move = searcher.startSearching(4);
+        Move move = searcher.startSearching(4, new ArrayList<>()).principalVariation().getFirst();
         String moveString = move.toString();
 
         assertEquals("b8a8", moveString);
@@ -27,7 +28,7 @@ class SearcherTest {
 
         Searcher searcher = new Searcher();
 
-        Move move = searcher.startSearching(4);
+        Move move = searcher.startSearching(4, new ArrayList<>()).principalVariation().getFirst();
         String moveString = move.toString();
 
         assertEquals("b8a8", moveString);
@@ -39,7 +40,7 @@ class SearcherTest {
 
         Searcher searcher = new Searcher();
 
-        Move move = searcher.startSearching(4);
+        Move move = searcher.startSearching(4, new ArrayList<>()).principalVariation().getFirst();
         String moveString = move.toString();
 
         assertEquals("b1d1", moveString);

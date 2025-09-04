@@ -6,12 +6,9 @@ import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.movegen.MoveGenerator;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.evaluation.Evaluator;
-import de.janfrase.blunder.uci.UciMessageHandler;
 import de.janfrase.blunder.utility.Constants;
-
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -29,39 +26,43 @@ public class Searcher {
     private Move bestMove = null;
     AtomicBoolean stopSearchingImmediately = new AtomicBoolean(false);
 
-    public Move startSearching(int depth) {
+    // TODO: Eventually replace this with a transposition table.
+    private ArrayList<Move> previousPrincipalVariation = new ArrayList<>();
+
+    public SearchResult startSearching(int depth, ArrayList<Move> previousPrincipalVariation) {
         Constants.Side sideToMove = gameState.getFriendlySide();
         boolean isMaximizingPlayer = (sideToMove == Constants.Side.WHITE);
+        this.previousPrincipalVariation = previousPrincipalVariation;
 
-        float eval =
+        SearchResult searchResult =
                 alphaBetaSearch(
                         depth,
                         Float.NEGATIVE_INFINITY,
                         Float.POSITIVE_INFINITY,
                         isMaximizingPlayer,
                         true);
-
-        UciMessageHandler.getInstance().sendInfo("score cp", Float.toString(eval));
-
-        return bestMove;
+        return searchResult;
     }
 
-    private float alphaBetaSearch(
+    private SearchResult alphaBetaSearch(
             int remainingDepth,
             float alpha,
             float beta,
             boolean isMaximizingPlayer,
             boolean isRoot) {
+        ArrayList<Move> principalVariation = new ArrayList<>();
         if (gameState.isHalfMoveClockAt50() || gameState.isRepeatedPosition()) {
             // if either of these is true, we will consider the position a draw
-            return 0f;
+            return new SearchResult(0f, principalVariation);
         }
 
         // we have reached the end! return the eval
         if (remainingDepth == 0) {
-            return Evaluator.calculateEvaluation(GameState.getInstance());
+            return new SearchResult(
+                    Evaluator.calculateEvaluation(GameState.getInstance()), principalVariation);
         }
 
+        // TODO: Check if i can get rid of this.
         // If we are the maximizing player, the score needs to be negative
         float mostExtremeEval =
                 isMaximizingPlayer ? Float.NEGATIVE_INFINITY : Float.POSITIVE_INFINITY;
@@ -70,17 +71,10 @@ public class Searcher {
         boolean noLegalMoves = true;
         Constants.Side activeSide = GameState.getInstance().getFriendlySide();
 
-        List<Move> moves = MoveGenerator.generatePseudoLegalMoves();
-        // TODO: Implement proper move ordering. Not sure if this improves things at all tbh.
-        Comparator<Move> comparator =
-                (m1, m2) ->
-                        Boolean.compare(
-                                m1.capturedPieceType() != Constants.PieceType.EMPTY,
-                                m2.capturedPieceType() != Constants.PieceType.EMPTY);
-        moves.sort(comparator);
+        ArrayList<Move> moves = getOrderedMoves();
         for (Move move : moves) {
             if (stopSearchingImmediately.get()) {
-                return mostExtremeEval;
+                return new SearchResult(mostExtremeEval, principalVariation);
             }
             gameState.makeMove(move);
 
@@ -97,20 +91,34 @@ public class Searcher {
             nodesSearched++;
 
             // search deeper
-            float eval =
+            SearchResult childSearchResult =
                     alphaBetaSearch(remainingDepth - 1, alpha, beta, !isMaximizingPlayer, false);
+
+            float eval = childSearchResult.eval();
 
             // update alpha beta, mostExtremeEval and bestMove depending on isMaximizingPlayer and
             // isRoot
             if (isMaximizingPlayer) {
-                if (isRoot && eval > mostExtremeEval) {
-                    bestMove = move;
+                if (eval > mostExtremeEval) {
+                    if (isRoot) {
+                        bestMove = move;
+                    }
+
+                    principalVariation = new ArrayList<>();
+                    principalVariation.add(move);
+                    principalVariation.addAll(childSearchResult.principalVariation());
                 }
                 alpha = Math.max(alpha, eval);
                 mostExtremeEval = Math.max(mostExtremeEval, eval);
             } else {
-                if (isRoot && eval < mostExtremeEval) {
-                    bestMove = move;
+                if (eval < mostExtremeEval) {
+                    if (isRoot) {
+                        bestMove = move;
+                    }
+                    // TODO: Remove code duplication from above
+                    principalVariation = new ArrayList<>();
+                    principalVariation.add(move);
+                    principalVariation.addAll(childSearchResult.principalVariation());
                 }
                 beta = Math.min(beta, eval);
                 mostExtremeEval = Math.min(mostExtremeEval, eval);
@@ -118,12 +126,8 @@ public class Searcher {
 
             gameState.unmakeMove(move);
 
-            // output some info to the ui
-            if (isRoot)
-                UciMessageHandler.getInstance().sendInfo("nodes", Integer.toString(nodesSearched));
-
             // pruning!
-            if (beta <= alpha) return mostExtremeEval;
+            if (beta <= alpha) return new SearchResult(mostExtremeEval, principalVariation);
         }
 
         // if we can't make any move
@@ -131,16 +135,42 @@ public class Searcher {
             // and we are in check
             if (KingInCheckDecider.isKingUnderAttack(activeSide)) {
                 // its checkmate
-                return isMaximizingPlayer
-                        ? -WE_GOT_CHECKMATED_EVAL - remainingDepth
-                        : WE_GOT_CHECKMATED_EVAL + remainingDepth;
+                float mateEval =
+                        isMaximizingPlayer
+                                ? -WE_GOT_CHECKMATED_EVAL - remainingDepth
+                                : WE_GOT_CHECKMATED_EVAL + remainingDepth;
+                return new SearchResult(mateEval, principalVariation);
                 // else if we aren't in check
             } else {
                 // its draw
-                return 0f;
+                return new SearchResult(0f, principalVariation);
             }
         }
 
-        return mostExtremeEval;
+        return new SearchResult(mostExtremeEval, principalVariation);
+    }
+
+    private ArrayList<Move> getOrderedMoves() {
+        ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
+        // TODO: Implement proper move ordering. Not sure if this improves things at all tbh.
+        Comparator<Move> comparator =
+                (m1, m2) ->
+                        Boolean.compare(
+                                m1.capturedPieceType() == Constants.PieceType.EMPTY,
+                                m2.capturedPieceType() == Constants.PieceType.EMPTY);
+        moves.sort(comparator);
+
+        if (!previousPrincipalVariation.isEmpty()) {
+            Move pvMove = previousPrincipalVariation.removeFirst();
+
+            moves.remove(pvMove);
+            moves.addFirst(pvMove);
+        }
+
+        return moves;
+    }
+
+    public int getNodesSearched() {
+        return nodesSearched;
     }
 }

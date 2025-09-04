@@ -2,8 +2,8 @@
 package de.janfrase.blunder.engine.search;
 
 import de.janfrase.blunder.engine.backend.movegen.Move;
+import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.uci.UciMessageHandler;
-
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import org.apache.logging.log4j.LogManager;
@@ -40,22 +40,38 @@ public class SearchManager {
     }
 
     private void startSearchThread(Searcher searcher, AtomicReference<Move> move) {
-        Thread.ofVirtual()
-                .name("Search Thread")
-                .start(() -> iterativeDeepening(searcher, move));
+        Thread.ofVirtual().name("Search Thread").start(() -> iterativeDeepening(searcher, move));
     }
 
-    private void iterativeDeepening (Searcher searcher, AtomicReference<Move> move) {
+    private void iterativeDeepening(Searcher searcher, AtomicReference<Move> move) {
         int depth = 1;
-        ArrayList<Move> bestLineSoFar = new ArrayList<>();
+        ArrayList<Move> previousPrincipalVariation = new ArrayList<>();
         do {
-            Move potentiallyAbortedMove = searcher.startSearching(depth);
+            SearchResult searchResult = searcher.startSearching(depth, previousPrincipalVariation);
             depth++;
 
+            // if we properly finished this search
             if (!searcher.stopSearchingImmediately.get()) {
-                move.set(potentiallyAbortedMove);
-                UciMessageHandler.getInstance()
-                        .sendInfo("depth", Integer.toString(depth - 1));
+
+                move.set(searchResult.principalVariation().getFirst());
+                // UCI info string
+                StringBuilder sb = new StringBuilder();
+                sb.append("depth ").append(depth - 1).append(" ");
+                sb.append("score cp ")
+                        .append(
+                                (int)
+                                        (GameState.getInstance().isWhitesTurn()
+                                                ? searchResult.eval()
+                                                : -searchResult.eval()))
+                        .append(" ");
+                sb.append("nodes ").append(searcher.getNodesSearched()).append(" ");
+                sb.append("pv ");
+                for (Move m : searchResult.principalVariation()) {
+                    sb.append(m.toString()).append(" ");
+                }
+
+                previousPrincipalVariation = searchResult.principalVariation();
+                UciMessageHandler.getInstance().sendInfo(sb.toString().trim());
             }
         } while (!searcher.stopSearchingImmediately.get());
         UciMessageHandler.getInstance().searchIsFinished(move.get().toString());
