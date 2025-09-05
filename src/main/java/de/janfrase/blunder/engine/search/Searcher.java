@@ -151,13 +151,16 @@ public class Searcher {
     }
 
     private ArrayList<Move> getOrderedMoves() {
+        // PERFORMANCE: 41% of the time is spend on generating an sorting
+        // 24% for generating, 17% for sorting
         ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
-        // TODO: Implement proper move ordering. Not sure if this improves things at all tbh.
+        // MVV-VLA (Most Valuable Victim - Least Valuable Aggressor)
+        // https://www.chessprogramming.org/MVV-LVA
         Comparator<Move> comparator =
                 (m1, m2) ->
-                        Boolean.compare(
-                                m1.capturedPieceType() == Constants.PieceType.EMPTY,
-                                m2.capturedPieceType() == Constants.PieceType.EMPTY);
+                        Float.compare(
+                                calculatePieceValueDifference(m1),
+                                calculatePieceValueDifference(m2));
         moves.sort(comparator);
 
         if (!previousPrincipalVariation.isEmpty()) {
@@ -168,6 +171,14 @@ public class Searcher {
         }
 
         return moves;
+    }
+
+    private float calculatePieceValueDifference(Move move) {
+        return Evaluator.getMaterialValue(
+                        GameState.getInstance()
+                                .getBoardRepresentation()
+                                .getPieceAt(move.fromX(), move.fromY()))
+                - Evaluator.getMaterialValue(move.capturedPieceType());
     }
 
     public int getNodesSearched() {

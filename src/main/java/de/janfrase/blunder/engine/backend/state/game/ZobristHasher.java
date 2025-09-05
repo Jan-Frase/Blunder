@@ -192,7 +192,8 @@ class ZobristHasher {
         if (capturedPieceType != Constants.PieceType.EMPTY) {
             if (move.moveType() != Move.MoveType.EP_CAPTURE)
                 zobristHash ^=
-                        pieceArraysMap.get(enemySide).get(capturedPieceType)[move.toX()][move.toY()];
+                        pieceArraysMap.get(enemySide)
+                                .get(capturedPieceType)[move.toX()][move.toY()];
             else {
                 int yOffset = GameState.getYOffsetOnEnPassantCapture(movedSide);
                 zobristHash ^=

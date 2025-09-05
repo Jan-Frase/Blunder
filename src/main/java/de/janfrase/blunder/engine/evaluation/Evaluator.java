@@ -205,14 +205,13 @@ public class Evaluator {
 
         if (blackHasQueen && blackHasRook) return false;
 
-        if (whiteHasQueen && blackHasQueen) return false;
+        return !whiteHasQueen || !blackHasQueen;
 
         // TODO: This isn't correct. We should also check that each side with a queen only has one
         // minor piece.
-        return true;
     }
 
-    private static float getMaterialValue(Constants.PieceType pieceType) {
+    public static float getMaterialValue(Constants.PieceType pieceType) {
         return switch (pieceType) {
             case KING -> 20000;
             case QUEEN -> 900;

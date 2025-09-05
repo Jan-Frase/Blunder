@@ -57,7 +57,7 @@ class SearchManagerTest {
 
         for (int i = 0; i < expectedMoves.length; i++) {
             Move move = SearchManager.getInstance().go(searchLimitations);
-            assertEquals(expectedMoves[i], move.toString(), "Move " + i + 1 + " was wrong.");
+            assertEquals(expectedMoves[i], move.toString(), "Move " + (i + 1) + " was wrong.");
             GameState.getInstance().makeMove(move);
         }
     }
