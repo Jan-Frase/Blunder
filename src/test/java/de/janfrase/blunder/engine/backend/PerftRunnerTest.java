@@ -67,4 +67,23 @@ public class PerftRunnerTest {
         long nodes = PerftRunner.perft(2);
         assertEquals(2079, nodes);
     }
+
+    @Test
+    void Position7Test() {
+        FenParser.loadFenString(
+                "7k/1pp3p1/p5Kr/P3r1p1/1P3b2/B1P2B1P/2Q3P1/3R4 w - - 7 40");
+
+        long nodes = PerftRunner.perft(1);
+        assertEquals(1, nodes);
+    }
+
+    @Test
+    void Position8Test() {
+        FenParser.loadFenString(
+                "7k/1pp3p1/p2r4/P5pK/1P3b2/B1P1rB1P/2Q3P1/3R4 b - - 0 36");
+
+        // TODO: Fix this.
+        long nodes = PerftRunner.perft(4);
+        assertEquals(1327529, nodes);
+    }
 }

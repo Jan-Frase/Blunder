@@ -58,8 +58,8 @@ public class Searcher {
 
         // we have reached the end! return the eval
         if (remainingDepth == 0) {
-            return new SearchResult(
-                    Evaluator.calculateEvaluation(GameState.getInstance()), principalVariation);
+            float eval = quiesceSearch(alpha, beta, isMaximizingPlayer);
+            return new SearchResult(eval, principalVariation);
         }
 
         // TODO: Check if i can get rid of this.
@@ -171,6 +171,61 @@ public class Searcher {
         }
 
         return moves;
+    }
+
+    private float quiesceSearch(float alpha, float beta, boolean isMaximizingPlayer) {
+        float eval = Evaluator.calculateEvaluation(GameState.getInstance());
+
+        // Stand pat - if the current position is already good enough
+        if (isMaximizingPlayer) {
+            if (eval >= beta) return beta;
+            alpha = Math.max(alpha, eval);
+        } else {
+            if (eval <= alpha) return alpha;
+            beta = Math.min(beta, eval);
+        }
+
+        float bestEval = eval;
+        ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
+        moves.removeIf(move -> move.capturedPieceType() == Constants.PieceType.EMPTY);
+
+        // Sort captures by MVV-LVA
+        moves.sort((m1, m2) -> Float.compare(
+                calculatePieceValueDifference(m1),
+                calculatePieceValueDifference(m2)));
+
+        Constants.Side activeSide = GameState.getInstance().getFriendlySide();
+
+        for (Move move : moves) {
+            if (stopSearchingImmediately.get()) {
+                return bestEval;
+            }
+
+            gameState.makeMove(move);
+
+            if (KingInCheckDecider.isKingUnderAttack(activeSide)) {
+                gameState.unmakeMove(move);
+                continue;
+            }
+
+            float score = quiesceSearch(alpha, beta, !isMaximizingPlayer);
+
+            gameState.unmakeMove(move);
+
+            if (isMaximizingPlayer) {
+                bestEval = Math.max(bestEval, score);
+                alpha = Math.max(alpha, score);
+            } else {
+                bestEval = Math.min(bestEval, score);
+                beta = Math.min(beta, score);
+            }
+
+            if (beta <= alpha) {
+                break;
+            }
+        }
+
+        return bestEval;
     }
 
     private float calculatePieceValueDifference(Move move) {

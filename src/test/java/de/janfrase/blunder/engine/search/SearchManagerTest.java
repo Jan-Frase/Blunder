@@ -38,6 +38,7 @@ class SearchManagerTest {
                 new String[] {
                     "d6h6", "h5g4", "h6h4", "g4f5", "e3e5", "f5g6", "h4h6", "g6f7", "h6f6"
                 };
+        // TODO: This error cause an invalid move gets generated.
         testLine(expectedMoves);
     }
 

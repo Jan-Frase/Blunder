@@ -183,6 +183,8 @@ class ZobristHasher {
             IrreversibleData newIrreversibleData) {
         // remove the piece
         Map<Constants.PieceType, long[][]> pieceToHashValueMap = pieceArraysMap.get(movedSide);
+        if(pieceToHashValueMap == null)
+            System.out.println("wat");
         zobristHash ^= pieceToHashValueMap.get(movedPieceType)[move.fromX()][move.fromY()];
 
         // remove the captured piece if it exists
