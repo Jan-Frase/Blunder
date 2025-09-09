@@ -119,7 +119,15 @@ public class Evaluator {
                 }
             };
 
+    private static final int CACHE_DEFAULT_SIZE = (int) (4 * Math.pow(10, 6)); //4 million
+    private static final EvaluationCache EVALUATION_CACHE = new EvaluationCache(CACHE_DEFAULT_SIZE);
+
     public static float calculateEvaluation(GameState gameState) {
+        long zobristHash = gameState.getZobristHash();
+        return EVALUATION_CACHE.checkHash(zobristHash, () -> doCalculateEvaluation(gameState));
+    }
+
+    private static float doCalculateEvaluation(GameState gameState) {
         float whiteMaterial = 0;
         float blackMaterial = 0;
 

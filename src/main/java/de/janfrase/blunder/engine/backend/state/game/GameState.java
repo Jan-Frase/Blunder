@@ -87,6 +87,10 @@ public class GameState {
         return instance;
     }
 
+    public long getZobristHash() {
+        return this.zobristHasher.getZobristHash();
+    }
+
     /**
      * Resets the game state to its initial condition by reinitializing
      * the {@code GameState} singleton instance.
