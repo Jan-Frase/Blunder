@@ -54,7 +54,7 @@ class SearchManagerTest {
 
     private void testLine(String[] expectedMoves) {
         SearchLimitations searchLimitations =
-                new SearchLimitations(null, false, -1, -1, -1, 9000, false);
+                new SearchLimitations(null, false, -1, -1, -1, 3000, false);
 
         for (int i = 0; i < expectedMoves.length; i++) {
             Move move = SearchManager.getInstance().go(searchLimitations);
