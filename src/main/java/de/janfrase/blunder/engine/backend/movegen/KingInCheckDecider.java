@@ -131,8 +131,8 @@ public class KingInCheckDecider {
                 return true;
             }
 
-            // special logic for pawns or king - checks if the distance is not too large
-            if ((diagonal && attackingType == Constants.PieceType.PAWN) || attackingType == Constants.PieceType.KING) {
+            // special logic for pawns - checks if the distance is not too large
+            if (diagonal && attackingType == Constants.PieceType.PAWN) {
                 int xDiff = obstacle[0] - x;
                 int yDiff = obstacle[1] - y;
 
@@ -142,6 +142,16 @@ public class KingInCheckDecider {
 
                 if (sideOfKingToCheck == Constants.Side.WHITE && yDiff == -1
                         || sideOfKingToCheck == Constants.Side.BLACK && yDiff == 1) {
+                    return true;
+                }
+            }
+
+            //
+            if (attackingType == Constants.PieceType.KING) {
+                int xDiff = obstacle[0] - x;
+                int yDiff = obstacle[1] - y;
+
+                if (Math.abs(xDiff) <= 1 && Math.abs(yDiff) <= 1) {
                     return true;
                 }
             }

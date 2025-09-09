@@ -34,14 +34,8 @@ public class Searcher {
         boolean isMaximizingPlayer = (sideToMove == Constants.Side.WHITE);
         this.previousPrincipalVariation = previousPrincipalVariation;
 
-        SearchResult searchResult =
-                alphaBetaSearch(
-                        depth,
-                        Float.NEGATIVE_INFINITY,
-                        Float.POSITIVE_INFINITY,
-                        isMaximizingPlayer,
-                        true);
-        return searchResult;
+        return alphaBetaSearch(
+                depth, Float.NEGATIVE_INFINITY, Float.POSITIVE_INFINITY, isMaximizingPlayer, true);
     }
 
     private SearchResult alphaBetaSearch(
@@ -190,9 +184,11 @@ public class Searcher {
         moves.removeIf(move -> move.capturedPieceType() == Constants.PieceType.EMPTY);
 
         // Sort captures by MVV-LVA
-        moves.sort((m1, m2) -> Float.compare(
-                calculatePieceValueDifference(m1),
-                calculatePieceValueDifference(m2)));
+        moves.sort(
+                (m1, m2) ->
+                        Float.compare(
+                                calculatePieceValueDifference(m1),
+                                calculatePieceValueDifference(m2)));
 
         Constants.Side activeSide = GameState.getInstance().getFriendlySide();
 
