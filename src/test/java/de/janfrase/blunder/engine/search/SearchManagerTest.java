@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import de.janfrase.blunder.engine.backend.movegen.Move;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
+import de.janfrase.blunder.uci.UciMessageHandler;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
 class SearchManagerTest {
@@ -38,7 +40,6 @@ class SearchManagerTest {
                 new String[] {
                     "d6h6", "h5g4", "h6h4", "g4f5", "e3e5", "f5g6", "h4h6", "g6f7", "h6f6"
                 };
-        // TODO: This error cause an invalid move gets generated.
         testLine(expectedMoves);
     }
 
@@ -52,14 +53,43 @@ class SearchManagerTest {
         testLine(expectedMoves);
     }
 
+    private static volatile Move bestMove = null;
+
     private void testLine(String[] expectedMoves) {
+        // set what limits the search
         SearchLimitations searchLimitations =
                 new SearchLimitations(null, false, -1, -1, -1, 3000, false);
 
+        // create a consumer that prints the best move and sets it into bestMove
+        UciMessageHandler.getInstance()
+                .setMoveConsumer(
+                        new Consumer<Move>() {
+                            @Override
+                            public void accept(Move move) {
+                                System.out.println("bestmove " + move.toString());
+                                bestMove = move;
+                            }
+                        });
+
+        // loop through the expected moves
         for (int i = 0; i < expectedMoves.length; i++) {
-            Move move = SearchManager.getInstance().go(searchLimitations);
+            // delete the old best move
+            bestMove = null;
+            SearchManager.getInstance().go(searchLimitations);
+
+            // busy wait until bestMove has been set
+            Move move = waitForBestMove();
+
             assertEquals(expectedMoves[i], move.toString(), "Move " + (i + 1) + " was wrong.");
             GameState.getInstance().makeMove(move);
         }
+    }
+
+    private Move waitForBestMove() {
+        while (bestMove == null) {
+            Thread.onSpinWait();
+        }
+
+        return bestMove;
     }
 }

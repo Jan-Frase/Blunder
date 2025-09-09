@@ -23,24 +23,15 @@ public class SearchManager {
         return INSTANCE;
     }
 
-    public Move go(SearchLimitations searchLimitations) {
+    public void go(SearchLimitations searchLimitations) {
         Searcher searcher = new Searcher();
         AtomicReference<Move> move = new AtomicReference<>();
 
-        startSearchThread(searcher, move);
-
-        // TODO: Im not even starting a thread here lol!
-        // This blocks the UCI thread and needs to be changed.
-        startTimeoutThread(searcher, searchLimitations);
-
-        // TODO: This cant return the move since we cant wait for it to be computed.
-        // The only reason why we return the move is to allow for easy unit testing without having
-        // to parse the sysout stream.
-        return move.get();
-    }
-
-    private void startSearchThread(Searcher searcher, AtomicReference<Move> move) {
         Thread.ofVirtual().name("Search Thread").start(() -> iterativeDeepening(searcher, move));
+
+        Thread.ofVirtual()
+                .name("TimeOut Thread")
+                .start(() -> startTimeoutThread(searcher, searchLimitations));
     }
 
     private void iterativeDeepening(Searcher searcher, AtomicReference<Move> move) {
@@ -75,7 +66,7 @@ public class SearchManager {
                 UciMessageHandler.getInstance().sendInfo(sb.toString().trim());
             }
         } while (!searcher.stopSearchingImmediately.get());
-        UciMessageHandler.getInstance().searchIsFinished(move.get().toString());
+        UciMessageHandler.getInstance().searchIsFinished(move.get());
     }
 
     private void startTimeoutThread(Searcher searcher, SearchLimitations searchLimitations) {

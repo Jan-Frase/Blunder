@@ -118,6 +118,11 @@ public class GameState {
         this.repeatTable.addHash(this.zobristHasher.getZobristHash());
     }
 
+    @Override
+    public String toString() {
+        return StatePrinter.stateToString();
+    }
+
     // ------------------------------
     // Make Section
     // ------------------------------

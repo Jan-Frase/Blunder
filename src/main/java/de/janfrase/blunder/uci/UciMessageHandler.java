@@ -10,6 +10,7 @@ import de.janfrase.blunder.engine.search.SearchManager;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.function.Consumer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -50,9 +51,14 @@ public class UciMessageHandler {
         private static final String OPTION = "option";
     }
 
+    public void setMoveConsumer(Consumer<Move> moveConsumer) {
+        this.moveConsumer = moveConsumer;
+    }
+
+    Consumer<Move> moveConsumer = this::defaultSearchIsFinishedConsumer;
+
     private UciMessageHandler() {
-        Thread uciParserThread = Thread.currentThread();
-        uciParserThread.setName("UCI Parser Thread");
+        Thread.currentThread().setName("UCI Message Handler Thread");
     }
 
     public static UciMessageHandler getInstance() {
@@ -102,7 +108,7 @@ public class UciMessageHandler {
 
     private void sendReply(String message) {
         System.out.println(message);
-        LOGGER.info(OUT + message);
+        LOGGER.info(OUT + "{}", message);
     }
 
     private void uci() {
@@ -191,6 +197,7 @@ public class UciMessageHandler {
         SearchManager.getInstance().go(searchLimitations);
     }
 
+    // TODO: Fix this. Can lead to a bug when stop sends a move and the finished search sends a move.
     private void stop() {
         Move move = MoveGenerator.generateLegalMoves().getFirst();
         sendReply(OutgoingMessage.BEST_MOVE + " " + move.toString());
@@ -199,8 +206,14 @@ public class UciMessageHandler {
     /*
      * The methods below will be called from the search thread and thus need to explicitly be moved to a uci thread.
      */
+    public void searchIsFinished(Move move) {
+        // By default this move consumer simply souts the move.toString for uci compliance
+        moveConsumer.accept(move);
+    }
 
-    public void searchIsFinished(String move) {
+    // This is what happens usually - it only gets changed for SearchManagerTest.java
+    // if you figure out a better way, please implement it
+    private void defaultSearchIsFinishedConsumer(Move move) {
         Thread.ofVirtual()
                 .name("UCI Send Thread")
                 .start(() -> sendReply(OutgoingMessage.BEST_MOVE + " " + move));
