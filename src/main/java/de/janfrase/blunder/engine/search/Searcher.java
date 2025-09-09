@@ -181,6 +181,7 @@ public class Searcher {
 
         float bestEval = eval;
         ArrayList<Move> moves = MoveGenerator.generatePseudoLegalMoves();
+        // TODO: Currently this also removes checks. It should not.
         moves.removeIf(move -> move.capturedPieceType() == Constants.PieceType.EMPTY);
 
         // Sort captures by MVV-LVA

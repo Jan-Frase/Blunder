@@ -51,7 +51,8 @@ public class SearchManager {
             depth++;
 
             // if we properly finished this search
-            if (!searcher.stopSearchingImmediately.get()) {
+            if (!searcher.stopSearchingImmediately.get()
+                    && !searchResult.principalVariation().isEmpty()) {
 
                 move.set(searchResult.principalVariation().getFirst());
                 // UCI info string

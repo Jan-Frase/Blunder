@@ -184,7 +184,10 @@ class ZobristHasher {
         // remove the piece
         Map<Constants.PieceType, long[][]> pieceToHashValueMap = pieceArraysMap.get(movedSide);
         // TODO: FIX THIS!
-        if (pieceToHashValueMap == null) System.out.println("wat");
+        if (pieceToHashValueMap == null) {
+            System.out.println(move.toString());
+            System.out.println(StatePrinter.stateToString());
+        }
         zobristHash ^= pieceToHashValueMap.get(movedPieceType)[move.fromX()][move.fromY()];
 
         // remove the captured piece if it exists
