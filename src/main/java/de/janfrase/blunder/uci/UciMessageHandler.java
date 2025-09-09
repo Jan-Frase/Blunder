@@ -197,7 +197,8 @@ public class UciMessageHandler {
         SearchManager.getInstance().go(searchLimitations);
     }
 
-    // TODO: Fix this. Can lead to a bug when stop sends a move and the finished search sends a move.
+    // TODO: Fix this. Can lead to a bug when stop sends a move and the finished search sends a
+    // move.
     private void stop() {
         Move move = MoveGenerator.generateLegalMoves().getFirst();
         sendReply(OutgoingMessage.BEST_MOVE + " " + move.toString());

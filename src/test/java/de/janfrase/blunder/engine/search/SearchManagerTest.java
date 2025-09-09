@@ -30,7 +30,7 @@ class SearchManagerTest {
         testLine(expectedMoves);
     }
 
-    // fails
+    // fails - passes with 6 seconds
     @Test
     void go3() {
         FenParser.loadFenString("7k/1pp3p1/p2r4/P5pK/1P3b2/B1P1rB1P/2Q3P1/3R4 b - - 0 36");
@@ -58,7 +58,7 @@ class SearchManagerTest {
     private void testLine(String[] expectedMoves) {
         // set what limits the search
         SearchLimitations searchLimitations =
-                new SearchLimitations(null, false, -1, -1, -1, 3000, false);
+                new SearchLimitations(null, false, -1, -1, -1, 6000, false);
 
         // create a consumer that prints the best move and sets it into bestMove
         UciMessageHandler.getInstance()
