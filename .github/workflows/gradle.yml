@@ -26,6 +26,7 @@ jobs:
       with:
         java-version: '24'
         distribution: 'graalvm-community'
+        set-java-home: 'true'
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
@@ -64,6 +65,7 @@ jobs:
       with:
         java-version: '24'
         distribution: 'graalvm-community'
+        set-java-home: 'true'
 
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
