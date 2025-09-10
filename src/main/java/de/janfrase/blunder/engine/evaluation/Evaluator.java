@@ -119,7 +119,7 @@ public class Evaluator {
                 }
             };
 
-    private static final int CACHE_DEFAULT_SIZE = (int) (4 * Math.pow(10, 6)); //4 million
+    private static final int CACHE_DEFAULT_SIZE = (int) (4 * Math.pow(10, 6)); // 4 million
     private static final EvaluationCache EVALUATION_CACHE = new EvaluationCache(CACHE_DEFAULT_SIZE);
 
     public static float calculateEvaluation(GameState gameState) {

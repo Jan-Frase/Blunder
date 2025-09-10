@@ -1,11 +1,11 @@
+/* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.evaluation;
 
 import java.util.function.Supplier;
 
 public class EvaluationCache {
 
-    public record HashAndEval(long hash, float eval) {
-    }
+    public record HashAndEval(long hash, float eval) {}
 
     private final HashAndEval[] cache;
 
@@ -25,5 +25,4 @@ public class EvaluationCache {
         }
         return cache[index].eval;
     }
-
 }
