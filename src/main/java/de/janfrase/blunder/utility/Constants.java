@@ -17,23 +17,6 @@ public class Constants {
         {1, 2}, {-1, 2}, {1, -2}, {-1, -2}, {2, 1}, {-2, 1}, {2, -1}, {-2, -1}
     };
 
-    // TODO:
-    public enum PieceType {
-        KING,
-        QUEEN,
-        ROOK,
-        BISHOP,
-        KNIGHT,
-        PAWN,
-        EMPTY
-    }
-
-    public enum Side {
-        WHITE,
-        BLACK,
-        EMPTY
-    }
-
     /**
      * Not meant for instantiation. Constants only!
      */

@@ -1,7 +1,9 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.movegen;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.backend.Piece;
+import de.janfrase.blunder.engine.backend.state.board.BitBoard;
+import de.janfrase.blunder.engine.backend.state.board.BitBoards;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
 import java.util.Optional;
@@ -18,20 +20,17 @@ public class KingInCheckDecider {
      *
      * @return true if the king is under attack by any opponent piece; false otherwise.
      */
-    public static boolean isKingUnderAttack(Constants.Side sideOfKingToCheck) {
-        Optional<int[]> kingPos =
-                GameState.getInstance()
-                        .getBoardRepresentation()
-                        .getPiece(Constants.PieceType.KING, sideOfKingToCheck);
+    public static boolean isKingUnderAttack(byte kingSide) {
+        BitBoard kingBoard =
+                GameState.getInstance().getBitBoards().getBitBoard(new Piece(Piece.KING, kingSide));
 
-        if (kingPos.isEmpty()) {
-            return false;
+        if (kingBoard.isEmpty()) {
+            throw new IllegalStateException("King position is empty");
         }
 
-        int x = kingPos.get()[0];
-        int y = kingPos.get()[1];
+        int[] kingPos = kingBoard.getKingPosition();
 
-        return isKingUnderAttack(x, y, sideOfKingToCheck);
+        return isKingUnderAttack(kingPos, kingSide);
     }
 
     /**
@@ -44,14 +43,14 @@ public class KingInCheckDecider {
      *
      * @return true if the king is under attack by any opponent piece; false otherwise.
      */
-    public static boolean isKingUnderAttack(int x, int y, Constants.Side sideOfKingToCheck) {
-        boolean isAttackByKnight = isAttackedByKnight(x, y, sideOfKingToCheck);
+    public static boolean isKingUnderAttack(int[] kingPos, byte kingPiece) {
+        boolean isAttackByKnight = isAttackedByKnight(kingPos, kingPiece);
 
         boolean isAttackedOnDiagonal =
-                isAttackedOnLine(x, y, Constants.DIAGONAL_DIRECTIONS, true, sideOfKingToCheck);
+                isAttackedOnLine(kingPos, Constants.DIAGONAL_DIRECTIONS, true, kingPiece);
 
         boolean isAttackOnStraight =
-                isAttackedOnLine(x, y, Constants.STRAIGHT_DIRECTIONS, false, sideOfKingToCheck);
+                isAttackedOnLine(kingPos, Constants.STRAIGHT_DIRECTIONS, false, kingPiece);
 
         return isAttackByKnight | isAttackedOnDiagonal | isAttackOnStraight;
     }
@@ -59,35 +58,36 @@ public class KingInCheckDecider {
     /**
      * Determines whether a given position is attacked by an opponent's knight.
      *
-     * @param x The x-coordinate of the position to check.
-     * @param y The y-coordinate of the position to check.
-     * @param sideOfKingToCheck The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
+     * @param kingPos The coordinate of the position to check.
+     * @param kingSide The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
      * @return true if the position is being attacked by an opponent's knight; false otherwise.
      */
-    private static boolean isAttackedByKnight(int x, int y, Constants.Side sideOfKingToCheck) {
-        BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
+    private static boolean isAttackedByKnight(int[] kingPos, byte kingSide) {
+        BitBoards board = GameState.getInstance().getBitBoards();
 
         // loop over all knight offsets
         for (int[] dir : Constants.KNIGHT_DIRECTIONS) {
-            int xTarget = x + dir[0];
-            int yTarget = y + dir[1];
+            int xTarget = kingPos[0] + dir[0];
+            int yTarget = kingPos[1] + dir[1];
 
             // position is off the board -> skip
             if (Constants.isOffBoard(xTarget, yTarget)) {
                 continue;
             }
 
-            // if the piece we found isn't a knight -> skip
-            if (Constants.PieceType.KNIGHT != board.getPieceAt(xTarget, yTarget)) {
+            // What an enemy knight would look like.
+            Piece enemyKnight = new Piece(Piece.KNIGHT, Piece.getEnemySide(kingSide));
+
+            // Get the piece at the relevant location.
+            Piece pieceAtPosition = board.getPieceAt(xTarget, yTarget);
+
+            boolean areTheyEqual = enemyKnight.value == pieceAtPosition.value;
+
+            if (!areTheyEqual) {
                 continue;
             }
 
-            // knight is friendly -> skip
-            if (sideOfKingToCheck == board.getSideAt(xTarget, yTarget)) {
-                continue;
-            }
-
-            // has to be an enemy knight :(
+            // if they are equal -> we are getting attacked
             return true;
         }
 
@@ -97,19 +97,18 @@ public class KingInCheckDecider {
     /**
      * Determines if a specific position on the chessboard is under attack along a straight or diagonal direction.
      *
-     * @param x           The x-coordinate (column index) of the position to check.
-     * @param y           The y-coordinate (row index) of the position to check.
+     * @param kingPos           The coordinate of the position to check.
      * @param dirs        An array of directional vectors to search for attacking pieces.
      * @param diagonal    A boolean specifying if the search is diagonal (true) or straight (false).
-     * @param sideOfKingToCheck The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
+     * @param kingSide The side of the player (WHITE or BLACK) whose perspective is used to check for an attack.
      * @return true if the position is being attacked along the specified directions by valid opposing pieces; false otherwise.
      */
     private static boolean isAttackedOnLine(
-            int x, int y, int[][] dirs, boolean diagonal, Constants.Side sideOfKingToCheck) {
-        BoardRepresentation board = GameState.getInstance().getBoardRepresentation();
+            int[] kingPos, int[][] dirs, boolean diagonal, byte kingSide) {
+        BitBoards board = GameState.getInstance().getBitBoards();
 
         for (int[] dir : dirs) {
-            Optional<int[]> optional = board.firstObstacleInDir(x, y, dir);
+            Optional<int[]> optional = board.firstObstacleInDir(kingPos[0], kingPos[1], dir);
 
             // nobody there -> skip
             if (optional.isEmpty()) {
@@ -118,38 +117,41 @@ public class KingInCheckDecider {
             int[] obstacle = optional.get();
 
             // found obstacle is friendly -> skip
-            if (board.getSideAt(obstacle[0], obstacle[1]) == sideOfKingToCheck) {
+            if (board.getPieceAt(obstacle[0], obstacle[1]).getSide() == kingSide) {
                 continue;
             }
 
-            Constants.PieceType attackingType = board.getPieceAt(obstacle[0], obstacle[1]);
+            byte attackingPieceType = board.getPieceAt(obstacle[0], obstacle[1]).getType();
 
-            // found queen or when diagonal -> bishop or when straight -> rook
-            if (attackingType == Constants.PieceType.QUEEN
-                    || attackingType
-                            == (diagonal ? Constants.PieceType.BISHOP : Constants.PieceType.ROOK)) {
+            // found queen
+            if (attackingPieceType == Piece.QUEEN) {
+                return true;
+            }
+
+            // or when diagonal -> bishop or when straight -> rook
+            if (attackingPieceType == (diagonal ? Piece.BISHOP : Piece.ROOK)) {
                 return true;
             }
 
             // special logic for pawns - checks if the distance is not too large
-            if (diagonal && attackingType == Constants.PieceType.PAWN) {
-                int xDiff = obstacle[0] - x;
-                int yDiff = obstacle[1] - y;
+            if (diagonal && attackingPieceType == Piece.PAWN) {
+                int xDiff = obstacle[0] - kingPos[0];
+                int yDiff = obstacle[1] - kingPos[1];
 
                 if (Math.abs(xDiff) != 1) {
                     continue;
                 }
 
-                if (sideOfKingToCheck == Constants.Side.WHITE && yDiff == -1
-                        || sideOfKingToCheck == Constants.Side.BLACK && yDiff == 1) {
+                if (kingSide == Piece.WHITE && yDiff == -1
+                        || kingSide == Piece.BLACK && yDiff == 1) {
                     return true;
                 }
             }
 
-            //
-            if (attackingType == Constants.PieceType.KING) {
-                int xDiff = obstacle[0] - x;
-                int yDiff = obstacle[1] - y;
+            // special logic for kings - checks if the distance is not too large
+            if (attackingPieceType == Piece.KING) {
+                int xDiff = obstacle[0] - kingPos[0];
+                int yDiff = obstacle[1] - kingPos[1];
 
                 if (Math.abs(xDiff) <= 1 && Math.abs(yDiff) <= 1) {
                     return true;

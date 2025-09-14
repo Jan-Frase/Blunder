@@ -1,7 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.movegen;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.backend.state.board.BitBoards;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 import java.util.OptionalInt;
@@ -15,8 +15,8 @@ public class PawnMoveGenerator {
             ArrayList<Move> moves,
             int x,
             int y,
-            BoardRepresentation board,
-            Constants.Side activeSide,
+            BitBoards board,
+            byte activeSide,
             OptionalInt enPassantX) {
         int moveDirection = (activeSide == Constants.Side.WHITE ? -1 : 1);
         int yDestination = y + moveDirection;

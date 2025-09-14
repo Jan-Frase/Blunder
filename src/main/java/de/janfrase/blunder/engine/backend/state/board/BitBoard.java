@@ -32,4 +32,22 @@ public class BitBoard {
         // The top left - so a8 - is x=0 y=0.
         return 64 - (x + y * 8);
     }
+
+    public boolean isEmpty() {
+        return value == 0;
+    }
+
+    // This uses the fact that there will always be exactly one king on the board.
+    // Considering that we have two logarithms here, I'm not even sure if this is quicker then
+    // iterating over the fucking board.
+    public int[] getKingPosition() {
+        // log e divided by log 2
+        int log = (int) (Math.log(value) / Math.log(2));
+        log = 64 - log;
+
+        int x = log % 8;
+        int y = log / 8;
+
+        return new int[] {x, y};
+    }
 }

@@ -1,7 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.movegen;
 
-import de.janfrase.blunder.utility.Constants;
+import de.janfrase.blunder.engine.backend.Piece;
 
 /**
  * Represents a move in a chess game. A move consists of a starting position
@@ -18,12 +18,7 @@ import de.janfrase.blunder.utility.Constants;
  * @param capturedPieceType The type of the captured piece, EMPTY if nothing was captured.
  */
 public record Move(
-        int fromX,
-        int fromY,
-        int toX,
-        int toY,
-        MoveType moveType,
-        Constants.PieceType capturedPieceType) {
+        int fromX, int fromY, int toX, int toY, MoveType moveType, Piece capturedPieceType) {
     // PERFORMANCE: This could be squeezed into a single 16 bit type:
     // to and from: 2^6=64 -> 6bits each -> 12 bits
     // promotion piece: 2^2=4 -> 2bits for the 4 different pieces
@@ -39,7 +34,7 @@ public record Move(
      * @param toY   The ending y-coordinate of the move, specifying the row position (0-based).
      */
     public Move(int fromX, int fromY, int toX, int toY) {
-        this(fromX, fromY, toX, toY, MoveType.NORMAL_MOVE, Constants.PieceType.EMPTY);
+        this(fromX, fromY, toX, toY, MoveType.NORMAL_MOVE, Piece.createEmptyPiece());
     }
 
     /**
@@ -52,7 +47,7 @@ public record Move(
      * @param toY   The ending y-coordinate of the move, specifying the row position (0-based).
      */
     public Move(int fromX, int fromY, int toX, int toY, MoveType moveType) {
-        this(fromX, fromY, toX, toY, moveType, Constants.PieceType.EMPTY);
+        this(fromX, fromY, toX, toY, moveType, Piece.createEmptyPiece());
     }
 
     /**
@@ -64,7 +59,7 @@ public record Move(
      * @param toX   The ending x-coordinate of the move, specifying the column position (0-based).
      * @param toY   The ending y-coordinate of the move, specifying the row position (0-based).
      */
-    public Move(int fromX, int fromY, int toX, int toY, Constants.PieceType capturedPieceType) {
+    public Move(int fromX, int fromY, int toX, int toY, Piece capturedPieceType) {
         this(fromX, fromY, toX, toY, MoveType.NORMAL_MOVE, capturedPieceType);
     }
 
@@ -130,6 +125,7 @@ public record Move(
     public enum MoveType {
         NORMAL_MOVE, // A quiet move OR if capturedPieceType is set -> a capture move.
 
+        // FIXME TODO HELP
         EP_CAPTURE, // When an En Passant happens, do NOT store the captured piece but only the
         // special move type.
 

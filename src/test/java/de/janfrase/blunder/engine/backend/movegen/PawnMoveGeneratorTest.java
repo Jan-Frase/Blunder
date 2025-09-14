@@ -27,12 +27,7 @@ public class PawnMoveGeneratorTest {
     void testBasicPawnMoves() {
         FenParser.loadFenString("8/8/8/8/8/8/4P3/8 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                4,
-                6,
-                gameState.getBoardRepresentation(),
-                Constants.Side.WHITE,
-                OptionalInt.empty());
+                moves, 4, 6, gameState.getBitBoards(), Constants.Side.WHITE, OptionalInt.empty());
         assertEquals(2, moves.size());
         assertTrue(moves.stream().anyMatch(m -> m.toY() == 5 && m.toX() == 4));
         assertTrue(moves.stream().anyMatch(m -> m.toY() == 4 && m.toX() == 4));
@@ -42,12 +37,7 @@ public class PawnMoveGeneratorTest {
     void testPawnCaptures() {
         FenParser.loadFenString("8/8/8/3p1n2/4P3/8/8/8 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                4,
-                4,
-                gameState.getBoardRepresentation(),
-                Constants.Side.WHITE,
-                OptionalInt.empty());
+                moves, 4, 4, gameState.getBitBoards(), Constants.Side.WHITE, OptionalInt.empty());
         assertEquals(3, moves.size());
         assertTrue(moves.stream().anyMatch(m -> m.toX() == 3 && m.toY() == 3));
         assertTrue(moves.stream().anyMatch(m -> m.toX() == 5 && m.toY() == 3));
@@ -62,12 +52,7 @@ public class PawnMoveGeneratorTest {
     void testEnPassantCapture() {
         FenParser.loadFenString("1k6/8/8/4Pp2/8/8/8/1K6 w - f6 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                4,
-                3,
-                gameState.getBoardRepresentation(),
-                Constants.Side.WHITE,
-                OptionalInt.of(5));
+                moves, 4, 3, gameState.getBitBoards(), Constants.Side.WHITE, OptionalInt.of(5));
 
         assertEquals(2, moves.size());
         assertTrue(moves.stream().anyMatch(m -> m.moveType() == Move.MoveType.EP_CAPTURE));
@@ -77,12 +62,7 @@ public class PawnMoveGeneratorTest {
     void testWrongEnPassantCapture() {
         FenParser.loadFenString("1k6/8/8/5p2/8/4P3/8/1K6 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                4,
-                5,
-                gameState.getBoardRepresentation(),
-                Constants.Side.WHITE,
-                OptionalInt.of(5));
+                moves, 4, 5, gameState.getBitBoards(), Constants.Side.WHITE, OptionalInt.of(5));
 
         assertEquals(1, moves.size());
         assertFalse(moves.stream().anyMatch(m -> m.moveType() == Move.MoveType.EP_CAPTURE));
@@ -92,12 +72,7 @@ public class PawnMoveGeneratorTest {
     void testPawnPromotion() {
         FenParser.loadFenString("1k6/4P3/8/8/8/8/8/1K6 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                4,
-                1,
-                gameState.getBoardRepresentation(),
-                Constants.Side.WHITE,
-                OptionalInt.empty());
+                moves, 4, 1, gameState.getBitBoards(), Constants.Side.WHITE, OptionalInt.empty());
         assertEquals(4, moves.size());
         assertTrue(moves.stream().anyMatch(m -> m.moveType() == Move.MoveType.QUEEN_PROMOTION));
         assertTrue(moves.stream().anyMatch(m -> m.moveType() == Move.MoveType.ROOK_PROMOTION));
@@ -109,12 +84,7 @@ public class PawnMoveGeneratorTest {
     void testCapturePromotion() {
         FenParser.loadFenString("1k1n4/4P3/8/8/8/8/8/1K6 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                4,
-                1,
-                gameState.getBoardRepresentation(),
-                Constants.Side.WHITE,
-                OptionalInt.empty());
+                moves, 4, 1, gameState.getBitBoards(), Constants.Side.WHITE, OptionalInt.empty());
 
         assertEquals(8, moves.size());
         assertTrue(
@@ -137,12 +107,7 @@ public class PawnMoveGeneratorTest {
     void testPawnOnLeftEdge() {
         FenParser.loadFenString("8/8/8/8/P7/8/8/8 w - - 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                0,
-                4,
-                gameState.getBoardRepresentation(),
-                Constants.Side.WHITE,
-                OptionalInt.empty());
+                moves, 0, 4, gameState.getBitBoards(), Constants.Side.WHITE, OptionalInt.empty());
         assertEquals(1, moves.size());
         assertTrue(moves.stream().anyMatch(m -> m.toY() == 3 && m.toX() == 0));
     }
@@ -151,12 +116,7 @@ public class PawnMoveGeneratorTest {
     void testEnPassantDiscoveredCheck() {
         FenParser.loadFenString("8/2p5/3p4/KP5r/1R2Pp1k/8/6P1/8 b e3 - 0 1");
         PawnMoveGenerator.generatePawnMove(
-                moves,
-                5,
-                4,
-                gameState.getBoardRepresentation(),
-                Constants.Side.BLACK,
-                OptionalInt.of(4));
+                moves, 5, 4, gameState.getBitBoards(), Constants.Side.BLACK, OptionalInt.of(4));
     }
 
     /*
@@ -249,7 +209,7 @@ public class PawnMoveGeneratorTest {
                 moves,
                 5,
                 4,
-                gameState.getBoardRepresentation(),
+                gameState.getBitBoards(),
                 gameState.getFriendlySide(),
                 gameState.getIrreversibleData().enPassantX());
 
@@ -261,16 +221,14 @@ public class PawnMoveGeneratorTest {
 
         gameState.makeMove(enPassantCaptureMove);
 
-        assertEquals(
-                Constants.PieceType.EMPTY, gameState.getBoardRepresentation().getPieceAt(4, 4));
-        assertEquals(Constants.PieceType.PAWN, gameState.getBoardRepresentation().getPieceAt(4, 5));
+        assertEquals(Constants.PieceType.EMPTY, gameState.getBitBoards().getPieceAt(4, 4));
+        assertEquals(Constants.PieceType.PAWN, gameState.getBitBoards().getPieceAt(4, 5));
 
         gameState.unmakeMove(enPassantCaptureMove);
 
-        assertEquals(Constants.PieceType.PAWN, gameState.getBoardRepresentation().getPieceAt(5, 4));
-        assertEquals(Constants.PieceType.PAWN, gameState.getBoardRepresentation().getPieceAt(4, 4));
-        assertEquals(
-                Constants.PieceType.EMPTY, gameState.getBoardRepresentation().getPieceAt(4, 5));
+        assertEquals(Constants.PieceType.PAWN, gameState.getBitBoards().getPieceAt(5, 4));
+        assertEquals(Constants.PieceType.PAWN, gameState.getBitBoards().getPieceAt(4, 4));
+        assertEquals(Constants.PieceType.EMPTY, gameState.getBitBoards().getPieceAt(4, 5));
     }
 
     @Test
@@ -281,7 +239,7 @@ public class PawnMoveGeneratorTest {
                 moves,
                 1,
                 6,
-                gameState.getBoardRepresentation(),
+                gameState.getBitBoards(),
                 gameState.getFriendlySide(),
                 OptionalInt.empty());
 

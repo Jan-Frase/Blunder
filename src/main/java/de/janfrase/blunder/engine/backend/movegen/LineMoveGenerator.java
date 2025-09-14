@@ -1,7 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.movegen;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.backend.state.board.BitBoards;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 
@@ -14,8 +14,8 @@ public class LineMoveGenerator {
             ArrayList<Move> moves,
             int x,
             int y,
-            BoardRepresentation board,
-            Constants.Side activeSide,
+            BitBoards board,
+            byte activeSide,
             int[][] directions) {
         for (int[] direction : directions) {
             int currentX = x;
@@ -51,20 +51,12 @@ public class LineMoveGenerator {
     }
 
     protected static void generateDiagonalMoves(
-            ArrayList<Move> moves,
-            int x,
-            int y,
-            BoardRepresentation board,
-            Constants.Side activeSide) {
+            ArrayList<Move> moves, int x, int y, BitBoards board, byte activeSide) {
         generateLineMoves(moves, x, y, board, activeSide, Constants.DIAGONAL_DIRECTIONS);
     }
 
     protected static void generateStraightMoves(
-            ArrayList<Move> moves,
-            int x,
-            int y,
-            BoardRepresentation board,
-            Constants.Side activeSide) {
+            ArrayList<Move> moves, int x, int y, BitBoards board, byte activeSide) {
         generateLineMoves(moves, x, y, board, activeSide, Constants.STRAIGHT_DIRECTIONS);
     }
 }

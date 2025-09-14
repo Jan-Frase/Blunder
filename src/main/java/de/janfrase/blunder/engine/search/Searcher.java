@@ -228,7 +228,7 @@ public class Searcher {
     private float calculatePieceValueDifference(Move move) {
         return Evaluator.getMaterialValue(
                         GameState.getInstance()
-                                .getBoardRepresentation()
+                                .getBitBoards()
                                 .getPieceAt(move.fromX(), move.fromY()))
                 - Evaluator.getMaterialValue(move.capturedPieceType());
     }

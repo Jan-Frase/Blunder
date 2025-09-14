@@ -4,7 +4,6 @@ package de.janfrase.blunder.engine.backend.movegen;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.backend.state.game.StatePrinter;
@@ -27,7 +26,7 @@ public class KingMoveGeneratorTest {
     @Test
     public void testGenerateMoves_OnlyWhiteKing() {
         FenParser.loadFenString("8/8/8/8/4K3/8/8/8 w - - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KingMoveGenerator.generateKingMoves(
                 moves,
@@ -47,7 +46,7 @@ public class KingMoveGeneratorTest {
     @Test
     public void testGenerateMoves_WhiteKingPartiallyBlocked() {
         FenParser.loadFenString("8/8/8/8/3PK3/8/8/8 w - - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KingMoveGenerator.generateKingMoves(
                 moves,
@@ -67,7 +66,7 @@ public class KingMoveGeneratorTest {
     @Test
     public void testGenerateMoves_WhiteKingCapturingEnemyPawn() {
         FenParser.loadFenString("8/8/8/8/4K3/5p2/8/8 w - - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KingMoveGenerator.generateKingMoves(
                 moves,
@@ -91,7 +90,7 @@ public class KingMoveGeneratorTest {
     @Test
     public void testGenerateMoves_WhiteCastleRights() {
         FenParser.loadFenString("8/8/8/8/8/8/8/R3K2R w KQ - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KingMoveGenerator.generateKingMoves(
                 moves,
@@ -116,7 +115,7 @@ public class KingMoveGeneratorTest {
     @Test
     public void testGenerateMoves_BlockingCastlePath() {
         FenParser.loadFenString("8/8/8/8/8/8/8/R3KQ1R w KQ - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KingMoveGenerator.generateKingMoves(
                 moves,
@@ -136,7 +135,7 @@ public class KingMoveGeneratorTest {
     @Test
     public void testGeneratesMoves_ExecuteLongCastle() {
         FenParser.loadFenString("8/8/8/8/8/8/3PPP2/R3KP1R w KQ - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KingMoveGenerator.generateKingMoves(
                 moves,
@@ -195,7 +194,7 @@ public class KingMoveGeneratorTest {
     @Test
     public void testGeneratesMoves_ExecuteShortCastle() {
         FenParser.loadFenString("8/8/8/8/8/8/3PPP2/R2PK2R w KQ - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KingMoveGenerator.generateKingMoves(
                 moves,
@@ -260,7 +259,7 @@ public class KingMoveGeneratorTest {
                 moves,
                 4,
                 0,
-                gameState.getBoardRepresentation(),
+                gameState.getBitBoards(),
                 gameState.getFriendlySide(),
                 gameState.getIrreversibleData().castlingRights());
 
@@ -287,7 +286,7 @@ public class KingMoveGeneratorTest {
                 moves,
                 4,
                 0,
-                gameState.getBoardRepresentation(),
+                gameState.getBitBoards(),
                 gameState.getFriendlySide(),
                 gameState.getIrreversibleData().castlingRights());
 
@@ -312,7 +311,7 @@ public class KingMoveGeneratorTest {
                 moves,
                 4,
                 0,
-                gameState.getBoardRepresentation(),
+                gameState.getBitBoards(),
                 gameState.getFriendlySide(),
                 gameState.getIrreversibleData().castlingRights());
 

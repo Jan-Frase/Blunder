@@ -1,7 +1,8 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.movegen;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.backend.Piece;
+import de.janfrase.blunder.engine.backend.state.board.BitBoards;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.engine.backend.state.game.irreversibles.IrreversibleData;
 import de.janfrase.blunder.utility.Constants;
@@ -39,41 +40,40 @@ public class MoveGenerator {
         ArrayList<Move> moves = new ArrayList<>();
 
         GameState gameState = GameState.getInstance();
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BitBoards board = gameState.getBitBoards();
         IrreversibleData irreversibleData = gameState.getIrreversibleData();
-        Constants.Side activeSide = gameState.getFriendlySide();
+        byte activeSide = gameState.getFriendlySide();
 
         for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
             for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
-                Constants.PieceType pieceType = board.getPieceAt(x, y);
-                Constants.Side pieceSide = board.getSideAt(x, y);
+                Piece piece = board.getPieceAt(x, y);
 
                 // skip empty squares
-                if (pieceType == Constants.PieceType.EMPTY) {
+                if (piece.isEmpty()) {
                     continue;
                 }
 
                 // skip opponents pieces
-                if (pieceSide != activeSide) {
+                if (piece.getSide() != activeSide) {
                     continue;
                 }
 
-                switch (pieceType) {
-                    case KING -> KingMoveGenerator.generateKingMoves(
+                switch (piece.getType()) {
+                    case Piece.KING -> KingMoveGenerator.generateKingMoves(
                             moves, x, y, board, activeSide, irreversibleData.castlingRights());
-                    case QUEEN -> {
+                    case Piece.QUEEN -> {
                         LineMoveGenerator.generateStraightMoves(moves, x, y, board, activeSide);
                         LineMoveGenerator.generateDiagonalMoves(moves, x, y, board, activeSide);
                     }
-                    case ROOK -> LineMoveGenerator.generateStraightMoves(
+                    case Piece.ROOK -> LineMoveGenerator.generateStraightMoves(
                             moves, x, y, board, activeSide);
-                    case BISHOP -> LineMoveGenerator.generateDiagonalMoves(
+                    case Piece.BISHOP -> LineMoveGenerator.generateDiagonalMoves(
                             moves, x, y, board, activeSide);
-                    case KNIGHT -> KnightMoveGenerator.generateKnightMoves(
+                    case Piece.KNIGHT -> KnightMoveGenerator.generateKnightMoves(
                             moves, x, y, board, activeSide);
-                    case PAWN -> PawnMoveGenerator.generatePawnMove(
+                    case Piece.PAWN -> PawnMoveGenerator.generatePawnMove(
                             moves, x, y, board, activeSide, irreversibleData.enPassantX());
-                    case EMPTY -> throw new IllegalStateException(
+                    case Piece.EMPTY -> throw new IllegalStateException(
                             "Empty piece type should have been skipped");
                 }
             }
@@ -99,7 +99,7 @@ public class MoveGenerator {
         ArrayList<Move> pseudoLegalMoves = MoveGenerator.generatePseudoLegalMoves();
         ArrayList<Move> legalMoves = new ArrayList<>();
 
-        Constants.Side activeSide = GameState.getInstance().getFriendlySide();
+        byte activeSide = GameState.getInstance().getFriendlySide();
 
         for (Move move : pseudoLegalMoves) {
             GameState.getInstance().makeMove(move);

@@ -3,7 +3,6 @@ package de.janfrase.blunder.engine.backend.state.game;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.utility.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ public class FenParserTest {
     void testLoadStartingPosition() {
         FenParser.loadStartingPosition();
 
-        BoardRepresentation board = this.gameState.boardRepresentation;
+        BoardRepresentation board = this.gameState.bitBoards;
 
         assertNotNull(board, "Board representation should not be null after loading FEN.");
 
@@ -83,7 +82,7 @@ public class FenParserTest {
 
         FenParser.loadFenString(customFen);
 
-        BoardRepresentation board = gameState.boardRepresentation;
+        BoardRepresentation board = gameState.bitBoards;
 
         assertNotNull(board, "Board representation should not be null after loading FEN.");
         assertEquals(
@@ -134,7 +133,7 @@ public class FenParserTest {
 
         FenParser.loadFenString(emptyFen);
 
-        BoardRepresentation board = gameState.boardRepresentation;
+        BoardRepresentation board = gameState.bitBoards;
 
         assertNotNull(board, "Board representation should not be null after loading FEN.");
         for (int y = 0; y < 8; y++) {

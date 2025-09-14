@@ -29,9 +29,7 @@ public class UciMoveParserTest {
      */
     @Test
     public void testParsePawnNormalMove() {
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e2e3";
@@ -48,9 +46,7 @@ public class UciMoveParserTest {
     @Test
     public void testParsePawnDoublePush() {
         // Arrange: Set up board with a pawn
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(4, 6, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e2e4";
@@ -67,12 +63,8 @@ public class UciMoveParserTest {
     @Test
     public void testParseKingShortCastle() {
         // Arrange: Set up board with king
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(7, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(7, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e1g1";
@@ -89,12 +81,8 @@ public class UciMoveParserTest {
     @Test
     public void testParseKingLongCastle() {
         // Arrange: Set up board with king
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(0, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(4, 7, Constants.PieceType.KING, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(0, 7, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         // Act
         String uciMove = "e1c1";
@@ -111,9 +99,7 @@ public class UciMoveParserTest {
     @Test
     public void testParsePawnPromotionToQueen() {
         // Arrange: Set up board with pawn
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
 
         // Act
         String uciMove = "a7a8q";
@@ -131,12 +117,8 @@ public class UciMoveParserTest {
     @Test
     public void testParseNormalCapture() {
         // Arrange: Set up board with pieces
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(4, 4, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(5, 2, Constants.PieceType.BISHOP, Constants.Side.BLACK);
+        gameState.getBitBoards().setPieceAt(4, 4, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(5, 2, Constants.PieceType.BISHOP, Constants.Side.BLACK);
 
         // Act
         String uciMove = "e4f6";
@@ -154,12 +136,8 @@ public class UciMoveParserTest {
     @Test
     public void testParsePawnPromotionCapture() {
         // Arrange: Set up board with pieces
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(1, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
+        gameState.getBitBoards().setPieceAt(0, 1, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(1, 0, Constants.PieceType.ROOK, Constants.Side.BLACK);
 
         // Act
         String uciMove = "a7b8q";
@@ -177,12 +155,8 @@ public class UciMoveParserTest {
     @Test
     public void testParseEnPassantCapture() {
         // Arrange: Set up board with pawns
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(4, 3, Constants.PieceType.PAWN, Constants.Side.WHITE);
-        gameState
-                .getBoardRepresentation()
-                .setPieceAt(5, 3, Constants.PieceType.PAWN, Constants.Side.BLACK);
+        gameState.getBitBoards().setPieceAt(4, 3, Constants.PieceType.PAWN, Constants.Side.WHITE);
+        gameState.getBitBoards().setPieceAt(5, 3, Constants.PieceType.PAWN, Constants.Side.BLACK);
 
         // Act
         String uciMove = "e5f6";

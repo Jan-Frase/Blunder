@@ -1,7 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.state.game.irreversibles;
 
-import de.janfrase.blunder.utility.Constants;
+import de.janfrase.blunder.engine.backend.Piece;
 
 public record CastlingRights(
         boolean whiteLongCastle,
@@ -9,16 +9,16 @@ public record CastlingRights(
         boolean blackLongCastle,
         boolean blackShortCastle) {
 
-    public boolean getLongCastle(Constants.Side side) {
-        if (side == Constants.Side.WHITE) {
+    public boolean getLongCastle(Piece side) {
+        if (side.getSide() == Piece.WHITE) {
             return this.whiteLongCastle;
         } else {
             return this.blackLongCastle;
         }
     }
 
-    public boolean getShortCastle(Constants.Side side) {
-        if (side == Constants.Side.WHITE) {
+    public boolean getShortCastle(Piece side) {
+        if (side.getSide() == Piece.WHITE) {
             return this.whiteShortCastle;
         } else {
             return this.blackShortCastle;

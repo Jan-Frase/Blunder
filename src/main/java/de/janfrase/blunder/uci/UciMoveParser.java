@@ -28,10 +28,10 @@ public class UciMoveParser {
         int toY = Constants.BOARD_SIDE_LENGTH - (uciMove.charAt(3) - '1') - 1;
 
         Constants.PieceType movingPieceType =
-                GameState.getInstance().getBoardRepresentation().getPieceAt(fromX, fromY);
+                GameState.getInstance().getBitBoards().getPieceAt(fromX, fromY);
 
         Constants.PieceType capturedPieceType =
-                GameState.getInstance().getBoardRepresentation().getPieceAt(toX, toY);
+                GameState.getInstance().getBitBoards().getPieceAt(toX, toY);
 
         if (movingPieceType == Constants.PieceType.PAWN) {
             // we are moving 2 squares -> double pawn push

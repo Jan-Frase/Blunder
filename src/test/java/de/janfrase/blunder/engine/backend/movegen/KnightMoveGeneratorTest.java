@@ -4,7 +4,6 @@ package de.janfrase.blunder.engine.backend.movegen;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
@@ -25,7 +24,7 @@ public class KnightMoveGeneratorTest {
 
     @Test
     void testKnightMovementAllDirections() {
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
         board.setPieceAt(3, 3, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
 
         KnightMoveGenerator.generateKnightMoves(moves, 3, 3, board, Constants.Side.WHITE);
@@ -43,7 +42,7 @@ public class KnightMoveGeneratorTest {
 
     @Test
     void testKnightBlockedByFriendlyPieces() {
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
         board.setPieceAt(3, 3, Constants.PieceType.KNIGHT, Constants.Side.WHITE);
         board.setPieceAt(1, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
         board.setPieceAt(5, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
@@ -62,7 +61,7 @@ public class KnightMoveGeneratorTest {
     @Test
     void testKnightCapturingEnemyPieces() {
         FenParser.loadFenString("8/8/1p6/3N4/5r2/8/8/8 w - - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         KnightMoveGenerator.generateKnightMoves(moves, 3, 3, board, Constants.Side.WHITE);
 

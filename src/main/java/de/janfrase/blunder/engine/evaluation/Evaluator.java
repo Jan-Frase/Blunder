@@ -1,7 +1,6 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.evaluation;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
 import java.util.EnumMap;
@@ -131,7 +130,7 @@ public class Evaluator {
         float whiteMaterial = 0;
         float blackMaterial = 0;
 
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         for (int y = 0; y < Constants.BOARD_SIDE_LENGTH; y++) {
             for (int x = 0; x < Constants.BOARD_SIDE_LENGTH; x++) {
@@ -195,7 +194,7 @@ public class Evaluator {
     }
 
     private static boolean isLateGame(GameState gameState) {
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         boolean whiteHasQueen =
                 board.getPiece(Constants.PieceType.QUEEN, Constants.Side.WHITE).isPresent();

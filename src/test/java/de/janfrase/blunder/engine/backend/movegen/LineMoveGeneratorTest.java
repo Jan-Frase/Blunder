@@ -4,7 +4,6 @@ package de.janfrase.blunder.engine.backend.movegen;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
 import de.janfrase.blunder.engine.backend.state.game.FenParser;
 import de.janfrase.blunder.engine.backend.state.game.GameState;
 import de.janfrase.blunder.utility.Constants;
@@ -25,7 +24,7 @@ public class LineMoveGeneratorTest {
 
     @Test
     void testDiagonalMovementAllDirections() {
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
         board.setPieceAt(3, 3, Constants.PieceType.BISHOP, Constants.Side.WHITE);
 
         LineMoveGenerator.generateDiagonalMoves(moves, 3, 3, board, Constants.Side.WHITE);
@@ -48,7 +47,7 @@ public class LineMoveGeneratorTest {
 
     @Test
     void testDiagonalBlockedByFriendlyPieces() {
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
         board.setPieceAt(3, 3, Constants.PieceType.BISHOP, Constants.Side.WHITE);
         board.setPieceAt(4, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
         board.setPieceAt(2, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
@@ -68,7 +67,7 @@ public class LineMoveGeneratorTest {
     void testDiagonalCapturingEnemyPieces() {
         FenParser.loadFenString("8/1n6/8/3B4/8/5p2/8/8 w - - 0 1");
 
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         LineMoveGenerator.generateDiagonalMoves(moves, 3, 3, board, Constants.Side.WHITE);
 
@@ -89,7 +88,7 @@ public class LineMoveGeneratorTest {
 
     @Test
     void testStraightMovementAllDirections() {
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
         board.setPieceAt(3, 3, Constants.PieceType.ROOK, Constants.Side.WHITE);
 
         LineMoveGenerator.generateStraightMoves(moves, 3, 3, board, Constants.Side.WHITE);
@@ -113,7 +112,7 @@ public class LineMoveGeneratorTest {
 
     @Test
     void testStraightBlockedByFriendlyPieces() {
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
         board.setPieceAt(3, 3, Constants.PieceType.ROOK, Constants.Side.WHITE);
         board.setPieceAt(3, 4, Constants.PieceType.PAWN, Constants.Side.WHITE);
         board.setPieceAt(3, 2, Constants.PieceType.PAWN, Constants.Side.WHITE);
@@ -132,7 +131,7 @@ public class LineMoveGeneratorTest {
     @Test
     void testStraightCapturingEnemyPieces() {
         FenParser.loadFenString("8/8/8/1n1R4/8/3p4/8/8 w - - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         LineMoveGenerator.generateStraightMoves(moves, 3, 3, board, Constants.Side.WHITE);
 
@@ -154,7 +153,7 @@ public class LineMoveGeneratorTest {
     @Test
     void testPosition3Part() {
         FenParser.loadFenString("8/2p5/3p4/KP5r/2R2p1k/8/4P1P1/8 w - - 0 1");
-        BoardRepresentation board = gameState.getBoardRepresentation();
+        BoardRepresentation board = gameState.getBitBoards();
 
         LineMoveGenerator.generateStraightMoves(moves, 7, 3, board, Constants.Side.BLACK);
 

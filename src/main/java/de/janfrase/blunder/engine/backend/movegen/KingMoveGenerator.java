@@ -1,7 +1,8 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.movegen;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.backend.Piece;
+import de.janfrase.blunder.engine.backend.state.board.BitBoards;
 import de.janfrase.blunder.engine.backend.state.game.irreversibles.CastlingRights;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
@@ -17,8 +18,8 @@ public class KingMoveGenerator {
             ArrayList<Move> moves,
             int x,
             int y,
-            BoardRepresentation board,
-            Constants.Side activeSide,
+            BitBoards board,
+            byte activeSide,
             CastlingRights castlingRights) {
         // takes care of normal king moves - leaves castles for later
         generateNormalMoves(moves, x, y, board, activeSide);
@@ -72,8 +73,8 @@ public class KingMoveGenerator {
             ArrayList<Move> moves,
             int x,
             int y,
-            BoardRepresentation board,
-            Constants.Side activeSide,
+            BitBoards board,
+            Piece activeSide,
             CastlingRights castlingRights) {
         // let's make some castles. 🏰
         boolean canLongCastle = castlingRights.getLongCastle(activeSide);
@@ -96,16 +97,16 @@ public class KingMoveGenerator {
             ArrayList<Move> moves,
             int x,
             int y,
-            BoardRepresentation board,
-            Constants.Side activeSide,
+            BitBoards board,
+            Piece activeSide,
             boolean canShortCastle) {
         if (!canShortCastle) return;
 
-        Constants.Side sideOneRight = board.getSideAt(x + 1, y);
-        Constants.Side sideTwoRight = board.getSideAt(x + 2, y);
+        boolean sideOneRight = board.getAllPieces().getBit(x + 1, y);
+        boolean sideTwoRight = board.getAllPieces().getBit(x + 2, y);
 
         // there is something between the king and the rook -> return
-        if (sideOneRight != Constants.Side.EMPTY || sideTwoRight != Constants.Side.EMPTY) return;
+        if (sideOneRight || sideTwoRight) return;
 
         // if one of the squares the king is passing through -> return
         if (KingInCheckDecider.isKingUnderAttack(x + 1, y, activeSide)

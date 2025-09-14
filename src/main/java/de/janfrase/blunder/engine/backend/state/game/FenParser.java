@@ -79,9 +79,7 @@ public class FenParser {
                     Constants.Side pieceSide =
                             Character.isUpperCase(c) ? Constants.Side.WHITE : Constants.Side.BLACK;
 
-                    GameState.getInstance()
-                            .boardRepresentation
-                            .setPieceAt(xPos, yPos, pieceType, pieceSide);
+                    GameState.getInstance().bitBoards.setPieceAt(xPos, yPos, pieceType, pieceSide);
 
                     xPos++;
                 }

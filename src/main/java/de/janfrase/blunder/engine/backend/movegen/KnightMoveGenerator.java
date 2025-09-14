@@ -1,7 +1,7 @@
 /* Made by Jan Frase :) */
 package de.janfrase.blunder.engine.backend.movegen;
 
-import de.janfrase.blunder.engine.backend.state.board.BoardRepresentation;
+import de.janfrase.blunder.engine.backend.state.board.BitBoards;
 import de.janfrase.blunder.utility.Constants;
 import java.util.ArrayList;
 
@@ -11,11 +11,7 @@ import java.util.ArrayList;
 public class KnightMoveGenerator {
 
     protected static void generateKnightMoves(
-            ArrayList<Move> moves,
-            int x,
-            int y,
-            BoardRepresentation board,
-            Constants.Side activeSide) {
+            ArrayList<Move> moves, int x, int y, BitBoards board, byte activeSide) {
         for (int[] direction : Constants.KNIGHT_DIRECTIONS) {
             int currentX = x + direction[0];
             int currentY = y + direction[1];
