@@ -1,10 +1,8 @@
-# ♞♜ Blunder — A Work-in-Progress Chess Engine ♔♗  
-🚧 **Under Construction**
+# ♞♜ Blunder — Chess Engine ♔♗  
+No longer being worked on because i decided to switch to rust. 
+
+New engine is called [Mouse](https://github.com/Jan-Frase/Mouse).
 
 ## 📜 Overview  
-An attempt to build a chess engine from scratch.
-🔨 Built with Java
-
-To run perft tests you need:
-- rust and https://lib.rs/crates/perftree
-- stockfish
+A fully functional UCI chess engine built from scratch in java.
+It works fairly well (good enough to beat me anyways).
